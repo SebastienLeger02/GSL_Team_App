@@ -1,5 +1,6 @@
 <template>
-  <h1>Home Page</h1>
+  <h1 class="font-black">Home Page</h1>
+  <span>hola soy gerard</span>
 </template>
 <script>
 export default {
