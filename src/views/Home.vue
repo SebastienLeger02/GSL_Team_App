@@ -1,5 +1,5 @@
 <template>
-  <h1>Home Page</h1>
+  <h1 class="text-sky-600 font-bold text-[35px]">Home Page</h1>
 </template>
 <script>
 export default {
@@ -13,4 +13,7 @@ export default {
   },
 }
 </script>
-<styles></styles>
+
+
+<styles>
+</styles>
