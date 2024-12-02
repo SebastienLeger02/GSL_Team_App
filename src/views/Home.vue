@@ -1,6 +1,6 @@
 <template>
-  <h1>Home Page</h1>
-  <p>Prueba commit branch</p>
+  <h1 class="font-black">Home Page</h1>
+  <span>hola soy gerard</span>
 </template>
 <script>
 export default {
@@ -14,4 +14,7 @@ export default {
   },
 }
 </script>
-<styles></styles>
+
+
+<styles>
+</styles>
