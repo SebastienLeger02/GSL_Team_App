@@ -3,10 +3,8 @@ export default {
   content: [ "./index.html", "./src/**/*.{vue,js}", ],
   theme: {
     colors: {
-      'bg-blue': '#483C9E',
-      'bg-purple': '#68088B',
-      'bg-pink': '#BC168D',
-      'bg-black': '#000000',
+      'bg-color': '#1B001E',
+      'b-nav': '#8cb7eb;'
     },
     extend: {},
   },
