@@ -1,11 +1,10 @@
 <template>
-    <h2 class="text-2xl font-bold">Game</h2>
-  
+  <h2 class="text-2xl font-bold">NotFound</h2>
 </template>
 
 <script>
 export default {
-    name : "Game",
+    name: "NotFound",
     data() {
 
     }
