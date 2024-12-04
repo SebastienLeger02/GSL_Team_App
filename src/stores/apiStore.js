@@ -9,13 +9,11 @@ export const useApiStore = defineStore("apiStore", {
 
       actions: {
         // Acción para obtener datos de la API
-        // async fetchGames(endpoint) {
         async fetchGames(endpoint) {
           this.loading = true;
           this.error = null;
     
           try {
-            // const endpoint = "games";
             const response = await fetch(
               `https://free-to-play-games-database.p.rapidapi.com/api/${endpoint}`,
               {

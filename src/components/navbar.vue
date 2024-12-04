@@ -1,7 +1,7 @@
 <template>
     <section class="px-4 py-2">
         <div class="flex items-center justify-between">
-            <img class="w-20 h-20" src="../assets/logo.png" alt="GSL Gane App">
+            <img class="w-36 h-12" src="../assets/logo_gsl.png" alt="GSL Gane App">
             <div class="flex space-x-6 items-center">
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
