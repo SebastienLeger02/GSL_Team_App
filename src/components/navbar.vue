@@ -21,8 +21,8 @@
                         </li>
                     </ul>
                 </div>
-                
-                
+
+
                 <div class="relative group">
                     <button class="text-gray-700 hover:text-black font-semibold flex items-center">
                         Categorías
@@ -45,16 +45,16 @@
             <!-- Otros enlaces -->
             <div class="flex space-x-6 items-center">
                 <div class="relative">
-            <label class="sr-only" for="search">Search</label>
-            <input type="search" placeholder="Find a game" id="search"
-              class="w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-white">
-            <div class="absolute top-1 right-1">
-              <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
-            </div>
-          </div>
+                    <label class="sr-only" for="search">Search</label>
+                    <input type="search" placeholder="Find a game" id="search"
+                        class="w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-white">
+                    <div class="absolute top-1 right-1">
+                        <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
+                    </div>
+                </div>
 
-                    <!-- <a href="#" class="text-blue-500">Search</a> -->
-                    <a href="#" class="text-gray-700 hover:text-black">GitHub</a>
+                <!-- <a href="#" class="text-blue-500">Search</a> -->
+                <a href="#" class="text-gray-700 hover:text-black">GitHub</a>
             </div>
         </div>
     </section>
