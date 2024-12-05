@@ -1,6 +1,7 @@
 <template>
   <RouterView />
 </template>
+
 <script>
 import {mapStores} from "pinia";
 import {useApiStore} from "./stores/apiStore.js";

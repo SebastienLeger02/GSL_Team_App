@@ -21,8 +21,8 @@
                         </li>
                     </ul>
                 </div>
-                
-                
+
+
                 <div class="relative group">
                     <button class="text-gray-700 hover:text-black font-semibold flex items-center">
                         Categorías
@@ -45,16 +45,16 @@
             <!-- Otros enlaces -->
             <div class="flex space-x-6 items-center">
                 <div class="relative">
-            <label class="sr-only" for="search">Search</label>
-            <input type="search" placeholder="Find a game" id="search"
-              class="w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-white">
-            <div class="absolute top-1 right-1">
-              <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
-            </div>
-          </div>
+                    <label class="sr-only" for="search">Search</label>
+                    <input type="search" placeholder="Find a game" id="search"
+                        class="w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-white">
+                    <div class="absolute top-1 right-1">
+                        <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
+                    </div>
+                </div>
 
-                    <!-- <a href="#" class="text-blue-500">Search</a> -->
-                    <a href="#" class="text-gray-700 hover:text-black">GitHub</a>
+                <!-- <a href="#" class="text-blue-500">Search</a> -->
+                <a href="#" class="text-gray-700 hover:text-black">GitHub</a>
             </div>
         </div>
     </section>
@@ -73,28 +73,24 @@ export default {
             categories: [],
         };
     },
-    async mounted() {
+    mounted() {
         // Usamos el store de Pinia para obtener los datos
         const gameStore = useApiStore();
 
-        try {
-            // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
-            // await gameStore.fetchGames("games");
-            let id = 545;
-            await gameStore.fetchGames(`game?id=${id}`);
+        // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
+        gameStore.fetchGames("games");
+        // let id = 545;
+        // await gameStore.fetchGames(`game?id=${id}`);
 
-            // Sincronizamos los datos del store con el estado local del componente
-            // Lo llamamos gameStore porque llamamos al endpoint general de games
-            // Cogemos las plataformas y las categorias para los menus desplegables del navbar
-            console.log("games: ", gameStore.game);
-            // this.platforms = gameStore.platforms;
-            // this.categories = gameStore.categories;
+        // Sincronizamos los datos del store con el estado local del componente
+        // Lo llamamos gameStore porque llamamos al endpoint general de games
+        // Cogemos las plataformas y las categorias para los menus desplegables del navbar
+        // console.log("games: ", gameStore.game);
+        this.platforms = gameStore.platforms;
+        this.categories = gameStore.categories;
 
-            // console.log("platforms: ", this.platforms);
-            // console.log("categorias: ", this.categories);
-        } catch (error) {
-            console.error("Error al obtener los datos desde el store:", error);
-        }
+        console.log("platforms: ", this.platforms);
+        console.log("categorias: ", this.categories);
     },
 };
 </script>
