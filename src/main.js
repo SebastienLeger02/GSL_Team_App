@@ -5,12 +5,12 @@ import { createPinia } from "pinia";
 import { routes } from "./routes.js";
 import { createRouter, createWebHistory } from "vue-router";
 
-const router = createRouter({
+const routes = createRouter({
   history: createWebHistory(),
   routes,
 });
 
 createApp(App)
-  .use(router)
+  .use(routes.push())
   .use(createPinia())
   .mount("#app");

@@ -3,6 +3,7 @@ export const useApiStore = defineStore("apiStore", {
     state: () => ({
         platforms: [], // Listado de plataformas
         categories: [], // Listado de categorías
+        game: [],
         loading: false, // Estado de carga
         error: null, // Errores en la API
       }),
@@ -25,7 +26,10 @@ export const useApiStore = defineStore("apiStore", {
               }
             );
             const data = await response.json();
-    
+            console.log("data: ", data);
+            if (endpoint.includes("game?id=")) {
+              this.game = data;
+            }
             // Extraer plataformas y categorías únicas con New Set
             this.platforms = [...new Set(data.map((game) => game.platform))];
             this.categories = [...new Set(data.map((game) => game.genre))];

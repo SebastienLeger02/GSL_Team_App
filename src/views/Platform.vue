@@ -6,6 +6,9 @@
 export default {
     name: "Platform",
     data() {
+       return{
+            
+        }
 
     }
 
