@@ -44,6 +44,30 @@ export default {
                     title: "PROYECTO 2",
                     description: "Descripción del proyecto 2.",
                 },
+                {
+                    src: "/images/paisaje3.jpg",
+                    alt: "Paisaje 3",
+                    title: "PROYECTO 3",
+                    description: "Descripción del proyecto 2.",
+                },
+                {
+                    src: "/images/paisaje4.jpg",
+                    alt: "Paisaje 4",
+                    title: "PROYECTO 4",
+                    description: "Descripción del proyecto 2.",
+                },
+                {
+                    src: "/images/paisaje5.jpg",
+                    alt: "Paisaje 5",
+                    title: "PROYECTO 5",
+                    description: "Descripción del proyecto 2.",
+                },
+                {
+                    src: "/images/paisaje6.jpg",
+                    alt: "Paisaje 6",
+                    title: "PROYECTO 6",
+                    description: "Descripción del proyecto 2.",
+                },
                 // ... Añade los demás elementos
             ],
             currentIndex: 0,
