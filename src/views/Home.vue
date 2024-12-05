@@ -1,20 +1,18 @@
 <template>
-  <h1 class="font-black">Home Page</h1>
-  <span>hola soy gerard</span>
+  <div>
+    <Navbar />
+  </div>
 </template>
+
 <script>
+import Navbar from "../components/Navbar.vue";
+
 export default {
   name: "Home",
-  data() {
-    return {
-    };
+  components: {
+    Navbar,
   },
-  methods: {},
-  mounted() {
-  },
-}
+};
 </script>
 
-
-<styles>
-</styles>
+<style scoped></style>
