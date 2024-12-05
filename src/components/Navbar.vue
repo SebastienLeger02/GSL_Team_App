@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { useApiStore } from "../stores/apiStore";
+/* import { useApiStore } from "../stores/apiStore";
 
 export default {
     name: "Navbar",
@@ -93,6 +93,28 @@ export default {
 
         console.log("platforms: ", this.platforms);
         console.log("categorias: ", this.categories);
+    },
+}; */
+export default {
+    name: "Navbar",
+    data() {
+        return {
+            // Seteamos como array vacio las propiedades a usar en el navbar
+            platforms: [],
+            categories: [],
+        };
+    },
+    async mounted() {
+        // Usamos el store de Pinia para obtener los datos
+        const gameStore = useApiStore();
+        try {
+            // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
+            // await gameStore.fetchGames("games");
+            let id = 545;
+            await gameStore.fetchGames(`game?id=${id}`);
+        } catch (error) {
+            console.error("Error al obtener los datos desde el store:", error);
+        }
     },
 };
 </script>
