@@ -74,17 +74,19 @@ export default {
     },
     mounted() {
         // Usamos el store de Pinia para obtener los datos
-        const gameStore = useApiStore();
-
         // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
+        const gameStore = useApiStore();
         gameStore.fetchGames("games");
+
+
+        // Ejemplo de endpoint llamando a cada juego individualmente
         // let id = 545;
         // await gameStore.fetchGames(`game?id=${id}`);
+        // console.log("games: ", gameStore.game);
 
         // Sincronizamos los datos del store con el estado local del componente
         // Lo llamamos gameStore porque llamamos al endpoint general de games
         // Cogemos las plataformas y las categorias para los menus desplegables del navbar
-        // console.log("games: ", gameStore.game);
         this.platforms = gameStore.platforms;
         this.categories = gameStore.categories;
 
