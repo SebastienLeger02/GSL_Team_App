@@ -12,8 +12,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <ul
-                        class="absolute hidden group-hover:block bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-10">
+                    <!-- <ul class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-50"> -->
+                    <ul class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[300px] z-50">
+                        <!-- class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-50"> -->
                         <li v-for="platform in platforms" :key="platform"
                             class="hover:bg-gray-100 px-4 py-2 text-gray-700">
                             {{ platform }}
@@ -57,7 +58,6 @@
             </div>
         </div>
     </section>
-    <div class="container-full h-[1000px] bg-color"></div>
 </template>
 
 <script>
@@ -72,25 +72,24 @@ export default {
             categories: [],
         };
     },
-    async mounted() {
+    mounted() {
         // Usamos el store de Pinia para obtener los datos
         const gameStore = useApiStore();
 
-        try {
-            // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
-            await gameStore.fetchGames("games");
+        // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
+        gameStore.fetchGames("games");
+        // let id = 545;
+        // await gameStore.fetchGames(`game?id=${id}`);
 
-            // Sincronizamos los datos del store con el estado local del componente
-            // Lo llamamos gameStore porque llamamos al endpoint general de games
-            // Cogemos las plataformas y las categorias para los menus desplegables del navbar
-            this.platforms = gameStore.platforms;
-            this.categories = gameStore.categories;
+        // Sincronizamos los datos del store con el estado local del componente
+        // Lo llamamos gameStore porque llamamos al endpoint general de games
+        // Cogemos las plataformas y las categorias para los menus desplegables del navbar
+        // console.log("games: ", gameStore.game);
+        this.platforms = gameStore.platforms;
+        this.categories = gameStore.categories;
 
-            console.log("platforms: ", this.platforms);
-            console.log("categorias: ", this.categories);
-        } catch (error) {
-            console.error("Error al obtener los datos desde el store:", error);
-        }
+        console.log("platforms: ", this.platforms);
+        console.log("categorias: ", this.categories);
     },
 };
 </script>
