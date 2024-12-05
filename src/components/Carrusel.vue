@@ -31,8 +31,8 @@
       </div>
     </div>
     <div class="nextPrevArrows">
-      <button class="prev" @click="prevSlide"><</button>
-      <button class="next" @click="nextSlide">></button>
+      <button class="prev" @click="prevSlide"></button>
+      <button class="next" @click="nextSlide"></button>
     </div>
   </div>
 </template>
@@ -380,7 +380,12 @@ animation-delay: 0.6s;
         font-size: 40px;
     }
 }
-
+.prev::after {
+    content: "<";
+}
+.next::after {
+    content: ">";
+}
 </style>
 <!-- <script options>
 let nextBtn = document.querySelector('.next');

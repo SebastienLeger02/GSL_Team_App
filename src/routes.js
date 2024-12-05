@@ -1,3 +1,5 @@
+import { createWebHistory, createRouter } from "vue-router";
+//nuestros dos ficheros de vistas
 import Home from "./views/Home.vue";
 import Category from "./views/Category.vue";
 import Platform from "./views/Platform.vue";
@@ -7,15 +9,15 @@ import NotFound from "./views/NotFound.vue";
 
 const router = [
   { path: "/", name: "home", component: Home },
-  { path: "/category/", name: "category", component: Category },
-  { path: "/platform/", name: "platform", component: Platform },
-  { path: "/game/:id", name: "game", component: Game },
+  { path: "/category", name: "category", component: Category },
+  { path: "/platform", name: "platform", component: Platform },
+  { path: "/game/", name: "game", component: Game },
   //   {
   //     path: "/film/:id", name: "film", component: Film, children: [
   //       { path: "/person/:charid", name: "character", component: Character }, // Añado la ruta con el parámetro para cada película
   //     ]
   //   },
-  { path: "/:path(.*)",name :"notFound", component: NotFound },
+  { path: "/:path(.*)", name: "notFound", component: NotFound },
 ];
 const routes = createRouter({
   history: createWebHistory(),
