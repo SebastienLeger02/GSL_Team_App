@@ -67,25 +67,25 @@
 import { useApiStore } from "../stores/apiStore";
 
 export default {
-  name: "Navbar",
-  computed: {
-    // Acceso a los getters del store
-    platforms() {
-      const gameStore = useApiStore();
-      return gameStore.platforms;
+    name: "Navbar",
+    computed: {
+        // Acceso a los getters del store
+        platforms() {
+            const gameStore = useApiStore();
+            return gameStore.platforms;
+        },
+        categories() {
+            const gameStore = useApiStore();
+            return gameStore.categories;
+        },
     },
-    categories() {
-      const gameStore = useApiStore();
-      return gameStore.categories;
+    mounted() {
+        const gameStore = useApiStore();
+        // Realizamos la llamada solo si no se han cargado los juegos
+        if (!gameStore.games.length) {
+            gameStore.fetchGames("games");
+        }
     },
-  },
-  mounted() {
-    const gameStore = useApiStore();
-    // Realizamos la llamada solo si no se han cargado los juegos
-    if (!gameStore.games.length) {
-      gameStore.fetchGames("games");
-    }
-  },
 };
 </script>
 
