@@ -92,6 +92,7 @@ export default {
 </script>
 
 <style>
+
 * {
     margin: 0;
     padding: 0;
@@ -109,7 +110,7 @@ body {
     height: 100vh;
     overflow: hidden;
     position: relative;
-    /* margin-top: -50px; */
+    /*margin-top: -50px;*/
 }
 
 .slider .list .item {
@@ -473,3 +474,8 @@ function moveSlider(direction) {
     }, {once: true})
 }
 </script> -->
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> main
