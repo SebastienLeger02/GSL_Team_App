@@ -1,13 +1,22 @@
 import Home from "./views/Home.vue";
-// import NotFound from "./views/NotFound.vue";
-// import Film from "./views/Film.vue";
+import Category from "./views/Category.vue";
+import Platform from "./views/Platform.vue";
+import Game from "./views/Game.vue";
+import NotFound from "./views/NotFound.vue";
 
-export const routes = [
+const routes = [
   { path: "/", name: "home", component: Home },
-//   {
-//     path: "/film/:id", name: "film", component: Film, children: [
-//       { path: "/person/:charid", name: "character", component: Character }, // Añado la ruta con el parámetro para cada película
-//     ]
-//   },
-//   { path: "/:path(.*)", component: NotFound },
+  { path: "/category", name: "category", component: Category },
+  { path: "/platform", name: "platform", component: Platform },
+  { path: "/game/", name: "game", component: Game },
+  { path: "/:pathMatch(.*)*", name: "notFound", component: NotFound },
 ];
+
+export default routes;
+
+/* const routes = createRouter({
+  history: createWebHistory(),
+  router,
+});
+
+export default routes; */
