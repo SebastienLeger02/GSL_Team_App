@@ -382,6 +382,9 @@ body {
     content: ">";
 }
 </style>
+
+
+
 <!-- <script options>
 let nextBtn = document.querySelector('.next');
 let prevBtn = document.querySelector('.prev');
