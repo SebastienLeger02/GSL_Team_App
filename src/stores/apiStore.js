@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useApiStore = defineStore("apiStore", {
   state: () => ({
     games: [], // Almacenamos todos los juegos aquí
+    orderby: [], // Almacenamos los juegos procesados (ordenados/limitados)
   }),
 
   getters: {
@@ -32,10 +33,33 @@ export const useApiStore = defineStore("apiStore", {
         .then((response) => response.json())
         .then((data) => {
           this.games = data; // Asignamos los datos de los juegos al estado
+          this.orderby = [...data]; // Inicializamos `orderby` con los mismos datos
         })
         .catch((error) => {
           console.error("Error fetching games data:", error);
         });
+    },
+
+    // Acción para ordenar los juegos
+    sortGames(orderType) {
+      switch (orderType) {
+        case "relevance":
+          this.orderby = [...this.games].sort((a, b) => b.relevance - a.relevance);
+          break;
+        case "release-date":
+          this.orderby = [...this.games].sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+          break;
+        case "alphabetical":
+          this.orderby = [...this.games].sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        default:
+          this.orderby = [...this.games]; // Sin orden específico
+      }
+    },
+
+    // Acción para limitar los resultados
+    limitResults(limit) {
+      this.orderby = this.orderby.slice(0, limit);
     },
   },
 });

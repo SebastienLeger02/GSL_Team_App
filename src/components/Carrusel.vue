@@ -1,13 +1,16 @@
 <template>
     <div class="slider">
         <div class="list">
-            <div v-for="(item, index) in images" :key="index" class="item" :class="{ active: index === currentIndex }"
+            <!-- {{ games }} -->
+            <!-- {{console.log("games: ", gamesOrdered) }} -->
+            <div v-for="(item, index) in gamesOrdered" :key="index" class="item" :class="{ active: index === currentIndex }"
                 v-show="index === currentIndex">
-                <img v-bind:src="item.src" :alt="item.alt" />
-                {{ console.warn("item: ", item) }}
+                <!-- {{ console.log(index) }} -->
+                <img v-bind:src="item.thumbnail" :alt="item.alt" />
+                <!-- {{ console.warn("item: ", item) }} -->
                 <div class="content">
                     <div class="title">{{ item.title }}</div>
-                    <div class="description">{{ item.description }}</div>
+                    <div class="description">{{ item.short_description }}</div>
                     <div class="button">
                         <button>More Info</button>
                     </div>
@@ -28,9 +31,13 @@
 </template>
 
 <script>
+
+import { useApiStore } from "../stores/apiStore";
+
 export default {
     data() {
         return {
+            limit: 12, // Limitar inicialmente a 12 resultados
             images: [
                 {
                     src: "/images/paisaje1.jpg",
@@ -49,7 +56,55 @@ export default {
             currentIndex: 0,
         };
     },
+    computed: {
+        // Juegos limitados y ordenados
+        gamesOrdered() {
+            const gameStore = useApiStore();
+            console.log("Sttore: ", gameStore.orderby);
+            return gameStore.orderby;
+        },
+    },
+    mounted() {
+        const gameStore = useApiStore();
+        // Llamamos a la API y aplicamos orden y límite inicial
+        if (!gameStore.orderby.length) {
+            gameStore.fetchGames("games").then(() => {
+                this.applyInitialSettings();
+            });
+        }
+    },
     methods: {
+        // Aplicar orden y límite inicial
+        applyInitialSettings() {
+            const gameStore = useApiStore();
+            gameStore.sortGames("relevance");
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos limitados
+            console.log("Juegos iniciales limitados:", gameStore.orderby);
+        },
+
+        // Cambiar límite dinámicamente
+        updateLimit(newLimit) {
+            const gameStore = useApiStore();
+            this.limit = newLimit;
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos con el nuevo límite
+            console.log(`Juegos limitados a ${this.limit}:`, gameStore.orderby);
+        },
+
+        // Cambiar el orden dinámicamente
+        changeOrder(orderType) {
+            const gameStore = useApiStore();
+            gameStore.sortGames(orderType);
+
+            // Aplicar el límite nuevamente después de ordenar
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos ordenados y limitados
+            console.log(`Juegos ordenados por ${orderType} y limitados:`, gameStore.orderby);
+        },
         nextSlide() {
             this.currentIndex =
                 (this.currentIndex + 1) % this.images.length;
