@@ -44,6 +44,30 @@ export default {
                     title: "PROYECTO 2",
                     description: "Descripción del proyecto 2.",
                 },
+                {
+                    src: "/images/paisaje3.jpg",
+                    alt: "Paisaje 3",
+                    title: "PROYECTO 3",
+                    description: "Descripción del proyecto 3.",
+                },
+                {
+                    src: "/images/paisaje4.jpg",
+                    alt: "Paisaje 4",
+                    title: "PROYECTO 4",
+                    description: "Descripción del proyecto 4.",
+                },
+                {
+                    src: "/images/paisaje5.jpg",
+                    alt: "Paisaje 5",
+                    title: "PROYECTO 5",
+                    description: "Descripción del proyecto 5.",
+                },
+                {
+                    src: "/images/paisaje6.jpg",
+                    alt: "Paisaje 6",
+                    title: "PROYECTO 6",
+                    description: "Descripción del proyecto 5.",
+                },
                 // ... Añade los demás elementos
             ],
             currentIndex: 0,
@@ -59,9 +83,10 @@ export default {
                 (this.currentIndex - 1 + this.images.length) %
                 this.images.length;
         },
-        goToSlide(index) {
+
+/*         goToSlide(index) {
             this.currentIndex = index;
-        },
+        }, */
     },
 };
 </script>
@@ -117,7 +142,7 @@ body {
     font-size: 4em;
     font-weight: bold;
     line-height: 1.3em;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     text-shadow:
         0 0 7px #0000ff,
         0 0 10px #0000ff,
@@ -131,7 +156,7 @@ body {
 
 
 .slider .list .item .content .description {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     letter-spacing: 1px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -146,6 +171,7 @@ body {
 .slider .list .item .content .button button {
     border-radius: 5px;
     border: none;
+    font-size: 12px;
     padding: 7px 7px;
     font-weight: 800;
     cursor: pointer;
@@ -223,7 +249,7 @@ body {
         0 0 2.8rem #bc13fe,
         inset 0 0 1.3rem #bc13fe;
     border: none;
-    color: #953fb4;
+    color: #a335cb;
     font-family: monospace;
     font-size: 25px;
     font-weight: bold;
@@ -381,6 +407,28 @@ body {
     content: ">";
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- <script options>
 let nextBtn = document.querySelector('.next');
 let prevBtn = document.querySelector('.prev');
@@ -425,4 +473,3 @@ function moveSlider(direction) {
     }, {once: true})
 }
 </script> -->
-
