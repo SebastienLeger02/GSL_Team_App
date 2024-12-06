@@ -73,6 +73,7 @@ export default {
             currentIndex: 0,
         };
     },
+
     methods: {
         nextSlide() {
             this.currentIndex =
@@ -84,15 +85,14 @@ export default {
                 this.images.length;
         },
 
-/*         goToSlide(index) {
+        goToSlide(index) {
             this.currentIndex = index;
-        }, */
+        },
     },
 };
 </script>
 
 <style>
-
 * {
     margin: 0;
     padding: 0;
@@ -411,25 +411,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- <script options>
 let nextBtn = document.querySelector('.next');
 let prevBtn = document.querySelector('.prev');
@@ -474,8 +455,3 @@ function moveSlider(direction) {
     }, {once: true})
 }
 </script> -->
-<<<<<<< HEAD
-=======
-
-
->>>>>>> main
