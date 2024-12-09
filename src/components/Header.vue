@@ -1,7 +1,7 @@
 <template>
   <section class="flex justify-center">
     <h1 class="">Project : GSL _ Game App</h1>
-    <p class="">
+    <p class="w-30">
       Estamos creando una aplicación web enfocada en videojuegos, utilizando una
       stack tecnológica moderna compuesta por Vue.js y Tailwind CSS, junto con
       una API para el backend. La plataforma permitirá a los usuarios explorar
