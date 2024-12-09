@@ -5,38 +5,42 @@
             <div class="flex space-x-6 items-center">
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
-                    <button class="text-gray-700 hover:text-black font-semibold flex items-center">
+                    <button class="text-gray-700 font-semibold flex items-center" @mouseover="showPlatform = true"
+                        @mouseleave="showPlatform = false">>
                         Plataforma
                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <!-- <ul class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-50"> -->
-                    <ul class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[300px] z-50">
-                        <!-- class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-50"> -->
-                        <li v-for="platform in platforms" :key="platform"
-                            class="hover:bg-gray-100 px-4 py-2 text-gray-700">
+                    <div v-show="showPlatform"
+                        class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-bg-color/70"
+                        @mouseover="showPlatform = true" 
+                        @mouseleave="showPlatform = false">
+                        <a class="whitespace-nowrap p-1" v-for="platform in platforms" :key="platform">
                             {{ platform }}
-                        </li>
-                    </ul>
+                        </a>
+                    </div>
                 </div>
 
 
                 <div class="relative group">
-                    <button class="text-gray-700 hover:text-black font-semibold flex items-center">
+                    <button class="text-gray-700 font-semibold flex items-center" @mouseover="showCategory = true"
+                        @mouseleave="showCategory = false">
                         Categorías
                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <ul
-                        class="absolute hidden group-hover:block bg-white shadow-lg rounded mt-2 p-2 min-w-[150px] z-10">
-                        <li v-for="category in categories" :key="category" class="hover:bg-gray-100 p-2">
+                    <div v-show="showCategory"
+                        class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-bg-color/70"
+                        @mouseover="showCategory = true" 
+                        @mouseleave="showCategory = false">
+                        <a class="whitespace-nowrap p-1" v-for="category in categories" :key="category">
                             {{ category }}
-                        </li>
-                    </ul>
+                        </a>
+                    </div>
                 </div>
                 <div>
                     <a href="#" class="text-blue-500">Blog</a>
@@ -62,58 +66,34 @@
 </template>
 
 <script>
-/* import { useApiStore } from "../stores/apiStore";
+
+
+import { useApiStore } from "../stores/apiStore";
 
 export default {
     name: "Navbar",
     data() {
         return {
-            // Seteamos como array vacio las propiedades a usar en el navbar
-            platforms: [],
-            categories: [],
+            showPlatform: false, // Estado para controlar la visibilidad del contenido
+            showCategory: false, // Estado para controlar la visibilidad del contenido
         };
+    },
+    computed: {
+        // Acceso a los getters del store
+        platforms() {
+            const gameStore = useApiStore();
+            return gameStore.platforms;
+        },
+        categories() {
+            const gameStore = useApiStore();
+            return gameStore.categories;
+        },
     },
     mounted() {
-        // Usamos el store de Pinia para obtener los datos
-        // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
         const gameStore = useApiStore();
-        gameStore.fetchGames("games");
-
-
-        // Ejemplo de endpoint llamando a cada juego individualmente
-        // let id = 545;
-        // await gameStore.fetchGames(`game?id=${id}`);
-        // console.log("games: ", gameStore.game);
-
-        // Sincronizamos los datos del store con el estado local del componente
-        // Lo llamamos gameStore porque llamamos al endpoint general de games
-        // Cogemos las plataformas y las categorias para los menus desplegables del navbar
-        this.platforms = gameStore.platforms;
-        this.categories = gameStore.categories;
-
-        console.log("platforms: ", this.platforms);
-        console.log("categorias: ", this.categories);
-    },
-}; */
-export default {
-    name: "Navbar",
-    data() {
-        return {
-            // Seteamos como array vacio las propiedades a usar en el navbar
-            platforms: [],
-            categories: [],
-        };
-    },
-    async mounted() {
-        // Usamos el store de Pinia para obtener los datos
-        const gameStore = useApiStore();
-        try {
-            // Llamada a la API desde el store - Le pasamos como agumento el nombre del endpoint al cual llamaremos
-            // await gameStore.fetchGames("games");
-            let id = 545;
-            await gameStore.fetchGames(`game?id=${id}`);
-        } catch (error) {
-            console.error("Error al obtener los datos desde el store:", error);
+        // Realizamos la llamada solo si no se han cargado los juegos
+        if (!gameStore.games.length) {
+            gameStore.fetchGames("games");
         }
     },
 };

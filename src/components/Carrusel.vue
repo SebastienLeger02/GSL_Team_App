@@ -1,13 +1,16 @@
 <template>
     <div class="slider">
         <div class="list">
-            <div v-for="(item, index) in images" :key="index" class="item" :class="{ active: index === currentIndex }"
+            <!-- {{ games }} -->
+            <!-- {{console.log("games: ", gamesOrdered) }} -->
+            <div v-for="(item, index) in gamesOrdered" :key="index" class="item" :class="{ active: index === currentIndex }"
                 v-show="index === currentIndex">
-                <img v-bind:src="item.src" :alt="item.alt" />
-                {{ console.warn("item: ", item) }}
+                <!-- {{ console.log(index) }} -->
+                <img v-bind:src="item.thumbnail" :alt="item.alt" />
+                <!-- {{ console.warn("item: ", item) }} -->
                 <div class="content">
                     <div class="title">{{ item.title }}</div>
-                    <div class="description">{{ item.description }}</div>
+                    <div class="description">{{ item.short_description }}</div>
                     <div class="button">
                         <button>More Info</button>
                     </div>
@@ -15,9 +18,9 @@
             </div>
         </div>
         <div class="thumbnail">
-            <div v-for="(item, index) in images" :key="'thumb-' + index" class="item"
+            <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
                 :class="{ active: index === currentIndex }" @click="goToSlide(index)">
-                <img :src="item.src" :alt="item.alt" />
+                <img :src="item.thumbnail" :alt="item.alt" />
             </div>
         </div>
         <div class="nextPrevArrows">
@@ -28,28 +31,65 @@
 </template>
 
 <script>
+
+import { useApiStore } from "../stores/apiStore";
+
 export default {
     data() {
         return {
-            images: [
-                {
-                    src: "/images/paisaje1.jpg",
-                    alt: "Paisaje 1",
-                    title: "PROYECTO 1",
-                    description: "Descripción del proyecto 1.",
-                },
-                {
-                    src: "/images/paisaje2.jpg",
-                    alt: "Paisaje 2",
-                    title: "PROYECTO 2",
-                    description: "Descripción del proyecto 2.",
-                },
-                // ... Añade los demás elementos
-            ],
+            limit: 12, // Limitar inicialmente a 12 resultados
             currentIndex: 0,
         };
     },
+    computed: {
+        // Juegos limitados y ordenados
+        gamesOrdered() {
+            const gameStore = useApiStore();
+            console.log("Sttore: ", gameStore.orderby);
+            return gameStore.orderby;
+        },
+    },
+    mounted() {
+        const gameStore = useApiStore();
+        // Llamamos a la API y aplicamos orden y límite inicial
+        if (!gameStore.orderby.length) {
+            gameStore.fetchGames("games").then(() => {
+                this.applyInitialSettings();
+            });
+        }
+    },
     methods: {
+        // Aplicar orden y límite inicial
+        applyInitialSettings() {
+            const gameStore = useApiStore();
+            gameStore.sortGames("relevance");
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos limitados
+            console.log("Juegos iniciales limitados:", gameStore.orderby);
+        },
+
+        // Cambiar límite dinámicamente
+        updateLimit(newLimit) {
+            const gameStore = useApiStore();
+            this.limit = newLimit;
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos con el nuevo límite
+            console.log(`Juegos limitados a ${this.limit}:`, gameStore.orderby);
+        },
+
+        // Cambiar el orden dinámicamente
+        changeOrder(orderType) {
+            const gameStore = useApiStore();
+            gameStore.sortGames(orderType);
+
+            // Aplicar el límite nuevamente después de ordenar
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos ordenados y limitados
+            console.log(`Juegos ordenados por ${orderType} y limitados:`, gameStore.orderby);
+        },
         nextSlide() {
             this.currentIndex =
                 (this.currentIndex + 1) % this.images.length;
@@ -176,7 +216,7 @@ body {
     bottom: 50px;
     left: 50%;
     width: max-content;
-    z-index: 100;
+    z-index: 5;
 }
 
 .thumbnail .item {
