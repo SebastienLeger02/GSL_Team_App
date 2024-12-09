@@ -31,8 +31,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <ul
-                        class="absolute hidden group-hover:block bg-white shadow-lg rounded mt-2 p-2 min-w-[150px] z-10">
+                    <ul class="absolute hidden group-hover:block bg-white shadow-lg rounded mt-2 p-2 min-w-[150px] z-10">
                         <li v-for="category in categories" :key="category" class="hover:bg-gray-100 p-2">
                             {{ category }}
                         </li>

@@ -3,8 +3,8 @@
         <div class="list">
             <!-- {{ games }} -->
             <!-- {{console.log("games: ", gamesOrdered) }} -->
-            <div v-for="(item, index) in gamesOrdered" :key="index" class="item" :class="{ active: index === currentIndex }"
-                v-show="index === currentIndex">
+            <div v-for="(item, index) in gamesOrdered" :key="index" class="item"
+                :class="{ active: index === currentIndex }" v-show="index === currentIndex">
                 <!-- {{ console.log(index) }} -->
                 <img v-bind:src="item.thumbnail" :alt="item.alt" />
                 <!-- {{ console.warn("item: ", item) }} -->
@@ -18,14 +18,14 @@
             </div>
         </div>
         <div class="thumbnail">
-            <div v-for="(item, index) in images" :key="'thumb-' + index" class="item"
+            <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
                 :class="{ active: index === currentIndex }" @click="goToSlide(index)">
-                <img :src="item.src" :alt="item.alt" />
+                <img :src="item.thumbnail" :alt="item.alt" />
             </div>
         </div>
         <div class="nextPrevArrows">
-            <button class="prev" @click="prevSlide"></button>
-            <button class="next" @click="nextSlide"></button>
+            <button class="prev" @click="prevSlide('prev')"></button>
+            <button class="next" @click="nextSlide('next')"></button>
         </div>
     </div>
 </template>
@@ -38,47 +38,31 @@ export default {
     data() {
         return {
             limit: 12, // Limitar inicialmente a 12 resultados
-            images: [
-                {
-                    src: "/images/paisaje1.jpg",
-                    alt: "Paisaje 1",
-                    title: "PROYECTO 1",
-                    description: "Descripción del proyecto 1.",
-                },
-                {
-                    src: "/images/paisaje2.jpg",
-                    alt: "Paisaje 2",
-                    title: "PROYECTO 2",
-                    description: "Descripción del proyecto 2.",
-                },
-                {
-                    src: "/images/paisaje3.jpg",
-                    alt: "Paisaje 3",
-                    title: "PROYECTO 3",
-                    description: "Descripción del proyecto 3.",
-                },
-                {
-                    src: "/images/paisaje4.jpg",
-                    alt: "Paisaje 4",
-                    title: "PROYECTO 4",
-                    description: "Descripción del proyecto 4.",
-                },
-                {
-                    src: "/images/paisaje5.jpg",
-                    alt: "Paisaje 5",
-                    title: "PROYECTO 5",
-                    description: "Descripción del proyecto 5.",
-                },
-                {
-                    src: "/images/paisaje6.jpg",
-                    alt: "Paisaje 6",
-                    title: "PROYECTO 6",
-                    description: "Descripción del proyecto 5.",
-                },
-                // ... Añade los demás elementos
-            ],
             currentIndex: 0,
         };
+    },
+    computed: {
+        // Juegos limitados y ordenados
+        gamesOrdered() {
+            const gameStore = useApiStore();
+            console.log("Store: ", gameStore.orderby);
+            return gameStore.orderby;
+        },
+        gamesId() {
+            const gameStore = useApiStore();
+            console.log("StoreGame: ", gameStore.orderby[0].id);
+            return gameStore;
+        },
+    },
+    mounted() {
+        const gameStore = useApiStore();
+        // Llamamos a la API y aplicamos orden y límite inicial
+        if (!gameStore.orderby.length) {
+            gameStore.fetchGames("games").then(() => {
+                this.applyInitialSettings();
+            });
+        }
+        this.startAutoSlide();
     },
     methods: {
         // Aplicar orden y límite inicial
@@ -112,55 +96,70 @@ export default {
             // Mostrar en consola los juegos ordenados y limitados
             console.log(`Juegos ordenados por ${orderType} y limitados:`, gameStore.orderby);
         },
+
         nextSlide() {
-            this.currentIndex =
-                (this.currentIndex + 1) % this.images.length;
+            this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
         },
+
         prevSlide() {
             this.currentIndex =
-                (this.currentIndex - 1 + this.images.length) %
-                this.images.length;
+                (this.currentIndex - 1 + this.gamesOrdered.length) %
+                this.gamesOrdered.length;
         },
 
         goToSlide(index) {
             this.currentIndex = index;
         },
+
+        //intervalo de las imagenes
+        startAutoSlide() {
+            this.autoSlideInterval = setInterval(() => {
+                this.nextSlide();
+            }, 10000); // Cambia la imagen cada 10 segundos
+        },
+
+        stopAutoSlide() {
+            clearInterval(this.autoSlideInterval);
+        },
     },
 };
+
 </script>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
 /* seccion imagenes grandes */
-
 .slider {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
     position: relative;
-    /*margin-top: -50px;*/
+}
+
+.slider .list {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .slider .list .item {
-    width: 100%;
-    height: 100%;
     position: absolute;
-    inset: 0 0 0 0;
+    inset: 0;
+    transition: 0.7s;
 }
+
+/* .slider .list .item::after {
+    content: '';
+    width: 100%;
+    height: 60%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-image: linear-gradient(to top, #000 30%, transparent);
+}  */
 
 .slider .list .item img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 .slider .list .item .content {
@@ -178,13 +177,15 @@ body {
 
 .slider .list .item .content .title {
     font-size: 4em;
+    font-family: "Jaro", sans-serif;
+    letter-spacing: 4px;
     font-weight: bold;
     line-height: 1.3em;
     padding-bottom: 10px;
     text-shadow:
-        0 0 7px #0000ff,
-        0 0 10px #0000ff,
-        0 0 21px #0000ff,
+        0 0 7px #ff6600,
+        0 0 10px #ff6600,
+        0 0 21px #ff6600,
         0 0 42px #5271ff,
         0 0 82px #5271ff,
         0 0 92px #5271ff,
@@ -192,12 +193,11 @@ body {
         0 0 151px #5271ff;
 }
 
-
 .slider .list .item .content .description {
     font-size: 14px;
     font-weight: bold;
     letter-spacing: 1px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(63, 106, 138, 0.71);
     padding: 10px;
     border-radius: 15px;
 }
@@ -237,10 +237,10 @@ body {
     display: flex;
     gap: 10px;
     position: absolute;
-    bottom: 50px;
+    bottom: 87px;
     left: 50%;
     width: max-content;
-    z-index: 100;
+    z-index: 5;
 }
 
 .thumbnail .item {
@@ -248,25 +248,38 @@ body {
     height: 220px;
     flex-shrink: 0;
     position: relative;
-    border-radius: 13px;
+    border-radius: 10px;
+    cursor: pointer;
+    filter: brightness(.5);
 }
 
 .thumbnail .item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 8px;
     box-shadow:
-        0 0 4rem rgb(92, 132, 119),
-        0 0 3rem #7f7fa9,
+        0 0 4rem rgb(132, 113, 92),
+        0 0 3rem #ff6600,
         inset 0 0 2.3rem rgb(92, 101, 98)
+}
+
+.thumbnail .item.active {
+
+    filter: brightness(1.5);
+    box-shadow: 0 0 .3rem #fff,
+        0 0 .1rem #fff,
+        0 0 1rem #e51a4c,
+        0 0 0.9rem #e51a4c,
+        0 0 2rem #ff7214,
+        inset 0 0 0.8rem #ff7214;
 }
 
 /* botones de prev y next */
 
 .nextPrevArrows {
     position: absolute;
-    top: 75%;
+    top: 70%;
     right: 40%;
     z-index: 100;
     width: 300px;
@@ -280,39 +293,45 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    box-shadow: 0 0 .2rem #fff,
-        0 0 .2rem #fff,
-        0 0 2rem #bc13fe,
-        0 0 0.8rem #bc13fe,
-        0 0 2.8rem #bc13fe,
-        inset 0 0 1.3rem #bc13fe;
+    box-shadow:
+        0 0 .3rem #fff,
+        0 0 .3rem #fff,
+        0 0 2.5rem #bc13fe,
+        0 0 1rem #bc13fe,
+        0 0 3rem #bc13fe,
+        inset 0 0 1.5rem #bc13fe;
     border: none;
-    color: #a335cb;
+    background-color: #bc13fe;
+    color: #ff00ff;
     font-family: monospace;
-    font-size: 25px;
+    font-size: 22px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.5s;
+    transition: all 0.4s ease;
 }
 
 .nextPrevArrows button:hover {
-
     background: var(--Gradiente-Radial, radial-gradient(270.17% 139.44% at 99.27% 1%, #483c9e 0%, #68088b 31.27%, #6c2c4a 65.27%, #000 99.77%));
     color: #fff;
 }
 
-/* animaciones */
-.slider .list .item:nth-child(1) {
-    z-index: 1;
+.prev::after {
+    content: "<";
 }
 
-.slider .list .item:nth-child(1) .content .title,
-.slider .list .item:nth-child(1) .content .description,
-.slider .list .item:nth-child(1) .content .button {
+.next::after {
+    content: ">";
+}
+
+/* animaciones */
+
+.slider .list .item .content .title,
+.slider .list .item .content .description,
+.slider .list .item .content .button {
     transform: translateY(50px);
     filter: blur(20px);
     opacity: 0;
-    animation: showContent 0.5s 1s linear 1 forwards;
+    animation: showContent 0.5s linear forwards;
 }
 
 @keyframes showContent {
@@ -323,20 +342,20 @@ body {
     }
 }
 
-.slider .list .item:nth-child(1) .content .title {
+.slider .list .item .content .title {
+    animation-delay: 0.4s;
+}
+
+.slider .list .item .content .description {
     animation-delay: 0.6s;
 }
 
-.slider .list .item:nth-child(1) .content .description {
+.slider .list .item .content .button {
     animation-delay: 0.8s;
 }
 
-.slider .list .item:nth-child(1) .content .button {
-    animation-delay: 1s;
-}
-
 /* animacion next boton */
-.slider.next .list .item:nth-child(1) img {
+/* .slider.next .list .item img {
     width: 150px;
     height: 220px;
     position: absolute;
@@ -344,9 +363,9 @@ body {
     left: 50%;
     border-radius: 30px;
     animation: showImage 0.5s linear 1 forwards;
-}
+} */
 
-@keyframes showImage {
+/* @keyframes showImage {
     to {
         bottom: 0;
         left: 0;
@@ -354,48 +373,48 @@ body {
         height: 100%;
         border-radius: 0;
     }
-}
+} */
 
-.slider.next .thumbnail .item:nth-last-child(1) {
+/* .slider.next .thumbnail .item:nth-last-child(1) {
     overflow: hidden;
     animation: showThumbnail 0.5s linear 1 forwards;
-}
+} */
 
-.slider.prev .list .item img {
+/* .slider.prev .list .item img {
     z-index: 100;
-}
+} */
 
-@keyframes showThumbnail {
+/* @keyframes showThumbnail {
     from {
         width: 0;
         opacity: 0;
     }
-}
+} */
 
-.slider.next .thumbnail {
+/* .slider.next .thumbnail {
     animation: effectNext .5s linear 1 forwards;
-}
+} */
 
-@keyframes effectNext {
+/* @keyframes effectNext {
     from {
         transform: translateX(150px);
     }
-}
+} */
 
 /* animacion boton prev */
 
-.slider.prev .list .item:nth-child(2) {
+/* .slider.prev .list .item:nth-child(2) {
     z-index: 2;
-}
+} */
 
-.slider.prev .list .item:nth-child(2) img {
+/* .slider.prev .list .item:nth-child(2) img {
     position: absolute;
     bottom: 0;
     left: 0;
     animation: outFrame 0.5s linear 1 forwards;
-}
+} */
 
-@keyframes outFrame {
+/* @keyframes outFrame {
     to {
         width: 150px;
         height: 220px;
@@ -404,27 +423,27 @@ body {
         border-radius: 20px;
     }
 }
-
-.slider.prev .thumbnail .item:nth-child(1) {
+ */
+/* .slider.prev .thumbnail .item {
     overflow: hidden;
     opacity: 0;
     animation: showThumbnail .5s linear 1 forwards;
-}
+} */
 
-.slider.prev .list .item:nth-child(1) .content .title,
+/* .slider.prev .list .item:nth-child(1) .content .title,
 .slider.prev .list .item:nth-child(1) .content .type,
 .slider.prev .list .item:nth-child(1) .content .description,
 .slider.prev .list .item:nth-child(1) .content .button {
     animation: contentOut 0.5s 1s linear 1 forwards;
-}
+} */
 
-@keyframes contentOut {
+/* @keyframes contentOut {
     to {
         transform: translateY(-150px);
         filter: blur(20px);
         opacity: 0;
     }
-}
+} */
 
 /* tamaños de la pantalla */
 @media screen and (max-width: 678px) {
@@ -436,59 +455,4 @@ body {
         font-size: 40px;
     }
 }
-
-.prev::after {
-    content: "<";
-}
-
-.next::after {
-    content: ">";
-}
 </style>
-
-
-
-<!-- <script options>
-let nextBtn = document.querySelector('.next');
-let prevBtn = document.querySelector('.prev');
-
-let slider = document.querySelector('.slider');
-let sliderList = slider.querySelector('.slider .list');
-let thumbnail = document.querySelector('.thumbnail');
-let thumbnailItems = thumbnail.querySelectorAll('.item');
-
-thumbnail.appendChild(thumbnailItems[0])
-
-//funciones para el boton next
-nextBtn.onclick = function() {
-    moveSlider('next')
-}
-
-//funciones para el boton prev
-prevBtn.onclick = function() {
-    moveSlider('prev')
-}
-
-function moveSlider(direction) {
-    let sliderItems = sliderList.querySelectorAll('.item')
-    let thumbnailItems = document.querySelectorAll('.thumbnail .item')
-
-    if(direction === 'next'){
-        sliderList.appendChild(sliderItems[0]) // Mueve el primer elemento al final
-        thumbnail.appendChild(thumbnailItems[0]) // Mueve el primer elemento de la miniatura al final
-        slider.classList.add('next')
-    } else {
-        sliderList.prepend(sliderItems[sliderItems.length - 1]) // Mueve el último elemento al inicio
-        thumbnail.prepend(thumbnailItems[thumbnailItems.length - 1]) // Mueve el último elemento de la miniatura al inicio
-        slider.classList.add('prev');
-    }
-
-    slider.addEventListener('animationend', function(){
-        if(direction === 'next'){
-            slider.classList.remove('next')
-        }else {
-            slider.classList.remove('prev')
-        }
-    }, {once: true})
-}
-</script> -->
