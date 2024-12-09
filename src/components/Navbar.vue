@@ -5,36 +5,41 @@
             <div class="flex space-x-6 items-center">
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
-                    <button class="text-gray-700 hover:text-black font-semibold flex items-center">
+                    <button class="text-gray-700 font-semibold flex items-center" @mouseover="showPlatform = true"
+                        @mouseleave="showPlatform = false">>
                         Plataforma
                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <ul class="absolute hidden bg-white shadow-md rounded p-2 min-w-[300px] z-50 bg-gray-400">
-                        <li v-for="platform in platforms" :key="platform"
-                            class="hover:bg-gray-200 px-4 py-2 text-gray-700">
-                            <a href="">{{ platform }}</a>
-                        </li>
-                    </ul>
+                    <div v-show="showPlatform"
+                        class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-bg-color/70"
+                        @mouseover="showPlatform = true" 
+                        @mouseleave="showPlatform = false">
+                        <a class="whitespace-nowrap p-1" v-for="platform in platforms" :key="platform">
+                            {{ platform }}
+                        </a>
+                    </div>
                 </div>
 
 
                 <div class="relative group">
-                    <button class="text-gray-700 font-semibold flex items-center">
+                    <button class="text-gray-700 font-semibold flex items-center" @mouseover="showCategory = true"
+                        @mouseleave="showCategory = false">
                         Categorías
                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div class="absolute bg-white shadow-lg rounded p-2 z-10">
-                        <ul class="grid grid-cols-3 grid-rows-5 gap-x-40 bg-bg-color/30">
-                            <li v-for="category in categories" :key="category">
-                                <a class="p-2" href="">{{ category }}</a>
-                            </li>
-                        </ul>
+                    <div v-show="showCategory"
+                        class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-bg-color/70"
+                        @mouseover="showCategory = true" 
+                        @mouseleave="showCategory = false">
+                        <a class="whitespace-nowrap p-1" v-for="category in categories" :key="category">
+                            {{ category }}
+                        </a>
                     </div>
                 </div>
                 <div>
@@ -67,6 +72,12 @@ import { useApiStore } from "../stores/apiStore";
 
 export default {
     name: "Navbar",
+    data() {
+        return {
+            showPlatform: false, // Estado para controlar la visibilidad del contenido
+            showCategory: false, // Estado para controlar la visibilidad del contenido
+        };
+    },
     computed: {
         // Acceso a los getters del store
         platforms() {

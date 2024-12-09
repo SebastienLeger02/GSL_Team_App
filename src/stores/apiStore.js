@@ -4,6 +4,7 @@ export const useApiStore = defineStore("apiStore", {
   state: () => ({
     games: [], // Almacenamos todos los juegos aquí
     orderby: [], // Almacenamos los juegos procesados (ordenados/limitados)
+    gameById: null, // Almacenamos la informacion del juego
   }),
 
   getters: {
@@ -20,6 +21,7 @@ export const useApiStore = defineStore("apiStore", {
   actions: {
     // Acción para obtener los datos desde la API
     fetchGames(endpoint) {
+      console.warn(endpoint);
       return fetch(
         `https://free-to-play-games-database.p.rapidapi.com/api/${endpoint}`,
         {
@@ -32,8 +34,12 @@ export const useApiStore = defineStore("apiStore", {
       )
         .then((response) => response.json())
         .then((data) => {
-          this.games = data; // Asignamos los datos de los juegos al estado
-          this.orderby = [...data]; // Inicializamos `orderby` con los mismos datos
+          if (endpoint.includes("game?id")) {
+            this.gameById = data;
+          } else {
+            this.games = data; // Asignamos los datos de los juegos al estado
+            this.orderby = [...data]; // Inicializamos `orderby` con los mismos datos
+          }
         })
         .catch((error) => {
           console.error("Error fetching games data:", error);
