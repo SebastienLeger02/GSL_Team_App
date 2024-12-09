@@ -18,9 +18,9 @@
             </div>
         </div>
         <div class="thumbnail">
-            <div v-for="(item, index) in images" :key="'thumb-' + index" class="item"
+            <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
                 :class="{ active: index === currentIndex }" @click="goToSlide(index)">
-                <img :src="item.src" :alt="item.alt" />
+                <img :src="item.thumbnail" :alt="item.alt" />
             </div>
         </div>
         <div class="nextPrevArrows">
@@ -38,21 +38,6 @@ export default {
     data() {
         return {
             limit: 12, // Limitar inicialmente a 12 resultados
-            images: [
-                {
-                    src: "/images/paisaje1.jpg",
-                    alt: "Paisaje 1",
-                    title: "PROYECTO 1",
-                    description: "Descripción del proyecto 1.",
-                },
-                {
-                    src: "/images/paisaje2.jpg",
-                    alt: "Paisaje 2",
-                    title: "PROYECTO 2",
-                    description: "Descripción del proyecto 2.",
-                },
-                // ... Añade los demás elementos
-            ],
             currentIndex: 0,
         };
     },
@@ -232,7 +217,7 @@ body {
     bottom: 50px;
     left: 50%;
     width: max-content;
-    z-index: 100;
+    z-index: 5;
 }
 
 .thumbnail .item {
