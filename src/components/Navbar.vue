@@ -12,31 +12,30 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <!-- <ul class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-50"> -->
-                    <ul class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[300px] z-50">
-                        <!-- class="absolute hidden bg-white shadow-md rounded mt-2 p-2 min-w-[150px] z-50"> -->
+                    <ul class="absolute hidden bg-white shadow-md rounded p-2 min-w-[300px] z-50 bg-gray-400">
                         <li v-for="platform in platforms" :key="platform"
-                            class="hover:bg-gray-100 px-4 py-2 text-gray-700">
-                            {{ platform }}
+                            class="hover:bg-gray-200 px-4 py-2 text-gray-700">
+                            <a href="">{{ platform }}</a>
                         </li>
                     </ul>
                 </div>
 
 
                 <div class="relative group">
-                    <button class="text-gray-700 hover:text-black font-semibold flex items-center">
+                    <button class="text-gray-700 font-semibold flex items-center">
                         Categorías
                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <ul
-                        class="absolute hidden group-hover:block bg-white shadow-lg rounded mt-2 p-2 min-w-[150px] z-10">
-                        <li v-for="category in categories" :key="category" class="hover:bg-gray-100 p-2">
-                            {{ category }}
-                        </li>
-                    </ul>
+                    <div class="absolute bg-white shadow-lg rounded p-2 z-10">
+                        <ul class="grid grid-cols-3 grid-rows-5 gap-x-40 bg-bg-color/30">
+                            <li v-for="category in categories" :key="category">
+                                <a class="p-2" href="">{{ category }}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div>
                     <a href="#" class="text-blue-500">Blog</a>
@@ -67,25 +66,25 @@
 import { useApiStore } from "../stores/apiStore";
 
 export default {
-  name: "Navbar",
-  computed: {
-    // Acceso a los getters del store
-    platforms() {
-      const gameStore = useApiStore();
-      return gameStore.platforms;
+    name: "Navbar",
+    computed: {
+        // Acceso a los getters del store
+        platforms() {
+            const gameStore = useApiStore();
+            return gameStore.platforms;
+        },
+        categories() {
+            const gameStore = useApiStore();
+            return gameStore.categories;
+        },
     },
-    categories() {
-      const gameStore = useApiStore();
-      return gameStore.categories;
+    mounted() {
+        const gameStore = useApiStore();
+        // Realizamos la llamada solo si no se han cargado los juegos
+        if (!gameStore.games.length) {
+            gameStore.fetchGames("games");
+        }
     },
-  },
-  mounted() {
-    const gameStore = useApiStore();
-    // Realizamos la llamada solo si no se han cargado los juegos
-    if (!gameStore.games.length) {
-      gameStore.fetchGames("games");
-    }
-  },
 };
 </script>
 
