@@ -85,25 +85,14 @@ import { useApiStore } from "../stores/apiStore";
 
 export default {
     name: "Navbar",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> main
     data() {
         return {
             showPlatform: false, // Estado para controlar la visibilidad del contenido
             showCategory: false, // Estado para controlar la visibilidad del contenido
-<<<<<<< HEAD
-        };
-    },
-=======
             searchQuery: "", // Almacena el texto del buscador
             suggestions: [], // Sugerencias para autocompletar
         };
     },
->>>>>>> 0c7651c793a2f7c08856d321801b8c1d93717e79
->>>>>>> main
     computed: {
         // Acceso a los getters del store
         platforms() {
