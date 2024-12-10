@@ -6,7 +6,7 @@
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
                     <button class="text-gray-700 font-semibold flex items-center" @mouseover="showPlatform = true"
-                        @mouseleave="showPlatform = false">>
+                        @mouseleave="showPlatform = false">
                         Plataforma
                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -15,8 +15,7 @@
                     </button>
                     <div v-show="showPlatform"
                         class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-bg-color/70"
-                        @mouseover="showPlatform = true" 
-                        @mouseleave="showPlatform = false">
+                        @mouseover="showPlatform = true" @mouseleave="showPlatform = false">
                         <a class="whitespace-nowrap p-1" v-for="platform in platforms" :key="platform">
                             {{ platform }}
                         </a>
@@ -35,8 +34,7 @@
                     </button>
                     <div v-show="showCategory"
                         class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-bg-color/70"
-                        @mouseover="showCategory = true" 
-                        @mouseleave="showCategory = false">
+                        @mouseover="showCategory = true" @mouseleave="showCategory = false">
                         <a class="whitespace-nowrap p-1" v-for="category in categories" :key="category">
                             {{ category }}
                         </a>
@@ -47,19 +45,34 @@
                 </div>
             </div>
             <!-- Otros enlaces -->
+
+            <!-- Buscador -->
             <div class="flex space-x-6 items-center">
                 <div class="relative">
                     <label class="sr-only" for="search">Search</label>
-                    <input type="search" placeholder="Find a game" id="search"
-                        class="w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-white">
+                    <input type="search" v-model="searchQuery" @input="onSearch" placeholder="Find a game" id="search"
+                        class="input-search w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-slate-400" />
                     <div class="absolute top-1 right-1">
                         <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
                     </div>
+                    <ul v-if="suggestions.length" class="absolute bg-white shadow-lg rounded mt-2 p-2 z-10">
+                        <li v-for="(name, index) in suggestions" :key="index" @click="selectSuggestion(name)"
+                            class="hover:bg-gray-100 px-4 py-2 text-gray-700 cursor-pointer">
+                            {{ name }}
+                        </li>
+                    </ul>
                 </div>
 
                 <!-- <a href="#" class="text-blue-500">Search</a> -->
                 <a href="#" class="text-gray-700 hover:text-black">GitHub</a>
             </div>
+        </div>
+        <!-- Resultados de búsqueda -->
+        <div v-if="gameById" class="mt-4">
+            <h3 class="font-bold">Resultados:</h3>
+            <ul>
+                <li>{{ gameById.title }} ({{ gameById.screenshots[0].image }})</li>
+            </ul>
         </div>
     </section>
     <!-- <div class="container-full h-[1000px] bg-color"></div> -->
@@ -76,26 +89,51 @@ export default {
         return {
             showPlatform: false, // Estado para controlar la visibilidad del contenido
             showCategory: false, // Estado para controlar la visibilidad del contenido
+            searchQuery: "", // Almacena el texto del buscador
+            suggestions: [], // Sugerencias para autocompletar
         };
     },
     computed: {
         // Acceso a los getters del store
         platforms() {
-            const gameStore = useApiStore();
-            return gameStore.platforms;
+            return useApiStore().platforms;
         },
         categories() {
-            const gameStore = useApiStore();
-            return gameStore.categories;
+            return useApiStore().categories;
+        },
+        gameStore() {
+            return useApiStore();
+        },
+        gameById() {
+            return this.gameStore.gameById;
         },
     },
     mounted() {
-        const gameStore = useApiStore();
-        // Realizamos la llamada solo si no se han cargado los juegos
-        if (!gameStore.games.length) {
-            gameStore.fetchGames("games");
+        if (!this.gameStore.games.length) {
+            this.gameStore.fetchGames("games");
         }
+},
+methods: {
+    onSearch() {
+        // Si el campo de búsqueda está vacío, vaciar las sugerencias
+        if (!this.searchQuery.trim()) {
+            this.suggestions = [];
+            return;
+        }
+
+        this.suggestions = this.gameStore.games
+            .map((game) => game.title)
+            .filter((name) => name.toLowerCase().includes(this.searchQuery.toLowerCase()));
     },
+    selectSuggestion(name) {
+        const selectedGame = this.gameStore.games.find((game) => game.title === name);
+        if (selectedGame) {
+            this.gameStore.fetchGames(`game?id=${selectedGame.id}`);
+        }
+        this.searchQuery = "";
+        this.suggestions = [];
+    },
+},
 };
 </script>
 
@@ -105,6 +143,10 @@ section {
     color: #fff;
     font-weight: 600;
     border-bottom: 2px solid #8cb7eb;
+}
+
+.input-search {
+    color: #151516;
 }
 
 button:hover+ul,
