@@ -3,16 +3,16 @@
 </template>
 
 <script>
+import Carrusel from "../components/Carrusel.vue";
+import Navbar from "../components/Navbar.vue";
+
 export default {
-    name: "Category",
-    data() {
-       return{
-            
-        }
-
-    }
-
-}
+  name: "Category",
+  components: {
+    Navbar,
+    Carrusel
+  },
+};
 </script>
 
 <style>
