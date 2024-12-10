@@ -16,6 +16,10 @@ export const useApiStore = defineStore("apiStore", {
     categories(state) {
       return [...new Set(state.games.map((game) => game.genre))];
     },
+    // Getter para pbtener el nombre de los juegos
+    gameNames(state) {
+      return state.games.map((game) => game.title);
+    },
   },
 
   actions: {
