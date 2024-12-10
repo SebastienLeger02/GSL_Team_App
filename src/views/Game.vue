@@ -1,9 +1,18 @@
 <template>
-    <!-- <h2 class="text-2xl font-bold">Game {{ $route.params.id }}</h2> -->
+     <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> 
+
+    <div className="grid grid-cols-2 grid-rows-1 gap-4 m-[auto] container">
+      <div >
+        <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" 
+        class="w-[120%]"/>
+      </div>
+      <div >
+         <h2 class="text-2xl font-bold">Game: {{ gameDetail?.title }}</h2>
+        <p v-if="gameDetail" class="mt-4">{{ gameDetail.description }}</p>
+      </div>
+    </div>
     <div>
-    <h2 class="text-2xl font-bold">Game: {{ gameDetail?.title }}</h2>
-    <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" />
-    <p v-if="gameDetail" class="mt-4">{{ gameDetail.short_description }}</p>
+   
 
     <div v-if="gameDetail?.screenshots?.length" class="mt-6">
       <h3 class="text-xl font-bold">Screenshots:</h3>
@@ -26,31 +35,39 @@ import { useApiStore } from "../stores/apiStore";
 
 export default {
   name: "Game",
+  data() {
+    return {
+      gameId : null
+    }
+  },
   computed: {
     // Obtener los datos del juego desde el store
     gameDetail() {
       const gameStore = useApiStore();
+      console.log("GamesDetail :", gameStore.gameById);
       return gameStore.gameById;
     },
+    
   },
   mounted() {
     const gameStore = useApiStore();
-    // const gameId = this.$route.params.id; // Obtenemos el ID desde la URL
-
+   
+    const gameId =  this.$route.query.id; // Obtenemos el ID desde la URL
     // Llamar a la API para obtener los detalles del juego
-    let gameId = 545;
+    //let gameId = 545;
     if (gameId) {
+      console.log("ID :",gameStore.fetchGames(`game?id=${gameId}`));
       gameStore.fetchGames(`game?id=${gameId}`);
     }
   },
   watch: {
     // Observar cambios en el ID de la ruta para recargar los datos
-    "$route.params.id"(newId) {
+/*     "$route.params.id"(newId) {
       const gameStore = useApiStore();
       if (newId) {
         gameStore.fetchGames(`game?id=${newId}`);
       }
-    },
+    }, */
   },
 };
 </script>
