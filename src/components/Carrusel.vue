@@ -45,7 +45,6 @@ export default {
         // Juegos limitados y ordenados
         gamesOrdered() {
             const gameStore = useApiStore();
-            console.log("Sttore: ", gameStore.orderby);
             return gameStore.orderby;
         },
     },

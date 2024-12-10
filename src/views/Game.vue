@@ -12,7 +12,10 @@
       </div>
     </div>
     <div>
-   
+    <h2 class="text-2xl font-bold">Game: {{ gameDetail?.title }}</h2>
+    <h3>{{ gameDetail.publisher }}</h3>
+    <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" />
+    <p v-if="gameDetail" class="mt-4">{{ gameDetail.short_description }}</p>
 
     <div v-if="gameDetail?.screenshots?.length" class="mt-6">
       <h3 class="text-xl font-bold">Screenshots:</h3>
@@ -54,7 +57,7 @@ export default {
    
     const gameId =  this.$route.query.id; // Obtenemos el ID desde la URL
     // Llamar a la API para obtener los detalles del juego
-    //let gameId = 545;
+   
     if (gameId) {
       console.log("ID :",gameStore.fetchGames(`game?id=${gameId}`));
       gameStore.fetchGames(`game?id=${gameId}`);
