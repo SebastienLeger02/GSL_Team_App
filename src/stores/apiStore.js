@@ -59,13 +59,15 @@ export const useApiStore = defineStore("apiStore", {
           this.orderby = [...this.games].sort((a, b) => a.title.localeCompare(b.title));
           break;
         default:
-          this.orderby = [...this.games]; // Sin orden específico
       }
     },
 
     // Acción para limitar los resultados
     limitResults(limit) {
       this.orderby = this.orderby.slice(0, limit);
+    },
+    fetchGameById(id) {
+      this.gameById = this.games.find((game) => game.id === id);//nuevo
     },
   },
 });

@@ -48,11 +48,10 @@ export default {
             console.log("Store: ", gameStore.orderby);
             return gameStore.orderby;
         },
-        gamesId() {
-            const gameStore = useApiStore();
-            console.log("StoreGame: ", gameStore.orderby[0].id);
-            return gameStore;
-        },
+        juegoId() {
+            const juegoStore = useApiStore();
+            return juegoStore.gameById
+        }
     },
     mounted() {
         const gameStore = useApiStore();
@@ -64,6 +63,7 @@ export default {
         }
         this.startAutoSlide();
     },
+
     methods: {
         // Aplicar orden y límite inicial
         applyInitialSettings() {
@@ -123,7 +123,6 @@ export default {
         },
     },
 };
-
 </script>
 
 <style>
