@@ -1,7 +1,7 @@
 <template>
     <section class="px-4 py-2">
         <div class="flex items-center justify-between">
-            <img class="w-36 h-12" src="../assets/logo_gsl.png" alt="GSL Gane App">
+            <img class="w-28 h-9" src="../assets/logo_gsl.png" alt="GSL Gane App">
             <div class="flex space-x-6 items-center">
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
@@ -51,11 +51,12 @@
                 <div class="relative">
                     <label class="sr-only" for="search">Search</label>
                     <input type="search" v-model="searchQuery" @input="onSearch" placeholder="Find a game" id="search"
-                        class="input-search w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-slate-400" />
+                        class="input-search w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-base rounded-full bg-gray-600/70 placeholder:text-slate-400" />
                     <div class="absolute top-1 right-1">
-                        <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
+                        <img class="w-9 h-9 sepia" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
                     </div>
-                    <ul v-if="suggestions.length" class="absolute bg-white shadow-lg rounded mt-2 p-2 z-10">
+                    <ul v-if="suggestions.length" class="absolute bg-white shadow-lg rounded-mg ml-[6%] w-[89%] p-2 z-10 bg-bg-color/70">
+                        <!-- padding 6 width 90 -->
                         <li v-for="(name, index) in suggestions" :key="index" @click="selectSuggestion(name)"
                             class="hover:bg-gray-100 px-4 py-2 text-gray-700 cursor-pointer">
                             {{ name }}
