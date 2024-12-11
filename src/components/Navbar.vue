@@ -22,7 +22,7 @@
                             :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap p-1">
                             {{ platform }}
                             <!-- {{ console.log("platform ->", platform) }} -->
-                            <!-- {{ console.log("platform ->", platform, " ----- ", formatToUrl(platform)) }} -->
+                            {{ console.log("platform ->", platform, " ----- ", formatToUrl(platform)) }}
                         </router-link>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <router-link v-for="category in categories" :key="category"
                             :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap p-1">
                             {{ category }}
-                            {{ console.log("categoria: ", category, " relacion: ", formatToUrl(category)) }}
+                            <!-- {{ console.log("categoria: ", category, " relacion: ", formatToUrl(category)) }} -->
                         </router-link>
                     </div>
                 </div>
