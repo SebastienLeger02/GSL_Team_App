@@ -18,7 +18,3 @@ body {
     )
   );
 }
-
-body {
-  @apply font-jaro;
-}
