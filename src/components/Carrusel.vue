@@ -3,10 +3,10 @@
         <div class="list">
             <!-- {{ games }} -->
             <!-- {{console.log("games: ", gamesOrdered) }} -->
-            <div v-for="(item, index) in gamesOrdered" :key="index" class="item"
+            <div v-for="(item, index) in gameDatails" :key="index" class="item"
                 :class="{ active: index === currentIndex }" v-show="index === currentIndex">
                 <!-- {{ console.log(index) }} -->
-                <img v-bind:src="item.thumbnail" :alt="item.alt" />
+                <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
                 <!-- {{ console.warn("item: ", item) }} -->
                 <div class="content">
                     <div class="title">{{ item.title }}</div>
@@ -19,39 +19,28 @@
         </div>
         <div class="thumbnail">
             <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
-                :class="{ active: index === currentIndex }" @click="goToSlide(index)">
+                :class="{ active: index === 0 }" @click="goToSlide(index)">
                 <img :src="item.thumbnail" :alt="item.alt" />
             </div>
         </div>
         <div class="nextPrevArrows">
-            <button class="prev" @click="prevSlide('prev')"></button>
-            <button class="next" @click="nextSlide('next')"></button>
+            <button class="prev" @click="prevSlide()"></button>
+            <button class="next" @click="nextSlide()"></button>
         </div>
     </div>
 </template>
 
 <script>
-
 import { useApiStore } from "../stores/apiStore";
-
+import axios from "axios";
 export default {
     data() {
         return {
             limit: 12, // Limitar inicialmente a 12 resultados
             currentIndex: 0,
+            gameDatails: [],
+            gamesOrdered: [],
         };
-    },
-    computed: {
-        // Juegos limitados y ordenados
-        gamesOrdered() {
-            const gameStore = useApiStore();
-            console.log("Store: ", gameStore.orderby);
-            return gameStore.orderby;
-        },
-        juegoId() {
-            const juegoStore = useApiStore();
-            return juegoStore.gameById
-        }
     },
     mounted() {
         const gameStore = useApiStore();
@@ -59,17 +48,39 @@ export default {
         if (!gameStore.orderby.length) {
             gameStore.fetchGames("games").then(() => {
                 this.applyInitialSettings();
+                this.gamesOrdered = gameStore.orderby;
             });
         }
         this.startAutoSlide();
     },
-
     methods: {
         // Aplicar orden y límite inicial
         applyInitialSettings() {
             const gameStore = useApiStore();
             gameStore.sortGames("relevance");
             gameStore.limitResults(this.limit);
+
+            //sacar los ids de los juegos
+            let IdsArray = gameStore.orderby.map((juego) => juego.id);
+
+            //hacer un fetch para cada id a endpoint game?id=XX
+            Promise.all(
+                IdsArray.map((id) =>
+                    axios.get(
+                        `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
+                        {
+                            headers: {
+                                "X-RapidAPI-Key":
+                                    "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
+                                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+                            },
+                        }
+                    )
+                )
+            ).then((respuesta) => {
+                //console.log(respuesta)
+                this.gameDatails = respuesta.map((item) => item.data);
+            });
 
             // Mostrar en consola los juegos limitados
             console.log("Juegos iniciales limitados:", gameStore.orderby);
@@ -94,17 +105,23 @@ export default {
             gameStore.limitResults(this.limit);
 
             // Mostrar en consola los juegos ordenados y limitados
-            console.log(`Juegos ordenados por ${orderType} y limitados:`, gameStore.orderby);
+            console.log(
+                `Juegos ordenados por ${orderType} y limitados:`,
+                gameStore.orderby
+            );
         },
 
         nextSlide() {
             this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
+            this.gamesOrdered.push(this.gamesOrdered.shift());
+            console.log(this.gamesOrdered);
         },
 
         prevSlide() {
             this.currentIndex =
                 (this.currentIndex - 1 + this.gamesOrdered.length) %
                 this.gamesOrdered.length;
+            this.gamesOrdered.unshift(this.gamesOrdered.pop());
         },
 
         goToSlide(index) {
@@ -128,7 +145,7 @@ export default {
 <style>
 /* seccion imagenes grandes */
 .slider {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     position: relative;
@@ -146,19 +163,10 @@ export default {
     transition: 0.7s;
 }
 
-/* .slider .list .item::after {
-    content: '';
-    width: 100%;
-    height: 60%;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    background-image: linear-gradient(to top, #000 30%, transparent);
-}  */
-
 .slider .list .item img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 
 .slider .list .item .content {
@@ -234,22 +242,23 @@ export default {
 
 .thumbnail {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     position: absolute;
     bottom: 87px;
-    left: 50%;
+    left: 40%;
     width: max-content;
     z-index: 5;
 }
 
 .thumbnail .item {
-    width: 150px;
-    height: 220px;
+    width: 290px;
+    height: 170px;
     flex-shrink: 0;
     position: relative;
     border-radius: 10px;
     cursor: pointer;
     filter: brightness(.5);
+    transition: transform 0.3s, filter 0.3s;
 }
 
 .thumbnail .item img {
@@ -264,7 +273,7 @@ export default {
 }
 
 .thumbnail .item.active {
-
+    transform: scale(1.1);
     filter: brightness(1.5);
     box-shadow: 0 0 .3rem #fff,
         0 0 .1rem #fff,
@@ -278,8 +287,8 @@ export default {
 
 .nextPrevArrows {
     position: absolute;
-    top: 70%;
-    right: 40%;
+    top: 72%;
+    right: 50%;
     z-index: 100;
     width: 300px;
     max-width: 30%;
@@ -352,97 +361,6 @@ export default {
 .slider .list .item .content .button {
     animation-delay: 0.8s;
 }
-
-/* animacion next boton */
-/* .slider.next .list .item img {
-    width: 150px;
-    height: 220px;
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    border-radius: 30px;
-    animation: showImage 0.5s linear 1 forwards;
-} */
-
-/* @keyframes showImage {
-    to {
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-    }
-} */
-
-/* .slider.next .thumbnail .item:nth-last-child(1) {
-    overflow: hidden;
-    animation: showThumbnail 0.5s linear 1 forwards;
-} */
-
-/* .slider.prev .list .item img {
-    z-index: 100;
-} */
-
-/* @keyframes showThumbnail {
-    from {
-        width: 0;
-        opacity: 0;
-    }
-} */
-
-/* .slider.next .thumbnail {
-    animation: effectNext .5s linear 1 forwards;
-} */
-
-/* @keyframes effectNext {
-    from {
-        transform: translateX(150px);
-    }
-} */
-
-/* animacion boton prev */
-
-/* .slider.prev .list .item:nth-child(2) {
-    z-index: 2;
-} */
-
-/* .slider.prev .list .item:nth-child(2) img {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    animation: outFrame 0.5s linear 1 forwards;
-} */
-
-/* @keyframes outFrame {
-    to {
-        width: 150px;
-        height: 220px;
-        bottom: 50px;
-        left: 50%;
-        border-radius: 20px;
-    }
-}
- */
-/* .slider.prev .thumbnail .item {
-    overflow: hidden;
-    opacity: 0;
-    animation: showThumbnail .5s linear 1 forwards;
-} */
-
-/* .slider.prev .list .item:nth-child(1) .content .title,
-.slider.prev .list .item:nth-child(1) .content .type,
-.slider.prev .list .item:nth-child(1) .content .description,
-.slider.prev .list .item:nth-child(1) .content .button {
-    animation: contentOut 0.5s 1s linear 1 forwards;
-} */
-
-/* @keyframes contentOut {
-    to {
-        transform: translateY(-150px);
-        filter: blur(20px);
-        opacity: 0;
-    }
-} */
 
 /* tamaños de la pantalla */
 @media screen and (max-width: 678px) {
