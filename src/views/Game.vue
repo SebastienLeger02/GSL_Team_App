@@ -13,7 +13,7 @@
     </div>
     <div>
     <h2 class="text-2xl font-bold">Game: {{ gameDetail?.title }}</h2>
-    <h3>{{ gameDetail.publisher }}</h3>
+    <h3>{{ gameDetail?.publisher }}</h3>
     <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" />
     <p v-if="gameDetail" class="mt-4">{{ gameDetail.short_description }}</p>
 
