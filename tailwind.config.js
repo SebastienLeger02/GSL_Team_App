@@ -6,6 +6,9 @@ export default {
       'bg-color': '#1B001E',
       'b-nav': '#8cb7eb;'
     },
+    fontFamily: {
+      jaro: [ 'Jaro', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [],

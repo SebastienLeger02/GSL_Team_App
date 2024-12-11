@@ -113,10 +113,6 @@ export default {
     box-sizing: border-box;
 }
 
-body {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
 /* seccion imagenes grandes */
 
 .slider {

@@ -2,11 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply font-jaro;
+}
+
 .bg-gradient {
-    background: var(--Gradiente-Radial,
-            radial-gradient(270.17% 139.44% at 99.27% 1%,
-                #483c9e 0%,
-                #68088b 31.27%,
-                #bc168d 65.27%,
-                #000 99.77%));
+  background: var(
+    --Gradiente-Radial,
+    radial-gradient(
+      270.17% 139.44% at 99.27% 1%,
+      #483c9e 0%,
+      #68088b 31.27%,
+      #bc168d 65.27%,
+      #000 99.77%
+    )
+  );
+}
+
+body {
+  @apply font-jaro;
 }
