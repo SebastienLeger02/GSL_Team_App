@@ -1,7 +1,9 @@
 <template>
     <section class="px-4 py-2">
         <div class="flex items-center justify-between">
-            <img class="w-36 h-12" src="../assets/logo_gsl.png" alt="GSL Gane App">
+            <router-link to="/">
+                <img class="w-28 h-9" src="../assets/logo_gsl.png" alt="GSL Gane App">
+            </router-link>
             <div class="flex space-x-6 items-center">
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
@@ -16,9 +18,10 @@
                     <div v-show="showPlatform"
                         class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-bg-color/70"
                         @mouseover="showPlatform = true" @mouseleave="showPlatform = false">
-                        <a class="whitespace-nowrap p-1" v-for="platform in platforms" :key="platform">
+                        <router-link v-for="platform in platforms" :key="platform"
+                            :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap p-1">
                             {{ platform }}
-                        </a>
+                        </router-link>
                     </div>
                 </div>
 
@@ -35,47 +38,45 @@
                     <div v-show="showCategory"
                         class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-bg-color/70"
                         @mouseover="showCategory = true" @mouseleave="showCategory = false">
-                        <a class="whitespace-nowrap p-1" v-for="category in categories" :key="category">
+                        <router-link v-for="category in categories" :key="category"
+                            :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap p-1">
                             {{ category }}
-                        </a>
+                        </router-link>
                     </div>
                 </div>
                 <div>
                     <a href="#" class="text-blue-500">Blog</a>
                 </div>
             </div>
-            <!-- Otros enlaces -->
 
             <!-- Buscador -->
             <div class="flex space-x-6 items-center">
                 <div class="relative">
                     <label class="sr-only" for="search">Search</label>
-                    <input type="search" v-model="searchQuery" @input="onSearch" placeholder="Find a game" id="search"
-                        class="input-search w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-lg rounded-full bg-gray-600/70 placeholder:text-slate-400" />
-                    <div class="absolute top-1 right-1">
-                        <img class="w-9 h-9" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
+                    <input type="search" autocomplete="off" v-model="searchQuery" @input="onSearch"
+                        @keyup.enter="navigateToFirstSuggestion" placeholder="Find a game" id="search"
+                        class="input-search w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-base rounded-full bg-gray-600/70 placeholder:text-slate-400" />
+                    <div class="absolute top-1 right-1" @click="navigateToFirstSuggestion">
+                        <img class="w-9 h-9 sepia" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
                     </div>
-                    <ul v-if="suggestions.length" class="absolute bg-white shadow-lg rounded mt-2 p-2 z-10">
-                        <li v-for="(name, index) in suggestions" :key="index" @click="selectSuggestion(name)"
+                    <ul v-if="suggestions.length"
+                        class="absolute bg-white shadow-lg rounded-mg ml-[6%] w-[89%] p-2 z-10 bg-bg-color/70">
+                        <li v-for="(name, index) in suggestions" :key="index" @click="navigateToGame(name)"
                             class="hover:bg-gray-100 px-4 py-2 text-gray-700 cursor-pointer">
                             {{ name }}
                         </li>
                     </ul>
                 </div>
 
-                <!-- <a href="#" class="text-blue-500">Search</a> -->
-                <a href="#" class="text-gray-700 hover:text-black">GitHub</a>
+                <!-- Github Link -->
+                <a href="https://github.com/FEPT07/GSL_Team_App" target="_blank" rel="noopener noreferrer"
+                    class="text-white-700 hover:text-black flex items-center space-x-2">
+                    <img src="../assets/github-icon.svg" alt="GitHub Icon" class="text-white-700 w-8 h-8" />
+                    <span>GitHub</span>
+                </a>
             </div>
         </div>
-        <!-- Resultados de búsqueda -->
-        <div v-if="gameById" class="mt-4">
-            <h3 class="font-bold">Resultados:</h3>
-            <ul>
-                <li>{{ gameById.title }} ({{ gameById.screenshots[0].image }})</li>
-            </ul>
-        </div>
     </section>
-    <!-- <div class="container-full h-[1000px] bg-color"></div> -->
 </template>
 
 <script>
@@ -112,28 +113,39 @@ export default {
         if (!this.gameStore.games.length) {
             this.gameStore.fetchGames("games");
         }
-},
-methods: {
-    onSearch() {
-        // Si el campo de búsqueda está vacío, vaciar las sugerencias
-        if (!this.searchQuery.trim()) {
+    },
+    methods: {
+        onSearch() {
+            // Si el campo de búsqueda está vacío, vaciar las sugerencias
+            if (!this.searchQuery.trim()) {
+                this.suggestions = [];
+                return;
+            }
+            this.suggestions = this.gameStore.games
+                .map((game) => game.title)
+                .filter((name) => name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        },
+        navigateToGame(name) {
+            const selectedGame = this.gameStore.games.find((game) => game.title === name);
+            if (selectedGame) {
+                this.$router.push(`/game?id=${selectedGame.id}`);
+            }
+            this.searchQuery = "";
             this.suggestions = [];
-            return;
-        }
-
-        this.suggestions = this.gameStore.games
-            .map((game) => game.title)
-            .filter((name) => name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        },
+        navigateToFirstSuggestion() {
+            if (this.suggestions.length > 0) {
+                const firstSuggestion = this.suggestions[0];
+                this.navigateToGame(firstSuggestion);
+            }
+        },
+        formatToUrl(text) {
+            return text
+                .toLowerCase() // Convertir todo a minúsculas
+                .replace(/\s+/g, "-") // Reemplazar espacios por guiones
+                .replace(/[^a-z0-9\-]/g, ""); // Eliminar caracteres no alfanuméricos excepto guiones
+        },
     },
-    selectSuggestion(name) {
-        const selectedGame = this.gameStore.games.find((game) => game.title === name);
-        if (selectedGame) {
-            this.gameStore.fetchGames(`game?id=${selectedGame.id}`);
-        }
-        this.searchQuery = "";
-        this.suggestions = [];
-    },
-},
 };
 </script>
 
