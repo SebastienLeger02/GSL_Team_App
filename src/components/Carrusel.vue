@@ -124,9 +124,9 @@ export default {
             this.gamesOrdered.unshift(this.gamesOrdered.pop());
         },
 
-        goToSlide(index) {
+/*         goToSlide(index) {
             this.currentIndex = index;
-        },
+        }, */
 
         //intervalo de las imagenes
         startAutoSlide() {
@@ -184,7 +184,7 @@ export default {
 
 .slider .list .item .content .title {
     font-size: 4em;
-    font-family: "Jaro", sans-serif;
+    /* font-family: "Jaro", sans-serif; */
     letter-spacing: 4px;
     font-weight: bold;
     line-height: 1.3em;
