@@ -51,7 +51,7 @@ export default {
       animation: rotateY 4s linear infinite;      
     } */
 .text-color {
-  color: antiquewhite;
+  color: rgb(252, 252, 252);
 }
 
 @keyframes rotateY {
@@ -64,9 +64,11 @@ export default {
 }
 
 .neon-ring {
-  background: conic-gradient(from 0deg, #ff0080, #00ffff, #ff0080);
+ /*  background: conic-gradient(from 0deg, #ff0080, #00ffff, #ff0080);
   mask: radial-gradient(circle, transparent 65%, black 61%);
-  -webkit-mask: radial-gradient(circle, transparent 65%, black 70%);
+  -webkit-mask: radial-gradient(circle, transparent 65%, black 70%); */
+  background-image:url("../assets/circle-neon.png");
+  background-repeat: no-repeat;
   animation: rotateY 4s linear infinite;
   
 }

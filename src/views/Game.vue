@@ -2,6 +2,8 @@
   <!-- <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> -->
   <Navbar />
 
+  <Header />
+
   <section class="section-principal-game bg-bg-color py-20">
     <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container ">
       <div>
@@ -140,11 +142,13 @@
 <script>
 import { useApiStore } from "../stores/apiStore";
 import Navbar from "../components/Navbar.vue";
+import Header from "../components/Header.vue";
 
 export default {
   name: "Game",
   components: {
     Navbar,
+    Header
   },
   data() {
     return {
