@@ -53,7 +53,7 @@
             <div class="flex space-x-6 items-center">
                 <div class="relative">
                     <label class="sr-only" for="search">Search</label>
-                    <input type="search" v-model="searchQuery" @input="onSearch"
+                    <input type="search" autocomplete="off" v-model="searchQuery" @input="onSearch"
                         @keyup.enter="navigateToFirstSuggestion" placeholder="Find a game" id="search"
                         class="input-search w-58 h-8 p-5 border-2 border-gray-400 font-gilroyregular text-base rounded-full bg-gray-600/70 placeholder:text-slate-400" />
                     <div class="absolute top-1 right-1" @click="navigateToFirstSuggestion">
