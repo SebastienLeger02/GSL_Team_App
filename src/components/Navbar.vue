@@ -139,22 +139,6 @@ export default {
                 this.navigateToGame(firstSuggestion);
             }
         },
-        handleKeyDown(event) {
-            if (event.key === "ArrowDown") {
-                // Mover hacia abajo
-                this.highlightedIndex =
-                    (this.highlightedIndex + 1) % this.suggestions.length;
-            } else if (event.key === "ArrowUp") {
-                // Mover hacia arriba
-                this.highlightedIndex =
-                    (this.highlightedIndex - 1 + this.suggestions.length) %
-                    this.suggestions.length;
-            } else if (event.key === "Enter" && this.highlightedIndex >= 0) {
-                // Seleccionar el juego resaltado
-                const selectedGame = this.suggestions[this.highlightedIndex];
-                this.navigateToGame(selectedGame);
-            }
-        },
         formatToUrl(text) {
             return text
                 .toLowerCase() // Convertir todo a minúsculas
