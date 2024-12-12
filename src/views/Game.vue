@@ -2,12 +2,12 @@
   <!-- <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> -->
   <Navbar />
   <section class="section-principal-game bg-bg-color py-20">
-    <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container">
-      <div>
+    <section class="grid grid-cols-2 grid-rows-1 gap-10 mx-[12%]">
+      <div class="">
         <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" class="w-[90%] rounded-2xl" />
       </div>
       <div>
-        <section class="grid grid-cols-2 grid-rows-4 gap-6">
+        <section class="grid grid-cols-2 grid-rows-4 gap-6 max-w-md">
           <div class="col-span-2">
             <h2 class="text-4xl font-bold">{{ gameDetail.title }}</h2>
           </div>
