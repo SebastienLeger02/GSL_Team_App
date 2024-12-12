@@ -63,6 +63,7 @@ export default {
     async fetchGamesByPlatform() {
       await this.apiStore.fetchGames("games"); // Obtener los juegos desde el endpoint
       const relatedPlatforms = this.associatedRelation.split(", "); // Dividir múltiples plataformas
+      console.log(relatedPlatforms);
       this.filteredGames = this.apiStore.games.filter((game) =>
         relatedPlatforms.includes(game.platform)
       );
