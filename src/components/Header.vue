@@ -1,20 +1,10 @@
 <template class="bg-color">
-  <section
-    class="bg-[#3e0b42] relative pt-[50px] pb-[80px] flex items-center justify-center min-h-screen flex-col">
-    <div
-      class="image-container relative flex items-center justify-center w-[300px] h-[300px]"
-    >
+  <section class="bg-[#3e0b42] relative pt-[50px] pb-[80px] flex items-center justify-center min-h-screen flex-col">
+    <div class="image-container relative flex items-center justify-center w-[300px] h-[300px]">
       <!-- neon-ring absolute w-[200px] h-[200px] rounded-full -->
-      <img
-        src="../assets/circle-neon.png"
-        alt="Image Logo Circle GSL _ Game App"
-        class="image-a absolute w-full h-full"
-      />
-      <img
-        src="../assets/logo_gsl.png"
-        alt="Image Logo GSL _ Game App"
-        class="image-b"
-      />
+      <img src="../assets/circle-neon.png" alt="Image Logo Circle GSL _ Game App"
+        class="image-a absolute w-full h-full" />
+      <img src="../assets/logo_gsl.png" alt="Image Logo GSL _ Game App" class="image-b" />
     </div>
     <h1 class="hidden">Project : GSL _ Game App</h1>
     <p class="text-color w-[45%] text-center pt-4 text-slate-100">
@@ -26,44 +16,15 @@
       colabora estrechamente para llevar a cabo el proyecto.
     </p>
 
-    <section
-      class="text-color grid grid-cols-3 grid-rows-1 gap-6 pt-14 mx-[20%]"
-    >
-      <div
-        class="w-[250px] h-[100%] flex flex-col justify-self-center rounded-2xl"
-      >
-        <img
-          class="rounded-t-2xl"
-          :src="gamesOrdered(0).thumbnail"
-          :alt="gamesOrdered(0).title"
-        />
-        <h2 class="text-2xl font-bold mx-2">{{ gamesOrdered(0).title }}</h2>
-        <p class="text-sm mt-[-6px] mb-3 mx-2">{{ gamesOrdered(0).genre }}</p>
-        <p class="mx-2">{{ gamesOrdered(0).short_description }}</p>
-      </div>
-      <div
-        class="w-[250px] h-[100%] flex flex-col justify-self-center rounded-2xl"
-      >
-        <img
-          class="rounded-t-2xl"
-          :src="gamesOrdered(1).thumbnail"
-          :alt="gamesOrdered(1).title"
-        />
-        <h2 class="text-2xl font-bold mx-2">{{ gamesOrdered(1).title }}</h2>
-        <p class="text-sm mt-[-6px] mb-3 mx-2">{{ gamesOrdered(1).genre }}</p>
-        <p class="mx-2">{{ gamesOrdered(1).short_description }}</p>
-      </div>
-      <div
-        class="w-[250px] h-[100%] flex flex-col justify-self-center rounded-2xl"
-      >
-        <img
-          class="rounded-t-2xl"
-          :src="gamesOrdered(2).thumbnail"
-          :alt="gamesOrdered(2).title"
-        />
-        <h2 class="text-2xl font-bold mx-2">{{ gamesOrdered(2).title }}</h2>
-        <p class="text-sm mt-[-6px] mb-3 mx-2">{{ gamesOrdered(2).genre }}</p>
-        <p class="mx-2">{{ gamesOrdered(2).short_description }}</p>
+    <section class="text-color grid grid-cols-3 grid-rows-1 gap-6 pt-14 mx-[20%]">
+      <div v-for="(game, index) in limitedGames" :key="index"
+        class="w-[250px] h-[100%] flex flex-col justify-self-center rounded-2xl">
+        <div v-show="game">
+          <img class="rounded-t-2xl" :src="game.thumbnail" :alt="game.title" />
+          <h2 class="text-2xl font-bold mx-2">{{ game.title }}</h2>
+          <p class="text-sm mt-[-6px] mb-3 mx-2">{{ game.genre }}</p>
+          <p class="mx-2">{{ game.short_description }}</p>
+        </div>
       </div>
     </section>
   </section>
@@ -71,50 +32,26 @@
 
 <script>
 import { useApiStore } from "../stores/apiStore";
-
 export default {
   name: "Header",
   data() {
     return {
-      limit: 3,
+      limit: 3, // Número máximo de juegos a mostrar
     };
   },
-  methods: {
-    gamesOrdered(index) {
+  computed: {
+    // Computed que filtra y devuelve los primeros N juegos
+    limitedGames() {
       const gameStore = useApiStore();
-      return gameStore.orderby[index];
+      return gameStore.orderby?.slice(0, this.limit) || []; // Maneja el caso donde orderby no está definido
     },
-    /*  gamesSettingRelevance() {
-      const gameStore = useApiStore();
-      gameStore.sortGames("relevance");
-      console.log(
-        "Juego por relevancia function: ",
-        gameStore.sortGames("relevance")
-      );
-
-      gameStore.limitResults(this.limit);
-    }, */
-  },
-  computed: {},
-  mounted() {
-    /* const gameStore = useApiStore();
-
-    gameStore.fetchGames("games").then(() => {
-      this.gamesSettingRelevance();
-    });
-
-    gameStore.sortGames("relevance");
-    console.log("Juego por relevancia : ", gameStore.sortGames("relevance")); */
   },
 };
 </script>
-
 <style>
-
 .text-color {
   color: rgb(252, 252, 252);
 }
-
 @keyframes spinY {
   0% {
     transform: rotateY(0deg);
@@ -131,8 +68,6 @@ export default {
   width: 300px;
   height: 300px;
 } */
-
-
 .image-container .image-a {
   position: absolute;
   width: 100%;
@@ -140,13 +75,10 @@ export default {
   animation: spinY 4s linear infinite;
   z-index: 2;
 }
-
-
 .image-container .image-b {
   position: absolute;
   width: 60%;
   height: 20%;
-  z-index: 1; 
+  z-index: 1;
 }
-
 </style>
