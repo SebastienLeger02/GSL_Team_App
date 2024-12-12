@@ -79,10 +79,14 @@ export default {
       limit: 3,
     };
   },
+  mounted() {
+    const gameStore = useApiStore();
+     return gameStore.orderby[index];
+  },
   methods: {
     gamesOrdered(index) {
-      const gameStore = useApiStore();
-      return gameStore.orderby[index];
+           
+       return gameStore.orderby[index];
     },
     /*  gamesSettingRelevance() {
       const gameStore = useApiStore();
@@ -94,18 +98,7 @@ export default {
 
       gameStore.limitResults(this.limit);
     }, */
-  },
-  computed: {},
-  mounted() {
-    /* const gameStore = useApiStore();
-
-    gameStore.fetchGames("games").then(() => {
-      this.gamesSettingRelevance();
-    });
-
-    gameStore.sortGames("relevance");
-    console.log("Juego por relevancia : ", gameStore.sortGames("relevance")); */
-  },
+  }
 };
 </script>
 
