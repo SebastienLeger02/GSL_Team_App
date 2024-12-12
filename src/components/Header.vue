@@ -15,6 +15,7 @@
       intuitiva y una arquitectura sólida. Un equipo de tres desarrolladores
       colabora estrechamente para llevar a cabo el proyecto.
     </p>
+    
 
     <section class="text-color grid grid-cols-3 grid-rows-1 gap-6 pt-14 mx-[20%]">
       <div v-for="(game, index) in limitedGames" :key="index"
