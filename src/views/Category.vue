@@ -1,7 +1,8 @@
 <template>
   <div>
     <Navbar />
-    <h2 class="text-2xl font-bold">Category: {{ category }}</h2>
+    <Carrusel />
+    <!-- <h2 class="text-2xl font-bold">Category: {{ category }}</h2>
     <p class="text-lg">Asociación: {{ associatedRelation }}</p>
     <div v-if="filteredGames.length">
       <h3 class="text-xl font-semibold mt-4">Juegos en la categoría: {{ associatedRelation }}</h3>
@@ -11,18 +12,26 @@
         </li>
       </ul>
     </div>
-    <p v-else class="mt-4 text-gray-500">No hay juegos disponibles para esta categoría.</p>
+    <p v-else class="mt-4 text-gray-500">No hay juegos disponibles para esta categoría.</p> -->
   </div>
+  <CategoryList :isCategory="true" />
+  <!-- <CategoryList :type="category" /> -->
+  <FooterSection />
 </template>
 <script>
 import { useApiStore } from "../stores/apiStore";
 import Navbar from "../components/Navbar.vue";
 import Carrusel from "../components/Carrusel.vue";
+import CategoryList from "../components/CategoryList.vue";
+import FooterSection from "../components/FooterSection.vue";
+
 export default {
   name: "Category",
   components: {
     Navbar,
     Carrusel,
+    CategoryList,
+    FooterSection,
   },
   data() {
     return {
