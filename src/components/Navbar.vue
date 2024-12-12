@@ -16,7 +16,7 @@
                         </svg>
                     </button>
                     <div v-show="showPlatform"
-                        class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-bg-color/70"
+                        class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-background-fourth/70"
                         @mouseover="showPlatform = true" @mouseleave="showPlatform = false">
                         <router-link v-for="platform in platforms" :key="platform"
                             :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap p-1">
@@ -38,7 +38,7 @@
                         </svg>
                     </button>
                     <div v-show="showCategory"
-                        class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-bg-color/70"
+                        class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-background-fourth/70"
                         @mouseover="showCategory = true" @mouseleave="showCategory = false">
                         <router-link v-for="category in categories" :key="category"
                             :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap p-1">
@@ -63,7 +63,7 @@
                         <img class="w-9 h-9 sepia" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
                     </div>
                     <ul v-if="suggestions.length"
-                        class="absolute shadow-lg rounded-mg ml-[6%] w-[89%] p-2 z-10 bg-bg-color/70">
+                        class="absolute shadow-lg rounded-mg ml-[6%] w-[89%] p-2 z-10 bg-background-fourth/70">
                         <li v-for="(name, index) in suggestions" :key="index" @click="navigateToGame(name)"
                             class="hover:bg-gray-500 px-4 py-2 text-gray-200 cursor-pointer">
                             {{ name }}

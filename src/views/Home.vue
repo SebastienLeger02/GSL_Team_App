@@ -1,8 +1,13 @@
 <template>
-  <div>
+  <div class="bg-background-thirty">
     <Navbar />
-    <Carrusel />
     <Header />
+    <GameAppCard />
+    <GameDatabaseOverview />
+    <CategoryList />
+    <FooterSection />
+
+
   </div>
   
 </template>
@@ -11,7 +16,10 @@
 import Carrusel from "../components/Carrusel.vue";
 import Navbar from "../components/Navbar.vue";
 import Header from "../components/Header.vue";
-
+import GameAppCard from "../components/GameAppCard.vue";
+import GameDatabaseOverview from "../components/GameDatabaseOverview.vue";
+import CategoryList from "../components/CategoryList.vue";
+import FooterSection from "../components/FooterSection.vue";
 
 export default {
   name: "Home",
@@ -19,6 +27,10 @@ export default {
     Navbar,
     Carrusel,
     Header,
+    GameAppCard,
+    GameDatabaseOverview,
+    CategoryList,
+    FooterSection
   },
 };
 </script>

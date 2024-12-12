@@ -50,7 +50,7 @@ export default {
                 this.applyInitialSettings();
                 this.gamesOrdered = gameStore.orderby;
             });
-        } else{
+        } else {
             this.gamesOrdered = gameStore.orderby;
             this.applyInitialSettings();
         }

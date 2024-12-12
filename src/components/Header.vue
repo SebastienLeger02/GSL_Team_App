@@ -30,32 +30,6 @@
   </section>
 </template>
 
-<!-- <script>
-import { useApiStore } from "../stores/apiStore";
-
-export default {
-  name: "Header",
-  data() {
-    return {
-      limit: 3,
-    };
-  },
-  computed: {
-    // Obtener los juegos ordenados desde el store, limitado a la cantidad especificada
-    //   gamesOrdered(index) {
-    //   const gameStore = useApiStore();
-    //   return gameStore.orderby[index];
-    // },
-  },
-  methods: {
-    gamesOrdered(index) {
-      const gameStore = useApiStore();
-      console.log(gameStore.orderby[index]);
-      return gameStore.orderby[index];
-    },
-  },
-};
-</script> -->
 <script>
 import { useApiStore } from "../stores/apiStore";
 
