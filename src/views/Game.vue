@@ -5,7 +5,7 @@
   <Header />
 
   <section class="section-principal-game bg-bg-color py-20">
-    <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container ">
+    <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container">
       <div>
         <img
           v-if="gameDetail"
@@ -148,7 +148,7 @@ export default {
   name: "Game",
   components: {
     Navbar,
-    Header
+    Header,
   },
   data() {
     return {

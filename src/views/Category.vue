@@ -1,16 +1,32 @@
 <template>
-  <h2 class="text-2xl font-bold">Category</h2>
+  <section>
+    <h2 class="text-2xl font-bold">Category</h2>
+   
+    <Header />
+
+  </section>
+
+  
 </template>
+
 <script>
-import Carrusel from "../components/Carrusel.vue";
-import Navbar from "../components/Navbar.vue";
+import Header from "../components/Header.vue";
+
 export default {
-  name: "Category",
-  components: {
-    Navbar,
-    Carrusel
-  },
-};
+    name: "Category",
+    components: {
+      Header
+    },
+/*     data() {
+       return{
+            
+        }
+
+    } */
+
+}
 </script>
+
 <style>
+
 </style>
