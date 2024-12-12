@@ -25,7 +25,6 @@ export const useApiStore = defineStore("apiStore", {
   actions: {
     // Acción para obtener los datos desde la API
     fetchGames(endpoint) {
-      console.warn(endpoint);
       return fetch(
         `https://free-to-play-games-database.p.rapidapi.com/api/${endpoint}`,
         {

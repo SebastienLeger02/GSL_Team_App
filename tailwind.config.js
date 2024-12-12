@@ -4,8 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bg-color': '#1B001E',
-        'b-nav': '#8cb7eb;'
+        'background-default': 'rgb(62 11 66 / var(--tw-bg-opacity, 1))',
+        'background-secondary': '#8cb7eb',
+        'background-thirty': '#1c0823',
+        'background-fourth': '#1B001E',
       },
       fontFamily: {
         jaro: [ 'Jaro', 'sans-serif'],
