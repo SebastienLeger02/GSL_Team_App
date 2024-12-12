@@ -3,7 +3,7 @@
         <div class="list">
             <!-- {{ games }} -->
             <!-- {{console.log("games: ", gamesOrdered) }} -->
-            <div v-for="(item, index) in gameDatails" :key="index" class="item"
+            <div v-for="(item, index) in gameDetails" :key="index" class="item"
                 :class="{ active: index === currentIndex }" v-show="index === currentIndex">
                 <!-- {{ console.log(index) }} -->
                 <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
@@ -38,11 +38,11 @@ export default {
         return {
             limit: 12, // Limitar inicialmente a 12 resultados
             currentIndex: 0,
-            gameDatails: [],
+            gameDetails: [],
             gamesOrdered: [],
         };
     },
-    mounted() {
+    beforeMount() {
         const gameStore = useApiStore();
         // Llamamos a la API y aplicamos orden y límite inicial
         if (!gameStore.orderby.length) {
@@ -50,6 +50,9 @@ export default {
                 this.applyInitialSettings();
                 this.gamesOrdered = gameStore.orderby;
             });
+        } else{
+            this.gamesOrdered = gameStore.orderby;
+            this.applyInitialSettings();
         }
         this.startAutoSlide();
     },
@@ -79,7 +82,7 @@ export default {
                 )
             ).then((respuesta) => {
                 //console.log(respuesta)
-                this.gameDatails = respuesta.map((item) => item.data);
+                this.gameDetails = respuesta.map((item) => item.data);
             });
 
             // Mostrar en consola los juegos limitados
