@@ -21,6 +21,7 @@ import { useApiStore } from "../stores/apiStore";
 import Navbar from "../components/Navbar.vue";
 import Carrusel from "../components/Carrusel.vue";
 
+
 export default {
   name: "Category",
   components: {
