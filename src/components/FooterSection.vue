@@ -33,7 +33,7 @@
             <div>
               <ul class="space-y-4 text-gray-800 font-semibold">
                 <li><a href="#" class="hover:text-gray-600">Home</a></li>
-                <li><a href="#" class="hover:text-gray-600">Blog</a></li>
+                <li><a href="#" class="hover:text-gray-600">Contact</a></li>
                 <li><a href="#" class="hover:text-gray-600">Github</a></li>
               </ul>
             </div>

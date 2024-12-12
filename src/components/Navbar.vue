@@ -21,8 +21,6 @@
                         <router-link v-for="platform in platforms" :key="platform"
                             :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap p-1">
                             {{ platform }}
-                            <!-- {{ console.log("platform ->", platform) }} -->
-                            {{ console.log("platform ->", platform, " ----- ", formatToUrl(platform)) }}
                         </router-link>
                     </div>
                 </div>
@@ -48,7 +46,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
                 </div>
             </div>
 

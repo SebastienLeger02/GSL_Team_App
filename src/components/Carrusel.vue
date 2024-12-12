@@ -84,9 +84,6 @@ export default {
                 //console.log(respuesta)
                 this.gameDetails = respuesta.map((item) => item.data);
             });
-
-            // Mostrar en consola los juegos limitados
-            console.log("Juegos iniciales limitados:", gameStore.orderby);
         },
 
         // Cambiar límite dinámicamente
