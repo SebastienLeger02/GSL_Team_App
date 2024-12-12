@@ -1,118 +1,111 @@
 <template>
-  <div class="slider">
-    <div class="list">
-      <!-- {{ games }} -->
-      <!-- {{console.log("games: ", gamesOrdered) }} -->
-      <div
-        v-for="(item, index) in gameDatails"
-        :key="index"
-        class="item"
-        :class="{ active: index === currentIndex }"
-        v-show="index === currentIndex"
-      >
-        <!-- {{ console.log(index) }} -->
-        <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
-        <!-- {{ console.warn("item: ", item) }} -->
-        <div class="content">
-          <div class="title">{{ item.title }}</div>
-          <div class="description">{{ item.short_description }}</div>
-          <div class="button">
-            <button>More Info</button>
-          </div>
+    <div class="slider">
+        <div class="list">
+            <!-- {{ games }} -->
+            <!-- {{console.log("games: ", gamesOrdered) }} -->
+            <div v-for="(item, index) in gameDetails" :key="index" class="item"
+                :class="{ active: index === currentIndex }" v-show="index === currentIndex">
+                <!-- {{ console.log(index) }} -->
+                <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
+                <!-- {{ console.warn("item: ", item) }} -->
+                <div class="content">
+                    <div class="title">{{ item.title }}</div>
+                    <div class="description">{{ item.short_description }}</div>
+                    <div class="button">
+                        <button>More Info</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="thumbnail">
+            <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
+                :class="{ active: index === 0 }" @click="goToSlide(index)">
+                <img :src="item.thumbnail" :alt="item.alt" />
+            </div>
+        </div>
+        <div class="nextPrevArrows">
+            <button class="prev" @click="prevSlide()"></button>
+            <button class="next" @click="nextSlide()"></button>
+        </div>
     </div>
-    <div class="thumbnail">
-      <div
-        v-for="(item, index) in gamesOrdered"
-        :key="'thumb-' + index"
-        class="item"
-        :class="{ active: index === 0 }"
-        @click="goToSlide(index)"
-      >
-        <img :src="item.thumbnail" :alt="item.alt" />
-      </div>
-    </div>
-    <div class="nextPrevArrows">
-      <button class="prev" @click="prevSlide()"></button>
-      <button class="next" @click="nextSlide()"></button>
-    </div>
-  </div>
 </template>
 
 <script>
 import { useApiStore } from "../stores/apiStore";
 import axios from "axios";
 export default {
-  data() {
-    return {
-      limit: 12, // Limitar inicialmente a 12 resultados
-      currentIndex: 0,
-      gameDatails: [],
-      gamesOrdered: [],
-    };
-  },
-  mounted() {
-    const gameStore = useApiStore();
-    // Llamamos a la API y aplicamos orden y límite inicial
-    if (!gameStore.orderby.length) {
-      gameStore.fetchGames("games").then(() => {
-        this.applyInitialSettings();
-        this.gamesOrdered = gameStore.orderby;
-      });
-    }
-    this.startAutoSlide();
-  },
-  methods: {
-    // Aplicar orden y límite inicial
-    applyInitialSettings() {
-      const gameStore = useApiStore();
-      gameStore.sortGames("relevance");
-      gameStore.limitResults(this.limit);
-
-      //sacar los ids de los juegos
-      let IdsArray = gameStore.orderby.map((juego) => juego.id);
-
-      //hacer un fetch para cada id a endpoint game?id=XX
-      Promise.all(
-        IdsArray.map((id) =>
-          axios.get(
-            `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
-            {
-              headers: {
-                "X-RapidAPI-Key":
-                  "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
-                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
-              },
-            }
-          )
-        )
-      ).then((respuesta) => {
-        //console.log(respuesta)
-        this.gameDatails = respuesta.map((item) => item.data);
-      });
-
-      // Mostrar en consola los juegos limitados
-      console.log("Juegos iniciales limitados:", gameStore.orderby);
+    data() {
+        return {
+            limit: 12, // Limitar inicialmente a 12 resultados
+            currentIndex: 0,
+            gameDetails: [],
+            gamesOrdered: [],
+        };
     },
-
-    // Cambiar límite dinámicamente
-    updateLimit(newLimit) {
-      const gameStore = useApiStore();
-      this.limit = newLimit;
-      gameStore.limitResults(this.limit);
-
-      // Mostrar en consola los juegos con el nuevo límite
-      console.log(`Juegos limitados a ${this.limit}:`, gameStore.orderby);
+    beforeMount() {
+        const gameStore = useApiStore();
+        // Llamamos a la API y aplicamos orden y límite inicial
+        if (!gameStore.orderby.length) {
+            gameStore.fetchGames("games").then(() => {
+                this.applyInitialSettings();
+                this.gamesOrdered = gameStore.orderby;
+            });
+        } else{
+            this.gamesOrdered = gameStore.orderby;
+            this.applyInitialSettings();
+        }
+        this.startAutoSlide();
     },
+    methods: {
+        // Aplicar orden y límite inicial
+        applyInitialSettings() {
+            const gameStore = useApiStore();
+            gameStore.sortGames("relevance");
+            gameStore.limitResults(this.limit);
 
-    // Cambiar el orden dinámicamente
-    changeOrder(orderType) {
-      const gameStore = useApiStore();
-      gameStore.sortGames(orderType);
+            //sacar los ids de los juegos
+            let IdsArray = gameStore.orderby.map((juego) => juego.id);
 
-      // Aplicar el límite nuevamente después de ordenar
-      gameStore.limitResults(this.limit);
+            //hacer un fetch para cada id a endpoint game?id=XX
+            Promise.all(
+                IdsArray.map((id) =>
+                    axios.get(
+                        `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
+                        {
+                            headers: {
+                                "X-RapidAPI-Key":
+                                    "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
+                                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+                            },
+                        }
+                    )
+                )
+            ).then((respuesta) => {
+                //console.log(respuesta)
+                this.gameDetails = respuesta.map((item) => item.data);
+            });
+
+            // Mostrar en consola los juegos limitados
+            console.log("Juegos iniciales limitados:", gameStore.orderby);
+        },
+
+        // Cambiar límite dinámicamente
+        updateLimit(newLimit) {
+            const gameStore = useApiStore();
+            this.limit = newLimit;
+            gameStore.limitResults(this.limit);
+
+            // Mostrar en consola los juegos con el nuevo límite
+            console.log(`Juegos limitados a ${this.limit}:`, gameStore.orderby);
+        },
+
+        // Cambiar el orden dinámicamente
+        changeOrder(orderType) {
+            const gameStore = useApiStore();
+            gameStore.sortGames(orderType);
+
+            // Aplicar el límite nuevamente después de ordenar
+            gameStore.limitResults(this.limit);
 
       // Mostrar en consola los juegos ordenados y limitados
       console.log(
@@ -148,7 +141,7 @@ export default {
     stopAutoSlide() {
       clearInterval(this.autoSlideInterval);
     },
-  },
+  }
 };
 </script>
 
