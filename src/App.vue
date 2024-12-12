@@ -20,7 +20,7 @@ export default {
     ...mapStores(useApiStore) 
   },
   mounted(){
-   
+
   }
 };
 </script>

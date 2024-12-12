@@ -3,10 +3,10 @@
         <div class="list">
             <!-- {{ games }} -->
             <!-- {{console.log("games: ", gamesOrdered) }} -->
-            <div v-for="(item, index) in gamesOrdered" :key="index" class="item" :class="{ active: index === currentIndex }"
-                v-show="index === currentIndex">
+            <div v-for="(item, index) in gameDatails" :key="index" class="item"
+                :class="{ active: index === currentIndex }" v-show="index === currentIndex">
                 <!-- {{ console.log(index) }} -->
-                <img v-bind:src="item.thumbnail" :alt="item.alt" />
+                <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
                 <!-- {{ console.warn("item: ", item) }} -->
                 <div class="content">
                     <div class="title">{{ item.title }}</div>
@@ -19,34 +19,28 @@
         </div>
         <div class="thumbnail">
             <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
-                :class="{ active: index === currentIndex }" @click="goToSlide(index)">
+                :class="{ active: index === 0 }" @click="goToSlide(index)">
                 <img :src="item.thumbnail" :alt="item.alt" />
             </div>
         </div>
         <div class="nextPrevArrows">
-            <button class="prev" @click="prevSlide"></button>
-            <button class="next" @click="nextSlide"></button>
+            <button class="prev" @click="prevSlide()"></button>
+            <button class="next" @click="nextSlide()"></button>
         </div>
     </div>
 </template>
 
 <script>
-
 import { useApiStore } from "../stores/apiStore";
-
+import axios from "axios";
 export default {
     data() {
         return {
             limit: 12, // Limitar inicialmente a 12 resultados
             currentIndex: 0,
+            gameDatails: [],
+            gamesOrdered: [],
         };
-    },
-    computed: {
-        // Juegos limitados y ordenados
-        gamesOrdered() {
-            const gameStore = useApiStore();
-            return gameStore.orderby;
-        },
     },
     mounted() {
         const gameStore = useApiStore();
@@ -54,8 +48,10 @@ export default {
         if (!gameStore.orderby.length) {
             gameStore.fetchGames("games").then(() => {
                 this.applyInitialSettings();
+                this.gamesOrdered = gameStore.orderby;
             });
         }
+        this.startAutoSlide();
     },
     methods: {
         // Aplicar orden y límite inicial
@@ -63,6 +59,28 @@ export default {
             const gameStore = useApiStore();
             gameStore.sortGames("relevance");
             gameStore.limitResults(this.limit);
+
+            //sacar los ids de los juegos
+            let IdsArray = gameStore.orderby.map((juego) => juego.id);
+
+            //hacer un fetch para cada id a endpoint game?id=XX
+            Promise.all(
+                IdsArray.map((id) =>
+                    axios.get(
+                        `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
+                        {
+                            headers: {
+                                "X-RapidAPI-Key":
+                                    "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
+                                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+                            },
+                        }
+                    )
+                )
+            ).then((respuesta) => {
+                //console.log(respuesta)
+                this.gameDatails = respuesta.map((item) => item.data);
+            });
 
             // Mostrar en consola los juegos limitados
             console.log("Juegos iniciales limitados:", gameStore.orderby);
@@ -87,376 +105,261 @@ export default {
             gameStore.limitResults(this.limit);
 
             // Mostrar en consola los juegos ordenados y limitados
-            console.log(`Juegos ordenados por ${orderType} y limitados:`, gameStore.orderby);
+            console.log(
+                `Juegos ordenados por ${orderType} y limitados:`,
+                gameStore.orderby
+            );
         },
+
         nextSlide() {
-            this.currentIndex =
-                (this.currentIndex + 1) % this.images.length;
+            this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
+            this.gamesOrdered.push(this.gamesOrdered.shift());
+            console.log(this.gamesOrdered);
         },
+
         prevSlide() {
             this.currentIndex =
-                (this.currentIndex - 1 + this.images.length) %
-                this.images.length;
+                (this.currentIndex - 1 + this.gamesOrdered.length) %
+                this.gamesOrdered.length;
+            this.gamesOrdered.unshift(this.gamesOrdered.pop());
         },
-        goToSlide(index) {
-            this.currentIndex = index;
+
+        /*         goToSlide(index) {
+                    this.currentIndex = index;
+                }, */
+
+        //intervalo de las imagenes
+        startAutoSlide() {
+            this.autoSlideInterval = setInterval(() => {
+                this.nextSlide();
+            }, 10000); // Cambia la imagen cada 10 segundos
+        },
+
+        stopAutoSlide() {
+            clearInterval(this.autoSlideInterval);
         },
     },
 };
 </script>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* seccion imagenes grandes */
-
 .slider {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     position: relative;
-    /* margin-top: -50px; */
+
+    & .list {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        & .item {
+            position: absolute;
+            inset: 0;
+            transition: 0.7s;
+
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            & .content {
+                position: absolute;
+                top: 20%;
+                width: 1140px;
+                height: 40%;
+                max-width: 70%;
+                left: 56%;
+                transform: translateX(-75%);
+                padding-right: 30%;
+                box-sizing: border-box;
+                color: #fff;
+
+                & .title {
+                    font-size: 4em;
+                    letter-spacing: 4px;
+                    font-weight: bold;
+                    line-height: 1.3em;
+                    padding-bottom: 10px;
+                    text-shadow: 0 0 7px #ff6600, 0 0 10px #ff6600, 0 0 21px #ff6600,
+                        0 0 42px #5271ff, 0 0 82px #5271ff, 0 0 92px #5271ff,
+                        0 0 102px #5271ff, 0 0 151px #5271ff;
+                }
+
+                & .description {
+                    font-size: 14px;
+                    font-weight: bold;
+                    letter-spacing: 1px;
+                    background-color: rgba(63, 106, 138, 0.71);
+                    padding: 10px;
+                    border-radius: 15px;
+                }
+
+                & .button {
+                    margin-top: 20px;
+
+                    & button {
+                        border-radius: 5px;
+                        border: none;
+                        font-size: 12px;
+                        padding: 7px 7px;
+                        font-weight: 800;
+                        cursor: pointer;
+                        letter-spacing: 1px;
+                        transition: 0.4s;
+                        color: #2c771c;
+                        background-color: #fff;
+                        box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #0fa,
+                            0 0 0.8rem #0fa, 0 0 2.8rem #0fa, inset 0 0 1.3rem #0fa;
+
+                        &:hover {
+                            background-color: #33a21d;
+                            color: #fff;
+                            font-weight: 800;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
-
-.slider .list .item {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0 0 0 0;
-}
-
-.slider .list .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.slider .list .item .content {
-    position: absolute;
-    top: 20%;
-    width: 1140px;
-    height: 40%;
-    max-width: 70%;
-    left: 56%;
-    transform: translateX(-75%);
-    padding-right: 30%;
-    box-sizing: border-box;
-    color: #fff;
-}
-
-.slider .list .item .content .title {
-    font-size: 4em;
-    font-weight: bold;
-    line-height: 1.3em;
-    padding-bottom: 15px;
-    text-shadow:
-        0 0 7px #0000ff,
-        0 0 10px #0000ff,
-        0 0 21px #0000ff,
-        0 0 42px #5271ff,
-        0 0 82px #5271ff,
-        0 0 92px #5271ff,
-        0 0 102px #5271ff,
-        0 0 151px #5271ff;
-}
-
-
-.slider .list .item .content .description {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 15px;
-}
-
-.slider .list .item .content .button {
-    margin-top: 20px;
-}
-
-.slider .list .item .content .button button {
-    border-radius: 5px;
-    border: none;
-    padding: 7px 7px;
-    font-weight: 800;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: 0.4s;
-    color: #2c771c;
-    background-color: #fff;
-    box-shadow: 0 0 .2rem #fff,
-        0 0 .2rem #fff,
-        0 0 2rem #0fa,
-        0 0 0.8rem #0fa,
-        0 0 2.8rem #0fa,
-        inset 0 0 1.3rem #0fa
-}
-
-.slider .list .item .content .button button:hover {
-    background-color: #33a21d;
-    color: #fff;
-    font-weight: 800;
-}
-
-/* seccion imagenes pequeñas */
 
 .thumbnail {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     position: absolute;
-    bottom: 50px;
-    left: 50%;
+    bottom: 87px;
+    left: 40%;
     width: max-content;
     z-index: 5;
-}
 
-.thumbnail .item {
-    width: 150px;
-    height: 220px;
-    flex-shrink: 0;
-    position: relative;
-    border-radius: 13px;
-}
+    & .item {
+        width: 290px;
+        height: 170px;
+        flex-shrink: 0;
+        position: relative;
+        border-radius: 10px;
+        cursor: pointer;
+        filter: brightness(0.5);
+        transition: transform 0.3s, filter 0.3s;
 
-.thumbnail .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow:
-        0 0 4rem rgb(92, 132, 119),
-        0 0 3rem #7f7fa9,
-        inset 0 0 2.3rem rgb(92, 101, 98)
-}
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 0 4rem rgb(132, 113, 92), 0 0 3rem #ff6600,
+                inset 0 0 2.3rem rgb(92, 101, 98);
+        }
 
-/* botones de prev y next */
+    }
+    & .item.active {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+        box-shadow: 0 0 .3rem #fff,
+            0 0 .1rem #fff,
+            0 0 1rem #e51a4c,
+            0 0 0.9rem #e51a4c,
+            0 0 2rem #ff7214,
+            inset 0 0 0.8rem #ff7214;
+    }
+}
 
 .nextPrevArrows {
     position: absolute;
-    top: 75%;
-    right: 40%;
+    top: 72%;
+    right: 50%;
     z-index: 100;
     width: 300px;
     max-width: 30%;
     display: flex;
     gap: 10px;
     align-items: center;
-}
 
-.nextPrevArrows button {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    box-shadow: 0 0 .2rem #fff,
-        0 0 .2rem #fff,
-        0 0 2rem #bc13fe,
-        0 0 0.8rem #bc13fe,
-        0 0 2.8rem #bc13fe,
-        inset 0 0 1.3rem #bc13fe;
-    border: none;
-    color: #953fb4;
-    font-family: monospace;
-    font-size: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.5s;
-}
+    & button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 0 0.3rem #fff, 0 0 0.3rem #fff, 0 0 2.5rem #bc13fe,
+            0 0 1rem #bc13fe, 0 0 3rem #bc13fe, inset 0 0 1.5rem #bc13fe;
+        border: none;
+        background-color: #bc13fe;
+        color: #ff00ff;
+        font-family: monospace;
+        font-size: 22px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.4s ease;
 
-.nextPrevArrows button:hover {
+        &:hover {
+            background: var(--Gradiente-Radial, radial-gradient(270.17% 139.44% at 99.27% 1%, #483c9e 0%, #68088b 31.27%, #6c2c4a 65.27%, #000 99.77%));
+            color: #fff;
+        }
+    }
 
-    background: var(--Gradiente-Radial, radial-gradient(270.17% 139.44% at 99.27% 1%, #483c9e 0%, #68088b 31.27%, #6c2c4a 65.27%, #000 99.77%));
-    color: #fff;
-}
+    .prev::after {
+        content: "<";
+    }
 
-/* animaciones */
-.slider .list .item:nth-child(1) {
-    z-index: 1;
-}
-
-.slider .list .item:nth-child(1) .content .title,
-.slider .list .item:nth-child(1) .content .description,
-.slider .list .item:nth-child(1) .content .button {
-    transform: translateY(50px);
-    filter: blur(20px);
-    opacity: 0;
-    animation: showContent 0.5s 1s linear 1 forwards;
+    .next::after {
+        content: ">";
+    }
 }
 
 @keyframes showContent {
     to {
         transform: translateY(0px);
-        filter: blur(00px);
+        filter: blur(0px);
         opacity: 1;
     }
 }
 
-.slider .list .item:nth-child(1) .content .title {
-    animation-delay: 0.6s;
-}
+.slider {
+    & .list {
+        & .item {
+            & .content {
 
-.slider .list .item:nth-child(1) .content .description {
-    animation-delay: 0.8s;
-}
+                & .title,
+                & .description,
+                & .button {
+                    transform: translateY(50px);
+                    filter: blur(20px);
+                    opacity: 0;
+                    animation: showContent 0.5s linear forwards;
+                }
 
-.slider .list .item:nth-child(1) .content .button {
-    animation-delay: 1s;
-}
+                & .title {
+                    animation-delay: 0.4s;
+                }
 
-/* animacion next boton */
-.slider.next .list .item:nth-child(1) img {
-    width: 150px;
-    height: 220px;
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    border-radius: 30px;
-    animation: showImage 0.5s linear 1 forwards;
-}
+                & .description {
+                    animation-delay: 0.6s;
+                }
 
-@keyframes showImage {
-    to {
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
+                & .button {
+                    animation-delay: 0.8s;
+                }
+            }
+        }
     }
 }
 
-.slider.next .thumbnail .item:nth-last-child(1) {
-    overflow: hidden;
-    animation: showThumbnail 0.5s linear 1 forwards;
-}
-
-.slider.prev .list .item img {
-    z-index: 100;
-}
-
-@keyframes showThumbnail {
-    from {
-        width: 0;
-        opacity: 0;
-    }
-}
-
-.slider.next .thumbnail {
-    animation: effectNext .5s linear 1 forwards;
-}
-
-@keyframes effectNext {
-    from {
-        transform: translateX(150px);
-    }
-}
-
-/* animacion boton prev */
-
-.slider.prev .list .item:nth-child(2) {
-    z-index: 2;
-}
-
-.slider.prev .list .item:nth-child(2) img {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    animation: outFrame 0.5s linear 1 forwards;
-}
-
-@keyframes outFrame {
-    to {
-        width: 150px;
-        height: 220px;
-        bottom: 50px;
-        left: 50%;
-        border-radius: 20px;
-    }
-}
-
-.slider.prev .thumbnail .item:nth-child(1) {
-    overflow: hidden;
-    opacity: 0;
-    animation: showThumbnail .5s linear 1 forwards;
-}
-
-.slider.prev .list .item:nth-child(1) .content .title,
-.slider.prev .list .item:nth-child(1) .content .type,
-.slider.prev .list .item:nth-child(1) .content .description,
-.slider.prev .list .item:nth-child(1) .content .button {
-    animation: contentOut 0.5s 1s linear 1 forwards;
-}
-
-@keyframes contentOut {
-    to {
-        transform: translateY(-150px);
-        filter: blur(20px);
-        opacity: 0;
-    }
-}
-
-/* tamaños de la pantalla */
 @media screen and (max-width: 678px) {
-    .slider .list .item .content {
-        padding-right: 0;
+    .slider {
+        & .list {
+            & .item {
+                & .content {
+                    padding-right: 0;
+
+                    & .title {
+                        font-size: 40px;
+                    }
+                }
+            }
+        }
     }
-
-    .slider .list .item .content .title {
-        font-size: 40px;
-    }
-}
-
-.prev::after {
-    content: "<";
-}
-
-.next::after {
-    content: ">";
 }
 </style>
-<!-- <script options>
-let nextBtn = document.querySelector('.next');
-let prevBtn = document.querySelector('.prev');
-
-let slider = document.querySelector('.slider');
-let sliderList = slider.querySelector('.slider .list');
-let thumbnail = document.querySelector('.thumbnail');
-let thumbnailItems = thumbnail.querySelectorAll('.item');
-
-thumbnail.appendChild(thumbnailItems[0])
-
-//funciones para el boton next
-nextBtn.onclick = function() {
-    moveSlider('next')
-}
-
-//funciones para el boton prev
-prevBtn.onclick = function() {
-    moveSlider('prev')
-}
-
-function moveSlider(direction) {
-    let sliderItems = sliderList.querySelectorAll('.item')
-    let thumbnailItems = document.querySelectorAll('.thumbnail .item')
-
-    if(direction === 'next'){
-        sliderList.appendChild(sliderItems[0]) // Mueve el primer elemento al final
-        thumbnail.appendChild(thumbnailItems[0]) // Mueve el primer elemento de la miniatura al final
-        slider.classList.add('next')
-    } else {
-        sliderList.prepend(sliderItems[sliderItems.length - 1]) // Mueve el último elemento al inicio
-        thumbnail.prepend(thumbnailItems[thumbnailItems.length - 1]) // Mueve el último elemento de la miniatura al inicio
-        slider.classList.add('prev');
-    }
-
-    slider.addEventListener('animationend', function(){
-        if(direction === 'next'){
-            slider.classList.remove('next')
-        }else {
-            slider.classList.remove('prev')
-        }
-    }, {once: true})
-}
-</script> -->
