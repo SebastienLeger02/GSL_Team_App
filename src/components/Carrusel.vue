@@ -179,6 +179,7 @@ export default {
         color: #fff;
 
         & .title {
+          
           font-size: 4em;
           letter-spacing: 4px;
           font-weight: bold;

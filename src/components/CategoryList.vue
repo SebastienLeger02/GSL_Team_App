@@ -1,29 +1,29 @@
 <template>
-  <section class="py-12 bg-background-thirty">
+  <section class="py-12 bg-color-thirty">
     <div class="max-w-6xl mx-auto space-y-8">
       <!-- Recorre las categorías o plataformas únicas -->
       <div v-for="(group, index) in randomGroups" :key="index">
-        <h2 class="text-lg font-semibold text-gray-100 mb-4">
+        <h2 class="text-lg font-semibold text-color-first mb-4">
           {{ isCategory ? "Category" : "Platform" }}: {{ group.name }}
         </h2>
         <div
           v-for="game in group.games"
           :key="game.id"
-          class="bg-white shadow-md rounded-lg flex overflow-hidden mb-4"
+          class="bg-color-first shadow-md rounded-lg flex overflow-hidden mb-4"
         >
           <!-- Enlace al juego -->
-          <a :href="`/game?id=${game.id}`" class="w-1/4 bg-gray-200 flex items-center justify-center">
+          <a :href="`/game?id=${game.id}`" class="w-1/4 bg-color-first flex items-center justify-center">
             <img :src="game.thumbnail" alt="">
           </a>
           <!-- Detalles del juego -->
-          <div class="w-3/4 p-4 bg-background-default">
-            <h3 class="text-xl font-bold text-gray-100">{{ game.title }}</h3>
-            <ul class="text-gray-300 text-sm mb-4">
+          <div class="w-3/4 p-4 bg-color-secondary">
+            <h3 class="text-xl font-bold text-color-first">{{ game.title }}</h3>
+            <ul class="text-color-first text-sm mb-4">
               <li><strong>Creator:</strong> {{ game.developer || "Unknown" }}</li>
               <li><strong>Platform:</strong> {{ game.platform || "N/A" }}</li>
               <li><strong>Start year:</strong> {{ game.release_date || "N/A" }}</li>
             </ul>
-            <p class="text-gray-300 text-sm">
+            <p class="text-color-first text-sm">
               {{ game.short_description || "No description available." }}
             </p>
           </div>

@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 body {
+  @apply font-museomoderno;
+}
+h1 ,h2, h3, .button, .title{
   @apply font-jaro;
 }
-
 .bg-gradient {
   background: var(
     --Gradiente-Radial,

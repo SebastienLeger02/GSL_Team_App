@@ -1,7 +1,7 @@
-<template class="bg-background-fourth">
+<template class="bg-color-thirty">
   <!-- <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> -->
   <Navbar />
-  <section class="section-principal-game bg-background-fourth py-20">
+  <section class="section-principal-game bg-color-thirty py-20">
     <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container ">
       <div>
         <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" class="w-[90%] rounded-2xl" />
