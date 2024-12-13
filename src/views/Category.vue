@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <section class="bg-background-default">
     <Navbar />
+    {{ console.log("Category:", category) }}
     <Carrusel />
+    <GameList />
     <!-- <h2 class="text-2xl font-bold">Category: {{ category }}</h2>
     <p class="text-lg">Asociación: {{ associatedRelation }}</p>
     <div v-if="filteredGames.length">
@@ -13,15 +15,17 @@
       </ul>
     </div>
     <p v-else class="mt-4 text-gray-500">No hay juegos disponibles para esta categoría.</p> -->
-  </div>
-  <CategoryList :isCategory="true" />
-  <!-- <CategoryList :type="category" /> -->
-  <FooterSection />
+    <CategoryList :isCategory="true" />
+    <!-- <CategoryList :type="category" /> -->
+    <FooterSection />
+  </section>
 </template>
 <script>
 import { useApiStore } from "../stores/apiStore";
+import { mapStores } from "pinia";
 import Navbar from "../components/Navbar.vue";
 import Carrusel from "../components/Carrusel.vue";
+import GameList from "../components/GameList.vue";
 import CategoryList from "../components/CategoryList.vue";
 import FooterSection from "../components/FooterSection.vue";
 
@@ -30,6 +34,7 @@ export default {
   components: {
     Navbar,
     Carrusel,
+    GameList,
     CategoryList,
     FooterSection,
   },
@@ -39,14 +44,14 @@ export default {
     };
   },
   computed: {
+    ...mapStores({
+      apiStore: useApiStore, // Mapear el store con mapStores
+    }),
     category() {
       return this.$route.params.category; // Categoría actual de la URL
     },
     associatedRelation() {
       return this.getRelation(this.category); // Obtener la asociación
-    },
-    apiStore() {
-      return useApiStore(); // Acceder al store
     },
   },
   methods: {
@@ -81,23 +86,27 @@ export default {
     /**
      * Filtra los juegos asociados a la categoría actual.
      */
-    async fetchGamesByCategory() {
-      await this.apiStore.fetchGames("games"); // Obtener los juegos desde el endpoint
+     async fetchGamesByCategory() {
+      // Check if apiStore is ready before accessing its methods
+      if (!this.apiStore || !this.apiStore.fetchGames) {
+        return;
+      }
+      await this.apiStore.fetchGames("games");
       this.filteredGames = this.apiStore.games.filter(
-        (game) => game.genre === this.associatedRelation
+        (game) => game.genre.toLowerCase() === this.associatedRelation.toLowerCase()
       );
     },
   },
-  async mounted() {
-    await this.fetchGamesByCategory(); // Filtrar los juegos al montar el componente
+  mounted() {
+    this.fetchGamesByCategory(); // Filtrar los juegos al montar el componente
   },
   watch: {
     /**
-     * Observa los cambios en la categoría de la ruta.
-     * Cuando cambia, vuelve a cargar los juegos filtrados.
-     */
-    category: {
-      immediate: true, // Ejecuta la función al montar el componente.
+    * Observa los cambios en la categoría de la ruta.
+    * Cuando cambia, vuelve a cargar los juegos filtrados.
+    */
+    "$route.params.category": {
+      immediate: true, // Ejecuta inmediatamente al montar el componente
       handler() {
         this.fetchGamesByCategory();
       },
@@ -105,5 +114,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>

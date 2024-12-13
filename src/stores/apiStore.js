@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const useApiStore = defineStore("apiStore", {
+export const useApiStore = defineStore("api", {
   state: () => ({
     games: [], // Almacenamos todos los juegos aquí
     orderby: [], // Almacenamos los juegos procesados (ordenados/limitados)
@@ -47,6 +47,18 @@ export const useApiStore = defineStore("apiStore", {
         .catch((error) => {
           console.error("Error fetching games data:", error);
         });
+    },
+    fetchCarruselImages(endpoint) {
+      return fetch(
+        `https://free-to-play-games-database.p.rapidapi.com/api/${endpoint}`,
+        {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
+            "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+          },
+        }
+      ).then((response) => response.json())
     },
 
     // Acción para ordenar los juegos

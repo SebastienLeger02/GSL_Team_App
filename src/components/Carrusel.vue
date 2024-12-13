@@ -66,23 +66,16 @@ export default {
             //sacar los ids de los juegos
             let IdsArray = gameStore.orderby.map((juego) => juego.id);
 
+
             //hacer un fetch para cada id a endpoint game?id=XX
+            // let id = 545;
+            // console.log("fetch: ", gameStore.fetchGames(`game?id=${id}`));
             Promise.all(
                 IdsArray.map((id) =>
-                    axios.get(
-                        `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
-                        {
-                            headers: {
-                                "X-RapidAPI-Key":
-                                    "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
-                                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
-                            },
-                        }
-                    )
+                    gameStore.fetchCarruselImages(`game?id=${id}`)
                 )
             ).then((respuesta) => {
-                //console.log(respuesta)
-                this.gameDetails = respuesta.map((item) => item.data);
+                this.gameDetails = respuesta;
             });
         },
 
@@ -114,7 +107,6 @@ export default {
         nextSlide() {
             this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
             this.gamesOrdered.push(this.gamesOrdered.shift());
-            console.log(this.gamesOrdered);
         },
 
         prevSlide() {
@@ -123,10 +115,6 @@ export default {
                 this.gamesOrdered.length;
             this.gamesOrdered.unshift(this.gamesOrdered.pop());
         },
-
-        /*         goToSlide(index) {
-                    this.currentIndex = index;
-                }, */
 
         //intervalo de las imagenes
         startAutoSlide() {
@@ -256,6 +244,7 @@ export default {
         }
 
     }
+
     & .item.active {
         transform: scale(1.1);
         filter: brightness(1.5);
