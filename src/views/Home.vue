@@ -1,16 +1,16 @@
 <template>
   <div class="bg-color-thirty">
-<!--<div v-if="loading">
+  <div v-if="loading">
       <Spinner />
      </div>
-     <div v-else> </div> -->
+     <div v-else>  
     <Navbar />
     <Header />
     <GameAppCard />
     <GameDatabaseOverview />
     <CategoryList />
     <FooterSection />
-
+</div>
 
   </div>
   
@@ -30,7 +30,7 @@ export default {
   name: "Home",
     data() {
     return {
-      loading: false,
+      loading: true,
     };
   },
   components: {
@@ -42,6 +42,20 @@ export default {
     GameDatabaseOverview,
     CategoryList,
     FooterSection
+  },
+    mounted() {
+    // Simuler un délai de chargement avec setTimeout ou attendre que les données soient récupérées
+    // Par exemple, si tu fais une requête API, tu attendras que celle-ci soit terminée
+
+    setTimeout(() => {
+      // Une fois le délai écoulé ou les données récupérées, on met à jour loading à false
+      this.loading = false;
+    }, 1500); // ici, on attend 3 secondes pour simuler un chargement (remplacer avec ton propre code logique)
+
+    // Exemple si tu fais un fetch() ou un appel API pour récupérer des données :
+    /*
+    this.fetchData();
+    */
   },
 };
 </script>
