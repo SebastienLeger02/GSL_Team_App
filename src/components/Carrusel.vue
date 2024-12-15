@@ -66,23 +66,16 @@ export default {
             //sacar los ids de los juegos
             let IdsArray = gameStore.orderby.map((juego) => juego.id);
 
+
             //hacer un fetch para cada id a endpoint game?id=XX
+            // let id = 545;
+            // console.log("fetch: ", gameStore.fetchGames(`game?id=${id}`));
             Promise.all(
                 IdsArray.map((id) =>
-                    axios.get(
-                        `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
-                        {
-                            headers: {
-                                "X-RapidAPI-Key":
-                                    "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
-                                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
-                            },
-                        }
-                    )
+                    gameStore.fetchCarruselImages(`game?id=${id}`)
                 )
             ).then((respuesta) => {
-                //console.log(respuesta)
-                this.gameDetails = respuesta.map((item) => item.data);
+                this.gameDetails = respuesta;
             });
         },
 
@@ -111,11 +104,10 @@ export default {
       );
     },
 
-    nextSlide() {
-      this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
-      this.gamesOrdered.push(this.gamesOrdered.shift());
-      console.log(this.gamesOrdered);
-    },
+        nextSlide() {
+            this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
+            this.gamesOrdered.push(this.gamesOrdered.shift());
+        },
 
     prevSlide() {
       this.currentIndex =
@@ -124,16 +116,12 @@ export default {
       this.gamesOrdered.unshift(this.gamesOrdered.pop());
     },
 
-    /*         goToSlide(index) {
-                    this.currentIndex = index;
-                }, */
-
-    //intervalo de las imagenes
-    startAutoSlide() {
-      this.autoSlideInterval = setInterval(() => {
-        this.nextSlide();
-      }, 10000); // Cambia la imagen cada 10 segundos
-    },
+        //intervalo de las imagenes
+        startAutoSlide() {
+            this.autoSlideInterval = setInterval(() => {
+                this.nextSlide();
+            }, 10000); // Cambia la imagen cada 10 segundos
+        },
 
     stopAutoSlide() {
       clearInterval(this.autoSlideInterval);
@@ -247,21 +235,27 @@ export default {
     filter: brightness(0.5);
     transition: transform 0.3s, filter 0.3s;
 
-    & img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 0 4rem rgb(132, 113, 92), 0 0 3rem #ff6600,
-        inset 0 0 2.3rem rgb(92, 101, 98);
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 0 4rem rgb(132, 113, 92), 0 0 3rem #ff6600,
+                inset 0 0 2.3rem rgb(92, 101, 98);
+        }
+
     }
-  }
-  & .item.active {
-    transform: scale(1.1);
-    filter: brightness(1.5);
-    box-shadow: 0 0 0.3rem #fff, 0 0 0.1rem #fff, 0 0 1rem #e51a4c,
-      0 0 0.9rem #e51a4c, 0 0 2rem #ff7214, inset 0 0 0.8rem #ff7214;
-  }
+
+    & .item.active {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+        box-shadow: 0 0 .3rem #fff,
+            0 0 .1rem #fff,
+            0 0 1rem #e51a4c,
+            0 0 0.9rem #e51a4c,
+            0 0 2rem #ff7214,
+            inset 0 0 0.8rem #ff7214;
+    }
 }
 
 .nextPrevArrows {

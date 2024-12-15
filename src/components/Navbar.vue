@@ -18,7 +18,7 @@
                     <div v-show="showPlatform"
                         class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-color-thirty/70"
                         @mouseover="showPlatform = true" @mouseleave="showPlatform = false">
-                        <router-link v-for="platform in platforms" :key="platform"
+                        <router-link v-for="platform in apiStore.platforms" :key="platform"
                             :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap p-1">
                             {{ platform }}
                         </router-link>
@@ -38,7 +38,7 @@
                     <div v-show="showCategory"
                         class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-color-thirty/70"
                         @mouseover="showCategory = true" @mouseleave="showCategory = false">
-                        <router-link v-for="category in categories" :key="category"
+                        <router-link v-for="category in apiStore.categories" :key="category"
                             :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap p-1">
                             {{ category }}
                             <!-- {{ console.log("categoria: ", category, " relacion: ", formatToUrl(category)) }} -->
@@ -84,6 +84,7 @@
 
 
 import { useApiStore } from "../stores/apiStore";
+import { mapStores } from "pinia";
 
 export default {
     name: "Navbar",
@@ -96,23 +97,12 @@ export default {
         };
     },
     computed: {
-        // Acceso a los getters del store
-        platforms() {
-            return useApiStore().platforms;
-        },
-        categories() {
-            return useApiStore().categories;
-        },
-        gameStore() {
-            return useApiStore();
-        },
-        gameById() {
-            return this.gameStore.gameById;
-        },
+        ...mapStores(useApiStore),
     },
     mounted() {
-        if (!this.gameStore.games.length) {
-            this.gameStore.fetchGames("games");
+        if (!this.apiStore.games.length) {
+            console.log("Obj apiStore->", this.apiStore.fetchGames("games"));
+            this.apiStore.fetchGames("games");
         }
     },
     methods: {
@@ -122,12 +112,14 @@ export default {
                 this.suggestions = [];
                 return;
             }
-            this.suggestions = this.gameStore.games
+            this.suggestions = this.apiStore.games
                 .map((game) => game.title)
                 .filter((name) => name.toLowerCase().includes(this.searchQuery.toLowerCase()));
         },
         navigateToGame(name) {
-            const selectedGame = this.gameStore.games.find((game) => game.title === name);
+            const selectedGame = this.apiStore.games.find(
+                (game) => game.title === name
+            );
             if (selectedGame) {
                 this.$router.push(`/game?id=${selectedGame.id}`);
             }

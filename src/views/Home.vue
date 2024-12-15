@@ -8,7 +8,7 @@
     <Header />
     <GameAppCard />
     <GameDatabaseOverview />
-    <CategoryList />
+    <CategoryList :isCategory="true" />
     <FooterSection />
 </div>
 

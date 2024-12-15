@@ -6,11 +6,7 @@
         <h2 class="text-lg font-semibold text-color-first mb-4">
           {{ isCategory ? "Category" : "Platform" }}: {{ group.name }}
         </h2>
-        <div
-          v-for="game in group.games"
-          :key="game.id"
-          class="bg-color-first shadow-md rounded-lg flex overflow-hidden mb-4"
-        >
+        <div v-for="game in group.games" :key="game.id" class="bg-white shadow-md rounded-lg flex overflow-hidden mb-4">
           <!-- Enlace al juego -->
           <a :href="`/game?id=${game.id}`" class="w-1/4 bg-color-first flex items-center justify-center">
             <img :src="game.thumbnail" alt="">
@@ -35,6 +31,7 @@
 
 <script>
 import { useApiStore } from "../stores/apiStore";
+import { mapStores } from "pinia";
 
 export default {
   name: "CategoryList",
@@ -50,9 +47,10 @@ export default {
     };
   },
   computed: {
-    apiStore() {
-      return useApiStore();
-    },
+    // apiStore() {
+    //   return useApiStore();
+    // },
+    ...mapStores(useApiStore), // Mapea directamente el store
   },
   methods: {
     getRandomGroups() {
@@ -87,7 +85,11 @@ export default {
   },
   async mounted() {
     if (!this.apiStore.games.length) {
-      await this.apiStore.fetchGames("games");
+      try {
+        await this.apiStore.fetchGames("games");
+      } catch (error) {
+        console.error("Error al obtener los juegos:", error);
+      }
     }
     this.getRandomGroups();
   },

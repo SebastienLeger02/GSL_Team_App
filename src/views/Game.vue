@@ -9,10 +9,10 @@
       <div>
         <section class="grid grid-cols-2 grid-rows-4 gap-6 max-w-md">
           <div class="col-span-2">
-            <h2 class="text-4xl font-bold">{{ gameDetail.title }}</h2>
+            <h2 class="text-4xl font-bold">{{ gameDetail?.title }}</h2>
           </div>
           <div class="flex items-center row-start-2">
-            <img src="../assets/publisher.png" :alt="gameDetail.publisher" class="w-7 mr-2.5" />
+            <img src="../assets/publisher.png" :alt="gameDetail?.publisher" class="w-7 mr-2.5" />
             <p class="font-bold">Publisher :</p>
           </div>
           <div class="flex items-center row-start-2">
@@ -137,12 +137,13 @@ export default {
   },
   watch: {
     // Observar cambios en el ID de la ruta para recargar los datos
-    /*     "$route.params.id"(newId) {
+    "$route.query.id": function(newId) {
       const gameStore = useApiStore();
       if (newId) {
         gameStore.fetchGames(`game?id=${newId}`);
+        console.log("fetchGame: ", gameStore.fetchGames(`game?id=${newId}`))
       }
-    }, */
+    },
   },
 };
 </script>

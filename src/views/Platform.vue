@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section class="bg-background-default">
     <Navbar />
     <Carrusel />
     <!-- ---------------- -->
@@ -15,13 +15,14 @@
       </ul>
     </div>
     <p v-else class="mt-4 text-gray-500">No hay juegos disponibles para esta plataforma.</p> -->
-  </div>
-  <CategoryList :isCategory="false" />
-  <FooterSection />
+    <CategoryList :isCategory="false" />
+    <FooterSection />
+  </section>
 </template>
 
 <script>
 import { useApiStore } from "../stores/apiStore";
+import { mapStores } from "pinia";
 import Navbar from "../components/Navbar.vue";
 import Carrusel from "../components/Carrusel.vue";
 import CategoryList from "../components/CategoryList.vue";
@@ -35,28 +36,23 @@ export default {
     CategoryList,
     FooterSection,
   },
-  data() {
-    return {
-      filteredGames: [], // Almacenará los juegos filtrados
-    };
-  },
   computed: {
+    ...mapStores(useApiStore),
+
     platform() {
-      return this.$route.params.platform; // Plataforma actual de la URL
+      return this.$route.params.platform;
     },
     associatedRelation() {
-      return this.getRelation(this.platform); // Obtener la asociación
+      return this.getRelation(this.platform);
     },
-    apiStore() {
-      return useApiStore(); // Acceder al store
+    filteredGames() {
+      const relatedPlatforms = this.associatedRelation.split(", ");
+      return this.apiStore?.games?.filter((game) =>
+        relatedPlatforms.includes(game.platform)
+      ) || [];
     },
   },
   methods: {
-    /**
-     * Devuelve la relación asociada a una plataforma.
-     * @param {string} platform - La plataforma en formato URL.
-     * @returns {string} La relación asociada.
-     */
     getRelation(platform) {
       const associations = {
         "pc-windows": "PC (Windows)",
@@ -64,31 +60,29 @@ export default {
         "pc-windows-web-browser": "PC (Windows), Web Browser",
       };
 
-      return associations[platform] || platform; // Devolver la relación o la plataforma original
+      return associations[platform] || platform;
     },
-
-    /**
-     * Filtra los juegos asociados a la plataforma actual.
-     */
     async fetchGamesByPlatform() {
-      await this.apiStore.fetchGames("games"); // Obtener los juegos desde el endpoint
-      const relatedPlatforms = this.associatedRelation.split(", "); // Dividir múltiples plataformas
-      console.log(relatedPlatforms);
-      this.filteredGames = this.apiStore.games.filter((game) =>
-        relatedPlatforms.includes(game.platform)
-      );
+      if (!this.apiStore) {
+        console.error("El store no está inicializado.");
+        return;
+      }
+
+      if (!this.apiStore.games.length) {
+        try {
+          await this.apiStore.fetchGames("games");
+        } catch (error) {
+          console.error("Error al obtener los juegos:", error);
+        }
+      }
     },
   },
-  async mounted() {
-    await this.fetchGamesByPlatform(); // Filtrar los juegos al montar el componente
+  mounted() {
+    this.fetchGamesByPlatform();
   },
   watch: {
-    /**
-     * Observa los cambios en la plataforma de la ruta.
-     * Cuando cambia, vuelve a cargar los juegos filtrados.
-     */
-    platform: {
-      immediate: true, // Ejecuta la función al montar el componente
+    "$route.params.platform": {
+      immediate: true,
       handler() {
         this.fetchGamesByPlatform();
       },
@@ -97,5 +91,5 @@ export default {
 };
 </script>
 
-<style>
-</style>
+
+<style></style>
