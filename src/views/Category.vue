@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-background-default">
+  <section class="bg-color-thirty">
     <Navbar />
     {{ console.log("Category:", category) }}
     <Carrusel />

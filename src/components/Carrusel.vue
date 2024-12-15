@@ -32,7 +32,6 @@
 
 <script>
 import { useApiStore } from "../stores/apiStore";
-import axios from "axios";
 export default {
     data() {
         return {
