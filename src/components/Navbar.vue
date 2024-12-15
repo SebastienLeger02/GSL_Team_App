@@ -70,7 +70,7 @@
 
                 <!-- Github Link -->
                 <a href="https://github.com/FEPT07/GSL_Team_App" target="_blank" rel="noopener noreferrer"
-                    class="text-white-700 hover:text-black flex items-center space-x-2">
+                    class="text-white-700 hover:opacity-90 flex items-center space-x-2">
                     <img src="../assets/github-icon.svg" alt="GitHub Icon" class="text-white-700 w-8 h-8" />
                     <span>GitHub</span>
                 </a>
