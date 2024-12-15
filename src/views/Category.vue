@@ -1,16 +1,117 @@
 <template>
-  <h2 class="text-2xl font-bold">Category</h2>
+  <section class="bg-background-default">
+    <Navbar />
+    {{ console.log("Category:", category) }}
+    <Carrusel />
+    <GameList />
+    <!-- <h2 class="text-2xl font-bold">Category: {{ category }}</h2>
+    <p class="text-lg">Asociación: {{ associatedRelation }}</p>
+    <div v-if="filteredGames.length">
+      <h3 class="text-xl font-semibold mt-4">Juegos en la categoría: {{ associatedRelation }}</h3>
+      <ul>
+        <li v-for="game in filteredGames" :key="game.id" class="py-2">
+          <router-link :to="`/game?id=${game.id}`">{{ game.title }}</router-link>
+        </li>
+      </ul>
+    </div>
+    <p v-else class="mt-4 text-gray-500">No hay juegos disponibles para esta categoría.</p> -->
+    <CategoryList :isCategory="true" />
+    <!-- <CategoryList :type="category" /> -->
+    <FooterSection />
+  </section>
 </template>
 <script>
-import Carrusel from "../components/Carrusel.vue";
+import { useApiStore } from "../stores/apiStore";
+import { mapStores } from "pinia";
 import Navbar from "../components/Navbar.vue";
+import Carrusel from "../components/Carrusel.vue";
+import GameList from "../components/GameList.vue";
+import CategoryList from "../components/CategoryList.vue";
+import FooterSection from "../components/FooterSection.vue";
+
 export default {
   name: "Category",
   components: {
     Navbar,
-    Carrusel
+    Carrusel,
+    GameList,
+    CategoryList,
+    FooterSection,
+  },
+  data() {
+    return {
+      filteredGames: [], // Almacenará los juegos filtrados
+    };
+  },
+  computed: {
+    ...mapStores({
+      apiStore: useApiStore, // Mapear el store con mapStores
+    }),
+    category() {
+      return this.$route.params.category; // Categoría actual de la URL
+    },
+    associatedRelation() {
+      return this.getRelation(this.category); // Obtener la asociación
+    },
+  },
+  methods: {
+    /**
+     * Devuelve la relación asociada a una categoría.
+     * @param {string} category - La categoría en formato URL.
+     * @returns {string} La relación asociada.
+     */
+    getRelation(category) {
+      const associations = {
+        mmorpg: "MMORPG",
+        shooter: "Shooter",
+        strategy: "Strategy",
+        "action-rpg": "Action RPG",
+        "battle-royale": "Battle Royale",
+        arpg: "ARPG",
+        mmoarpg: "MMOARPG",
+        fighting: "Fighting",
+        moba: "MOBA",
+        "card-game": "Card Game",
+        "action-game": "Action Game",
+        action: "Action",
+        sports: "Sports",
+        mmo: "MMO",
+        racing: "Racing",
+        social: "Social",
+        "-mmorpg": "MMORPG",
+        fantasy: "Fantasy",
+      };
+      return associations[category] || category; // Devolver la relación o la categoría original
+    },
+    /**
+     * Filtra los juegos asociados a la categoría actual.
+     */
+     async fetchGamesByCategory() {
+      // Check if apiStore is ready before accessing its methods
+      if (!this.apiStore || !this.apiStore.fetchGames) {
+        return;
+      }
+      await this.apiStore.fetchGames("games");
+      this.filteredGames = this.apiStore.games.filter(
+        (game) => game.genre.toLowerCase() === this.associatedRelation.toLowerCase()
+      );
+    },
+  },
+  mounted() {
+    this.fetchGamesByCategory(); // Filtrar los juegos al montar el componente
+  },
+  watch: {
+    /**
+    * Observa los cambios en la categoría de la ruta.
+    * Cuando cambia, vuelve a cargar los juegos filtrados.
+    */
+    "$route.params.category": {
+      immediate: true, // Ejecuta inmediatamente al montar el componente
+      handler() {
+        this.fetchGamesByCategory();
+      },
+    },
   },
 };
 </script>
-<style>
-</style>
+<style></style>

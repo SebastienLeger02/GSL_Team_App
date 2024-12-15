@@ -3,7 +3,7 @@
         <div class="list">
             <!-- {{ games }} -->
             <!-- {{console.log("games: ", gamesOrdered) }} -->
-            <div v-for="(item, index) in gameDatails" :key="index" class="item"
+            <div v-for="(item, index) in gameDetails" :key="index" class="item"
                 :class="{ active: index === currentIndex }" v-show="index === currentIndex">
                 <!-- {{ console.log(index) }} -->
                 <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
@@ -39,11 +39,11 @@ export default {
         return {
             limit: 12, // Limitar inicialmente a 12 resultados
             currentIndex: 0,
-            gameDatails: [],
+            gameDetails: [],
             gamesOrdered: [],
         };
     },
-    mounted() {
+    beforeMount() {
         const gameStore = useApiStore();
         // Llamamos a la API y aplicamos orden y límite inicial
         if (!gameStore.orderby.length) {
@@ -51,6 +51,9 @@ export default {
                 this.applyInitialSettings();
                 this.gamesOrdered = gameStore.orderby;
             });
+        } else {
+            this.gamesOrdered = gameStore.orderby;
+            this.applyInitialSettings();
         }
         this.startAutoSlide();
     },
@@ -64,27 +67,17 @@ export default {
             //sacar los ids de los juegos
             let IdsArray = gameStore.orderby.map((juego) => juego.id);
 
+
             //hacer un fetch para cada id a endpoint game?id=XX
+            // let id = 545;
+            // console.log("fetch: ", gameStore.fetchGames(`game?id=${id}`));
             Promise.all(
                 IdsArray.map((id) =>
-                    axios.get(
-                        `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${id}`,
-                        {
-                            headers: {
-                                "X-RapidAPI-Key":
-                                    "bdc2242cafmsh4c0302abdc3a647p1a6d33jsn5b561224ba73",
-                                "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
-                            },
-                        }
-                    )
+                    gameStore.fetchCarruselImages(`game?id=${id}`)
                 )
             ).then((respuesta) => {
-                //console.log(respuesta)
-                this.gameDatails = respuesta.map((item) => item.data);
+                this.gameDetails = respuesta;
             });
-
-            // Mostrar en consola los juegos limitados
-            console.log("Juegos iniciales limitados:", gameStore.orderby);
         },
 
         // Cambiar límite dinámicamente
@@ -105,29 +98,24 @@ export default {
             // Aplicar el límite nuevamente después de ordenar
             gameStore.limitResults(this.limit);
 
-            // Mostrar en consola los juegos ordenados y limitados
-            console.log(
-                `Juegos ordenados por ${orderType} y limitados:`,
-                gameStore.orderby
-            );
-        },
+      // Mostrar en consola los juegos ordenados y limitados
+      console.log(
+        `Juegos ordenados por ${orderType} y limitados:`,
+        gameStore.orderby
+      );
+    },
 
         nextSlide() {
             this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
             this.gamesOrdered.push(this.gamesOrdered.shift());
-            console.log(this.gamesOrdered);
         },
 
-        prevSlide() {
-            this.currentIndex =
-                (this.currentIndex - 1 + this.gamesOrdered.length) %
-                this.gamesOrdered.length;
-            this.gamesOrdered.unshift(this.gamesOrdered.pop());
-        },
-
-/*         goToSlide(index) {
-            this.currentIndex = index;
-        }, */
+    prevSlide() {
+      this.currentIndex =
+        (this.currentIndex - 1 + this.gamesOrdered.length) %
+        this.gamesOrdered.length;
+      this.gamesOrdered.unshift(this.gamesOrdered.pop());
+    },
 
         //intervalo de las imagenes
         startAutoSlide() {
@@ -136,179 +124,158 @@ export default {
             }, 10000); // Cambia la imagen cada 10 segundos
         },
 
-        stopAutoSlide() {
-            clearInterval(this.autoSlideInterval);
-        },
+    stopAutoSlide() {
+      clearInterval(this.autoSlideInterval);
     },
+  }
 };
 </script>
 
 <style>
 /* seccion imagenes grandes */
 .slider {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    position: relative;
-}
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
 
-.slider .list {
+  & .list {
     position: relative;
     width: 100%;
     height: 100%;
-}
 
-.slider .list .item {
-    position: absolute;
-    inset: 0;
-    transition: 0.7s;
-}
+    & .item {
+      position: absolute;
+      inset: 0;
+      transition: 0.7s;
 
-.slider .list .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-.slider .list .item .content {
-    position: absolute;
-    top: 20%;
-    width: 1140px;
-    height: 40%;
-    max-width: 70%;
-    left: 56%;
-    transform: translateX(-75%);
-    padding-right: 30%;
-    box-sizing: border-box;
-    color: #fff;
-}
+      & .content {
+        position: absolute;
+        top: 20%;
+        width: 1140px;
+        height: 40%;
+        max-width: 70%;
+        left: 56%;
+        transform: translateX(-75%);
+        padding-right: 30%;
+        box-sizing: border-box;
+        color: #fff;
 
-.slider .list .item .content .title {
-    font-size: 4em;
-    /* font-family: "Jaro", sans-serif; */
-    letter-spacing: 4px;
-    font-weight: bold;
-    line-height: 1.3em;
-    padding-bottom: 10px;
-    text-shadow:
-        0 0 7px #ff6600,
-        0 0 10px #ff6600,
-        0 0 21px #ff6600,
-        0 0 42px #5271ff,
-        0 0 82px #5271ff,
-        0 0 92px #5271ff,
-        0 0 102px #5271ff,
-        0 0 151px #5271ff;
-}
+        & .title {
+          
+          font-size: 4em;
+          letter-spacing: 4px;
+          font-weight: bold;
+          line-height: 1.3em;
+          padding-bottom: 10px;
+          text-shadow: 0 0 7px #ff6600, 0 0 10px #ff6600, 0 0 21px #ff6600,
+            0 0 42px #5271ff, 0 0 82px #5271ff, 0 0 92px #5271ff,
+            0 0 102px #5271ff, 0 0 151px #5271ff;
+        }
 
-.slider .list .item .content .description {
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    background-color: rgba(63, 106, 138, 0.71);
-    padding: 10px;
-    border-radius: 15px;
-}
+        & .description {
+          font-size: 14px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          background-color: rgba(63, 106, 138, 0.71);
+          padding: 10px;
+          border-radius: 15px;
+        }
 
-.slider .list .item .content .button {
-    margin-top: 20px;
-}
+        & .button {
+          margin-top: 20px;
 
-.slider .list .item .content .button button {
-    border-radius: 5px;
-    border: none;
-    font-size: 12px;
-    padding: 7px 7px;
-    font-weight: 800;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: 0.4s;
-    color: #2c771c;
-    background-color: #fff;
-    box-shadow: 0 0 .2rem #fff,
-        0 0 .2rem #fff,
-        0 0 2rem #0fa,
-        0 0 0.8rem #0fa,
-        0 0 2.8rem #0fa,
-        inset 0 0 1.3rem #0fa
-}
+          & button {
+            border-radius: 5px;
+            border: none;
+            font-size: 12px;
+            padding: 7px 7px;
+            font-weight: 800;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: 0.4s;
+            color: #2c771c;
+            background-color: #fff;
+            box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #0fa,
+              0 0 0.8rem #0fa, 0 0 2.8rem #0fa, inset 0 0 1.3rem #0fa;
 
-.slider .list .item .content .button button:hover {
-    background-color: #33a21d;
-    color: #fff;
-    font-weight: 800;
+            &:hover {
+              background-color: #33a21d;
+              color: #fff;
+              font-weight: 800;
+            }
+          }
+        }
+      }
+    }
+  }
 }
-
-/* seccion imagenes pequeñas */
 
 .thumbnail {
-    display: flex;
-    gap: 20px;
-    position: absolute;
-    bottom: 87px;
-    left: 40%;
-    width: max-content;
-    z-index: 5;
-}
+  display: flex;
+  gap: 20px;
+  position: absolute;
+  bottom: 87px;
+  left: 40%;
+  width: max-content;
+  z-index: 5;
 
-.thumbnail .item {
+  & .item {
     width: 290px;
     height: 170px;
     flex-shrink: 0;
     position: relative;
     border-radius: 10px;
     cursor: pointer;
-    filter: brightness(.5);
+    filter: brightness(0.5);
     transition: transform 0.3s, filter 0.3s;
-}
 
-.thumbnail .item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow:
-        0 0 4rem rgb(132, 113, 92),
-        0 0 3rem #ff6600,
-        inset 0 0 2.3rem rgb(92, 101, 98)
-}
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 0 4rem rgb(132, 113, 92), 0 0 3rem #ff6600,
+                inset 0 0 2.3rem rgb(92, 101, 98);
+        }
 
-.thumbnail .item.active {
-    transform: scale(1.1);
-    filter: brightness(1.5);
-    box-shadow: 0 0 .3rem #fff,
-        0 0 .1rem #fff,
-        0 0 1rem #e51a4c,
-        0 0 0.9rem #e51a4c,
-        0 0 2rem #ff7214,
-        inset 0 0 0.8rem #ff7214;
-}
+    }
 
-/* botones de prev y next */
+    & .item.active {
+        transform: scale(1.1);
+        filter: brightness(1.5);
+        box-shadow: 0 0 .3rem #fff,
+            0 0 .1rem #fff,
+            0 0 1rem #e51a4c,
+            0 0 0.9rem #e51a4c,
+            0 0 2rem #ff7214,
+            inset 0 0 0.8rem #ff7214;
+    }
+}
 
 .nextPrevArrows {
-    position: absolute;
-    top: 72%;
-    right: 50%;
-    z-index: 100;
-    width: 300px;
-    max-width: 30%;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
+  position: absolute;
+  top: 72%;
+  right: 50%;
+  z-index: 100;
+  width: 300px;
+  max-width: 30%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
 
-.nextPrevArrows button {
+  & button {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    box-shadow:
-        0 0 .3rem #fff,
-        0 0 .3rem #fff,
-        0 0 2.5rem #bc13fe,
-        0 0 1rem #bc13fe,
-        0 0 3rem #bc13fe,
-        inset 0 0 1.5rem #bc13fe;
+    box-shadow: 0 0 0.3rem #fff, 0 0 0.3rem #fff, 0 0 2.5rem #bc13fe,
+      0 0 1rem #bc13fe, 0 0 3rem #bc13fe, inset 0 0 1.5rem #bc13fe;
     border: none;
     background-color: #bc13fe;
     color: #ff00ff;
@@ -317,60 +284,81 @@ export default {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.4s ease;
-}
 
-.nextPrevArrows button:hover {
-    background: var(--Gradiente-Radial, radial-gradient(270.17% 139.44% at 99.27% 1%, #483c9e 0%, #68088b 31.27%, #6c2c4a 65.27%, #000 99.77%));
-    color: #fff;
-}
+    &:hover {
+      background: var(
+        --Gradiente-Radial,
+        radial-gradient(
+          270.17% 139.44% at 99.27% 1%,
+          #483c9e 0%,
+          #68088b 31.27%,
+          #6c2c4a 65.27%,
+          #000 99.77%
+        )
+      );
+      color: #fff;
+    }
+  }
 
-.prev::after {
+  .prev::after {
     content: "<";
-}
+  }
 
-.next::after {
+  .next::after {
     content: ">";
-}
-
-/* animaciones */
-
-.slider .list .item .content .title,
-.slider .list .item .content .description,
-.slider .list .item .content .button {
-    transform: translateY(50px);
-    filter: blur(20px);
-    opacity: 0;
-    animation: showContent 0.5s linear forwards;
+  }
 }
 
 @keyframes showContent {
-    to {
-        transform: translateY(0px);
-        filter: blur(00px);
-        opacity: 1;
+  to {
+    transform: translateY(0px);
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+.slider {
+  & .list {
+    & .item {
+      & .content {
+        & .title,
+        & .description,
+        & .button {
+          transform: translateY(50px);
+          filter: blur(20px);
+          opacity: 0;
+          animation: showContent 0.5s linear forwards;
+        }
+
+        & .title {
+          animation-delay: 0.4s;
+        }
+
+        & .description {
+          animation-delay: 0.6s;
+        }
+
+        & .button {
+          animation-delay: 0.8s;
+        }
+      }
     }
+  }
 }
 
-.slider .list .item .content .title {
-    animation-delay: 0.4s;
-}
-
-.slider .list .item .content .description {
-    animation-delay: 0.6s;
-}
-
-.slider .list .item .content .button {
-    animation-delay: 0.8s;
-}
-
-/* tamaños de la pantalla */
 @media screen and (max-width: 678px) {
-    .slider .list .item .content {
-        padding-right: 0;
-    }
+  .slider {
+    & .list {
+      & .item {
+        & .content {
+          padding-right: 0;
 
-    .slider .list .item .content .title {
-        font-size: 40px;
+          & .title {
+            font-size: 40px;
+          }
+        }
+      }
     }
+  }
 }
 </style>
