@@ -28,6 +28,7 @@
             <button class="next" @click="nextSlide()"></button>
         </div>
     </div>
+
 </template>
 
 <script>
