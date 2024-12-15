@@ -19,7 +19,7 @@
                         class="absolute w-[300px] shadow-lg rounded z-50 grid grid-cols-1 gap-2 cursor-pointer py-4 bg-color-thirty/70"
                         @mouseover="showPlatform = true" @mouseleave="showPlatform = false">
                         <router-link v-for="platform in apiStore.platforms" :key="platform"
-                            :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap p-1">
+                            :to="`/platform/${formatToUrl(platform)}`" class="whitespace-nowrap hover:bg-gray-500 p-1">
                             {{ platform }}
                         </router-link>
                     </div>
@@ -39,9 +39,8 @@
                         class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-color-thirty/70"
                         @mouseover="showCategory = true" @mouseleave="showCategory = false">
                         <router-link v-for="category in apiStore.categories" :key="category"
-                            :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap p-1">
+                            :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap hover:bg-gray-500 p-1">
                             {{ category }}
-                            <!-- {{ console.log("categoria: ", category, " relacion: ", formatToUrl(category)) }} -->
                         </router-link>
                     </div>
                 </div>
