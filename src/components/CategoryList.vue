@@ -9,7 +9,7 @@
         <div v-for="game in group.games" :key="game.id" class="bg-white shadow-md rounded-lg flex overflow-hidden mb-4">
           <!-- Enlace al juego -->
           <a :href="`/game?id=${game.id}`" class="w-1/4 bg-color-first flex items-center justify-center">
-            <img :src="game.thumbnail" alt="">
+            <img :src="game.thumbnail" :alt="game.title">
           </a>
           <!-- Detalles del juego -->
           <div class="w-3/4 p-4 bg-color-secondary">

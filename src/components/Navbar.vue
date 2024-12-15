@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="#">Contact</a>
+                    <router-link to="/team-dev">Team Dev</router-link>
                 </div>
             </div>
 
