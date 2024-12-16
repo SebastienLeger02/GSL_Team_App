@@ -49,7 +49,7 @@ export default {
 
     setTimeout(() => {
       this.loading = false;
-    }, 500);
+    }, 700);
   },
 };
 </script>

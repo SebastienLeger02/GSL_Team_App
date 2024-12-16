@@ -3,10 +3,10 @@
     <div class="max-w-6xl mx-auto space-y-8">
       <!-- Recorre las categorías o plataformas únicas -->
       <div v-for="(group, index) in randomGroups" :key="index">
-        <h2 class="text-lg font-semibold text-color-first mb-4">
+        <h2 class="text-3xl font-semibold text-color-first mb-4">
           {{ isCategory ? "Category" : "Platform" }}: {{ group.name }}
         </h2>
-        <div v-for="game in group.games" :key="game.id" class="bg-white shadow-md rounded-lg flex overflow-hidden mb-4">
+        <div v-for="game in group.games" :key="game.id" class="bg-white shadow-md rounded-lg flex overflow-hidden mb-8">
           <!-- Enlace al juego -->
           <a :href="`/game?id=${game.id}`" class="w-1/4 bg-color-first flex items-center justify-center">
             <img :src="game.thumbnail" :alt="game.title">

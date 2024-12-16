@@ -18,32 +18,34 @@
     </div>
     <h1 class="hidden">Project : GSL _ Game App</h1>
     <!-- <p class="w-[45%] text-center pt-4 text-color-first text-lg"> -->
-    <p class="w-[45%] text-center leading-10 text-color-first text-2xl">
+    <p class="mx-10 md:w-[45%] text-center leading-10 text-color-first text-lg md:text-2xl">
       Aplicación web enfocada en videojuegos, utilizando Vue.js y Tailwind CSS, que se integra con un backend a través de una API.
     </p>
+  
+    <!-- Game Section -->
     <section
-      class="text-color-first grid grid-cols-3 grid-rows-1 gap-6 relative top-[190px] mx-[20%]"
+      class="text-color-first grid grid-cols-1 md:grid-cols-3 gap-6 relative top-[5em] mx-[5%] md:mx-[20%] mt-15"
     >
       <div
         v-for="(game, index) in limitedGames"
         :key="index"
-        class="w-[250px] h-[100%] flex flex-col justify-self-center rounded-2xl"
+        class="w-full md:w-[250px] flex flex-col justify-self-center rounded-2xl"
       >
         <div
           v-show="game"
-          class="rounded-[18px] border border-solid border-color-secondary h-80 bg-color-secondary group overflow-hidden"
+          class="rounded-[18px] border border-solid border-color-secondary bg-color-secondary group overflow-hidden"
           @mouseenter="onHover(game.id)"
           @mouseleave="onLeave"
         >
           <router-link :to="`/game?id=${game.id}`">
-            <!-- Imagen por defecto -->
+            <!-- Default image -->
             <img
               v-if="!hoveredGameId || hoveredGameId !== game.id || !videoAvailability[game.id]"
               class="rounded-t-2xl transition-all duration-300"
               :src="game.thumbnail"
               :alt="game.title"
             />
-            <!-- Video al hacer hover -->
+            <!-- Hover video -->
             <video
               v-else
               class="featuredvideo3 rounded-t-2xl transition-all duration-300"
@@ -53,14 +55,14 @@
               :src="`https://www.freetogame.com/g/${game.id}/videoplayback.webm`"
             ></video>
           </router-link>
-          <h2 class="text-2xl font-bold mx-2">{{ game.title }}</h2>
-          <p class="text-sm mt-[-6px] mb-3 mx-2">{{ game.genre }}</p>
-          <p class="mx-2">{{ game.short_description }}</p>
+          <h2 class="text-xl md:text-2xl font-bold mx-2">{{ game.title }}</h2>
+          <p class="text-xs md:text-sm mt-[-6px] mb-3 mx-2">{{ game.genre }}</p>
+          <p class="text-sm mx-2 mb-5">{{ game.short_description }}</p>
         </div>
       </div>
     </section>
   </section>
-  <section class="h-[20em] w-full bg-color-thirty"></section>
+  <section class="h-[10em] w-full bg-color-thirty"></section>
 </template>
 
 <script>
