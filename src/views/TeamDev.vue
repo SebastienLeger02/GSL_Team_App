@@ -7,79 +7,131 @@
       <navbar />
       <!-- Sección principal -->
       <section class="min-h-screen bg-gradient text-color-first">
-        <section class="flex flex-col items-center gap-6 md:gap-8 pt-20 md:pt-24 px-4 sm:px-6 md:px-8">
-          <h1 class="neonText2 tracking-wider text-5xl  md:text-6xl font-bold text-center">Team Dev</h1>
+        <section
+          class="flex flex-col items-center gap-6 md:gap-8 pt-20 md:pt-24 px-4 sm:px-6 md:px-8"
+        >
+          <h1
+            class="neonText2 tracking-wider text-5xl md:text-6xl font-bold text-center"
+          >
+            Team Dev
+          </h1>
           <p class="text-lg md:text-2xl text-center">
-            Esta plataforma es el resultado del trabajo colaborativo de nuestro equipo de desarrollo.
+            Esta plataforma es el resultado del trabajo colaborativo de nuestro
+            equipo de desarrollo.
           </p>
         </section>
 
         <!-- Sección de perfiles -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 px-4 md:px-8 py-6 mt-4">
+        <section
+          class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 px-4 md:px-8 py-6 mt-4 pb-24"
+        >
           <!-- Perfil Gerard -->
-          <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg border-2 custom-shadow">
-            <img class="w-[120px] md:w-[140px] rounded-full mb-6 shadow-lg object-cover"
-              src="../../public/DevPictures/Gerard-Macias.jpg" alt="Foto Gerard Macias" />
+          <div
+            class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg border-2 custom-shadow"
+          >
+            <img
+              class="w-[120px] md:w-[140px] rounded-full mb-6 shadow-lg object-cover"
+              src="../../public/DevPictures/Gerard-Macias.jpg"
+              alt="Foto Gerard Macias"
+            />
             <h3 class="text-xl md:text-3xl font-bold mb-2">Gerard Macias</h3>
             <p class="text-md md:text-lg">
-              Desarrollador Full Stack con experiencia en diversas tecnologías. Siempre dispuesto a aprender y mejorar.
+              Desarrollador Full Stack con experiencia en diversas tecnologías.
+              Siempre dispuesto a aprender y mejorar.
             </p>
             <div class="flex items-center gap-4 mt-2">
               <a href="#">
-                <img class="w-10 md:w-12" src="../assets/github-icon.svg" alt="Repository Github Gerard" />
+                <img
+                  class="w-10 md:w-12"
+                  src="../assets/github-icon.svg"
+                  alt="Repository Github Gerard"
+                />
               </a>
               <a href="#">
-                <img class="w-8 md:w-10" src="../assets/linkedin-icon.svg" alt="Linkedin Gerard" />
+                <img
+                  class="w-8 md:w-10"
+                  src="../assets/linkedin-icon.svg"
+                  alt="Linkedin Gerard"
+                />
               </a>
             </div>
           </div>
 
           <!-- Perfil Sébastien -->
-          <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg border-2 custom-shadow">
-            <img class="w-[120px] md:w-[140px] rounded-full mb-6 shadow-lg object-cover"
-              src="../../public/DevPictures/Sebastien-Leger.png" alt="Foto Sébastien Léger" />
+          <div
+            class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg border-2 custom-shadow"
+          >
+            <img
+              class="w-[120px] md:w-[140px] rounded-full mb-6 shadow-lg object-cover"
+              src="../../public/DevPictures/Sebastien-Leger.png"
+              alt="Foto Sébastien Léger"
+            />
             <h3 class="text-xl md:text-3xl font-bold mb-2">Sébastien Léger</h3>
             <p class="text-md md:text-lg">
-              Desarrollador front-end apasionado por la tecnología y el diseño, con el objetivo de alcanzar la maestría
-              en el área.
+              Desarrollador front-end apasionado por la tecnología y el diseño,
+              con el objetivo de alcanzar la maestría en el área.
             </p>
             <div class="flex items-center gap-4 mt-2">
               <a href="https://github.com/SebastienLeger02">
-                <img class="w-10 md:w-12" src="../assets/github-icon.svg" alt="Repository Github Sébastien" />
+                <img
+                  class="w-10 md:w-12"
+                  src="../assets/github-icon.svg"
+                  alt="Repository Github Sébastien"
+                />
               </a>
               <a href="https://www.linkedin.com/in/sebastien-dev/">
-                <img class="w-8 md:w-10" src="../assets/linkedin-icon.svg" alt="Linkedin Sébastien" />
+                <img
+                  class="w-8 md:w-10"
+                  src="../assets/linkedin-icon.svg"
+                  alt="Linkedin Sébastien"
+                />
               </a>
             </div>
           </div>
 
           <!-- Perfil Lenin -->
-          <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg border-2 custom-shadow">
-            <img class="w-[120px] md:w-[140px] rounded-full mb-6 shadow-lg object-cover"
-              src="../../public/DevPictures/Lenin-Ruiz.jpg" alt="Foto Lenin Ruiz" />
+          <div
+            class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg border-2 custom-shadow"
+          >
+            <img
+              class="w-[120px] md:w-[140px] rounded-full mb-6 shadow-lg object-cover"
+              src="../../public/DevPictures/Lenin-Ruiz.jpg"
+              alt="Foto Lenin Ruiz"
+            />
             <h3 class="text-xl md:text-3xl font-bold mb-2">Lenin Ruiz</h3>
             <p class="text-md md:text-lg">
-              Desarrollador Full Stack y front-end con ganas de seguir evolucionando dentro del campo de la tecnología.
+              Desarrollador Full Stack y front-end con ganas de seguir
+              evolucionando dentro del campo de la tecnología.
             </p>
             <div class="flex items-center gap-4 mt-2">
               <a href="#">
-                <img class="w-10 md:w-12" src="../assets/github-icon.svg" alt="Repository Github Lenin" />
+                <img
+                  class="w-10 md:w-12"
+                  src="../assets/github-icon.svg"
+                  alt="Repository Github Lenin"
+                />
               </a>
               <a href="#">
-                <img class="w-8 md:w-10" src="../assets/linkedin-icon.svg" alt="Linkedin Lenin" />
+                <img
+                  class="w-8 md:w-10"
+                  src="../assets/linkedin-icon.svg"
+                  alt="Linkedin Lenin"
+                />
               </a>
             </div>
           </div>
         </section>
       </section>
+      <FooterSection />
     </div>
   </div>
 </template>
 
-
 <script>
+
 import Navbar from "../components/Navbar.vue";
 import Spinner from "../components/Spinner.vue";
+import FooterSection from "../components/FooterSection.vue";
 
 export default {
   name: "TeamDev",
@@ -91,11 +143,12 @@ export default {
   components: {
     Spinner,
     Navbar,
+    FooterSection,
   },
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 2000);
+    }, 500);
   },
 };
 </script>

@@ -1,4 +1,8 @@
 <template>
+  <div v-if="loading">
+      <Spinner />
+    </div>
+    <div v-else>
   <section class="bg-color-thirty">
     <Navbar />
     {{ console.log("Category:", category) }}
@@ -7,7 +11,9 @@
     <CategoryList :isCategory="true" />
     <FooterSection />
   </section>
+  </div>
 </template>
+
 <script>
 import { useApiStore } from "../stores/apiStore";
 import { mapStores } from "pinia";
@@ -16,6 +22,8 @@ import Carrusel from "../components/Carrusel.vue";
 import GameList from "../components/GameList.vue";
 import CategoryList from "../components/CategoryList.vue";
 import FooterSection from "../components/FooterSection.vue";
+import Spinner from "../components/Spinner.vue";
+
 
 export default {
   name: "Category",
@@ -25,10 +33,12 @@ export default {
     GameList,
     CategoryList,
     FooterSection,
+    Spinner
   },
   data() {
     return {
       filteredGames: [], // Almacenará los juegos filtrados
+      loading: true
     };
   },
   computed: {
@@ -87,6 +97,9 @@ export default {
   },
   mounted() {
     this.fetchGamesByCategory(); // Filtrar los juegos al montar el componente
+    setTimeout(() => { // Tiempo Spinner
+      this.loading = false;
+    }, 500);
   },
   watch: {
     /**
