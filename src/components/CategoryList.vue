@@ -47,9 +47,6 @@ export default {
     };
   },
   computed: {
-    // apiStore() {
-    //   return useApiStore();
-    // },
     ...mapStores(useApiStore), // Mapea directamente el store
   },
   methods: {
