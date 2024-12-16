@@ -1,60 +1,52 @@
 <template>
-    <section class="bg-gray-200 py-8">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex justify-between items-start">
-          <!-- Logo -->
-          <div class="text-4xl font-bold text-gray-800 transform -rotate-90">Logo</div>
-  
-          <!-- Navigation Links -->
-          <div class="flex space-x-16">
-            <!-- Categories -->
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800 border-b-2 border-blue-500 pb-2 mb-4">Category</h3>
-              <ul class="space-y-2 text-gray-600">
-                <li><a href="#" class="hover:text-blue-600">Category</a></li>
-                <li><a href="#" class="hover:text-blue-600">Category</a></li>
-                <li><a href="#" class="hover:text-blue-600">Category</a></li>
-                <li><a href="#" class="hover:text-blue-600">Category</a></li>
-              </ul>
-            </div>
-  
-            <!-- Platforms -->
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800 border-b-2 border-green-500 pb-2 mb-4">Platform</h3>
-              <ul class="space-y-2 text-gray-600">
-                <li><a href="#" class="hover:text-green-600">Platform</a></li>
-                <li><a href="#" class="hover:text-green-600">Platform</a></li>
-                <li><a href="#" class="hover:text-green-600">Platform</a></li>
-                <li><a href="#" class="hover:text-green-600">Platform</a></li>
-              </ul>
-            </div>
-  
-            <!-- Other Links -->
-            <div>
-              <ul class="space-y-4 text-gray-800 font-semibold">
-                <li><a href="#" class="hover:text-gray-600">Home</a></li>
-                <li><a href="#" class="hover:text-gray-600">Contact</a></li>
-                <li><a href="#" class="hover:text-gray-600">Github</a></li>
-              </ul>
-            </div>
+  <footer class="bg-gradient text-white py-6 border-t-2 custom-shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <!-- Columna 1 -->
+        <div>
+          <h3 class="text-[32px] text-[#bc168d] neonText3 font-semibold mb-2 md:mb-4 tracking-wider">GSL <span class="neonText2">developers</span></h3>
+          <div class="space-y-1 md:space-y-4 text-md">
+            <p>. Gerard Macias</p>
+            <p>. Sebastian Léger</p>
+            <p>. Lenin Ruiz</p>
           </div>
         </div>
-  
-        <!-- Footer -->
-        <div class="mt-12 text-center text-gray-600 text-sm">
-          <p>Project from: Gerard Macias, Lenin Ruiz, Sébastien Léger</p>
-          <p>CODEOP - FEPT07 - 2024</p>
+
+        <!-- Columna 2 -->
+        <div>
+          <h3 class="text-[32px] font-semibold mb-2 md:mb-4 neonText2 tracking-wider">Siguenos</h3>
+          <div class="space-y-2 text-md flex gap-8">
+            <img src="../assets/github-icon.svg" alt="GitHub Icon" class="w-[48px] h-[52px]" />
+            <img src="../assets/LinkedIn_icon.svg.png" alt="" class="w-[35px] h-[35px]">
+            <img src="/src/image/Instagram.svg.png" alt="" class="w-[35px] h-[35px]">
+          </div>
+        </div>
+
+        <!-- Columna 3 -->
+        <div>
+          <h3 class="text-[32px] font-semibold mb-2 md:mb-4 neonText2 tracking-wider">Contáctanos</h3>
+          <div class="space-y-1 md:space-y-4 text-md">
+            <p><b class="neonText">Dirección: </b><span>Carrer d'en Grassot, 101, Barcelona</span></p>
+            <p><b class="neonText">Teléfono: </b><span>648 49 15 91</span></p>
+            <p><b class="neonText">Email: </b><span>gsldevelopers@gameapp.com</span></p>
+          </div>
         </div>
       </div>
-    </section>
-  </template>
-  
-  <script>
-  export default {
-    name: "FooterSection",
-  };
-  </script>
-  
-  <style scoped>
-  </style>
-  
+    </div>
+    <!-- columna final -->
+    <div class="neonText mt-6 md:mt-12 md:mb-3 text-center text-white text-md">
+      <p>Project from: GSL developers CODEOP - FEPT07 - 2024</p>
+      <font-awesome-icon icon="phone" class="text-green-500 w-6 h-6" />
+    </div>
+  </footer>
+</template>
+
+<script>
+
+
+export default {
+  name: "FooterSection",
+};
+</script>
+
+<style scoped></style>

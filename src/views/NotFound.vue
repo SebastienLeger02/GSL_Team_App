@@ -40,23 +40,20 @@ export default {
 </script>
 
 <style>
-
 .text-stroke {
-      -webkit-text-stroke: 1px #6CDAFB; 
-    }
+  -webkit-text-stroke: 1px #6CDAFB;
+}
 
-    .a {
-        background-image: url(../assets/circle-neon.png),
-          radial-gradient(
-            270.17% 139.44% at 99.27% 1%,
-            #483c9e 0%,
-            #68088b 31.27%,
-            #bc168d 65.27%,
-            #000 99.77%
-          );
-        background-position: center, center; 
-        background-repeat: no-repeat, no-repeat; 
-        background-size:cover; 
-      
-    }
+.a {
+  background-image: url(../assets/circle-neon.png),
+    radial-gradient(270.17% 139.44% at 99.27% 1%,
+      #483c9e 0%,
+      #68088b 31.27%,
+      #bc168d 65.27%,
+      #000 99.77%);
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: cover;
+
+}
 </style>

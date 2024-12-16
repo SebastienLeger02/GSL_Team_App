@@ -11,7 +11,9 @@
       <CategoryList :isCategory="true" />
       <FooterSection />
     </div>
+
   </div>
+
 </template>
 
 <script>
@@ -42,6 +44,9 @@ export default {
     FooterSection,
   },
   mounted() {
+    // Simuler un délai de chargement avec setTimeout ou attendre que les données soient récupérées
+    // Par exemple, si tu fais une requête API, tu attendras que celle-ci soit terminée
+
     setTimeout(() => {
       this.loading = false;
     }, 500);
