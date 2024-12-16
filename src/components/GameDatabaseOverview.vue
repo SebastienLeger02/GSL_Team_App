@@ -1,5 +1,5 @@
 <template>
-  <section class="text-center py-16 bg-color-thirty text-slate-100">
+  <section class="text-center py-10 mt-5 bg-color-thirty text-slate-100">
     <h1 class="text-2xl font-bold mb-4">
       La base de datos más grande de juegos
     </h1>
