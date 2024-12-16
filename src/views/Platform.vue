@@ -1,20 +1,7 @@
 <template>
   <section class="bg-color-thirty">
     <Navbar />
-    <Carrusel />
-    <!-- ---------------- -->
-    <!-- <h2 class="text-2xl font-bold">Platform: {{ platform }}</h2>
-    <p class="text-lg">Asociación: {{ associatedRelation }}</p>
-
-    <div v-if="filteredGames.length">
-      <h3 class="text-xl font-semibold mt-4">Juegos en la plataforma: {{ associatedRelation }}</h3>
-      <ul>
-        <li v-for="game in filteredGames" :key="game.id" class="py-2">
-          <router-link :to="`/game?id=${game.id}`">{{ game.title }}</router-link>
-        </li>
-      </ul>
-    </div>
-    <p v-else class="mt-4 text-gray-500">No hay juegos disponibles para esta plataforma.</p> -->
+    <Carrusel :platform="associatedRelation" />
     <CategoryList :isCategory="false" />
     <FooterSection />
   </section>

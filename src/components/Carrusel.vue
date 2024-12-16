@@ -1,134 +1,121 @@
 <template>
-    <div class="slider">
-        <div class="list">
-            <!-- {{ games }} -->
-            <!-- {{console.log("games: ", gamesOrdered) }} -->
-            <div v-for="(item, index) in gameDetails" :key="index" class="item"
-                :class="{ active: index === currentIndex }" v-show="index === currentIndex">
-                <!-- {{ console.log(index) }} -->
-                <img v-bind:src="item.screenshots[0].image" :alt="item.alt" />
-                <!-- {{ console.warn("item: ", item) }} -->
-                <div class="content">
-                    <div class="title">{{ item.title }}</div>
-                    <div class="description">{{ item.short_description }}</div>
-                    <div class="button">
-                        <button>More Info</button>
-                    </div>
-                </div>
-            </div>
+  <div class="slider">
+    <div class="list">
+      <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }"
+        v-show="index === currentIndex">
+        <img :src="item.screenshots[0]?.image || item.thumbnail" :alt="item.alt" />
+        <div class="content">
+          <div class="text-white font-bold drop-shadow-lg"><span>{{ platform || category }}</span></div>
+          <div class="title">{{ item.title }}</div>
+          <div class="description">{{ item.short_description }}</div>
+          <div class="button">
+            <button @click="navigateToGame(item.id)">More Info</button>
+          </div>
         </div>
-        <div class="thumbnail">
-            <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item"
-                :class="{ active: index === 0 }" @click="goToSlide(index)">
-                <img :src="item.thumbnail" :alt="item.alt" />
-            </div>
-        </div>
-        <div class="nextPrevArrows">
-            <button class="prev" @click="prevSlide()"></button>
-            <button class="next" @click="nextSlide()"></button>
-        </div>
+      </div>
     </div>
-
+    <div class="thumbnail">
+      <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item" :class="{ active: index === 0 }"
+        @click="goToSlide(index)">
+        <img :src="item.thumbnail" :alt="item.alt" />
+      </div>
+    </div>
+    <div class="nextPrevArrows">
+      <button class="prev" @click="prevSlide()"></button>
+      <button class="next" @click="nextSlide()"></button>
+    </div>
+  </div>
 </template>
 
 <script>
 import { useApiStore } from "../stores/apiStore";
+
 export default {
-    data() {
-        return {
-            limit: 12, // Limitar inicialmente a 12 resultados
-            currentIndex: 0,
-            gameDetails: [],
-            gamesOrdered: [],
-        };
+  props: {
+    platform: {
+      type: String,
+      default: null,
     },
-    beforeMount() {
-        const gameStore = useApiStore();
-        // Llamamos a la API y aplicamos orden y límite inicial
-        if (!gameStore.orderby.length) {
-            gameStore.fetchGames("games").then(() => {
-                this.applyInitialSettings();
-                this.gamesOrdered = gameStore.orderby;
-            });
-        } else {
-            this.gamesOrdered = gameStore.orderby;
-            this.applyInitialSettings();
-        }
-        this.startAutoSlide();
+    category: {
+      type: String,
+      default: null,
     },
-    methods: {
-        // Aplicar orden y límite inicial
-        applyInitialSettings() {
-            const gameStore = useApiStore();
-            gameStore.sortGames("relevance");
-            gameStore.limitResults(this.limit);
-
-            //sacar los ids de los juegos
-            let IdsArray = gameStore.orderby.map((juego) => juego.id);
-
-
-            //hacer un fetch para cada id a endpoint game?id=XX
-            // let id = 545;
-            // console.log("fetch: ", gameStore.fetchGames(`game?id=${id}`));
-            Promise.all(
-                IdsArray.map((id) =>
-                    gameStore.fetchCarruselImages(`game?id=${id}`)
-                )
-            ).then((respuesta) => {
-                this.gameDetails = respuesta;
-            });
-        },
-
-        // Cambiar límite dinámicamente
-        updateLimit(newLimit) {
-            const gameStore = useApiStore();
-            this.limit = newLimit;
-            gameStore.limitResults(this.limit);
-
-            // Mostrar en consola los juegos con el nuevo límite
-            console.log(`Juegos limitados a ${this.limit}:`, gameStore.orderby);
-        },
-
-        // Cambiar el orden dinámicamente
-        changeOrder(orderType) {
-            const gameStore = useApiStore();
-            gameStore.sortGames(orderType);
-
-            // Aplicar el límite nuevamente después de ordenar
-            gameStore.limitResults(this.limit);
-
-      // Mostrar en consola los juegos ordenados y limitados
-      console.log(
-        `Juegos ordenados por ${orderType} y limitados:`,
-        gameStore.orderby
-      );
+  },
+  data() {
+    return {
+      limit: 12,
+      currentIndex: 0,
+      gameDetails: [],
+      gamesOrdered: [],
+    };
+  },
+  watch: {
+    platform: {
+      immediate: true,
+      handler() {
+        this.updateGames();
+      },
     },
+    category: {
+      immediate: true,
+      handler() {
+        this.updateGames();
+      },
+    },
+  },
+  methods: {
+    async updateGames() {
+      const gameStore = useApiStore();
+      await gameStore.fetchGames("games");
 
-        nextSlide() {
-            this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
-            this.gamesOrdered.push(this.gamesOrdered.shift());
-        },
+      let filteredGames = gameStore.games;
 
+      if (this.platform) {
+        filteredGames = filteredGames.filter((game) =>
+          game.platform.toLowerCase().includes(this.platform.toLowerCase())
+        );
+      } else if (this.category) {
+        filteredGames = filteredGames.filter((game) =>
+          game.genre.toLowerCase().includes(this.category.toLowerCase())
+        );
+      }
+
+      this.gamesOrdered = filteredGames.sort(() => Math.random() - 0.5).slice(0, this.limit);
+
+      const idsArray = this.gamesOrdered.map((game) => game.id);
+      Promise.all(idsArray.map((id) => gameStore.fetchCarruselImages(`game?id=${id}`)))
+        .then((details) => {
+          this.gameDetails = details;
+        });
+    },
+    navigateToGame(id) {
+      this.$router.push(`/game?id=${id}`);
+    },
+    nextSlide() {
+      this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
+      this.gamesOrdered.push(this.gamesOrdered.shift());
+    },
     prevSlide() {
-      this.currentIndex =
-        (this.currentIndex - 1 + this.gamesOrdered.length) %
-        this.gamesOrdered.length;
+      this.currentIndex = (this.currentIndex - 1 + this.gamesOrdered.length) % this.gamesOrdered.length;
       this.gamesOrdered.unshift(this.gamesOrdered.pop());
     },
-
-        //intervalo de las imagenes
-        startAutoSlide() {
-            this.autoSlideInterval = setInterval(() => {
-                this.nextSlide();
-            }, 10000); // Cambia la imagen cada 10 segundos
-        },
-
+    startAutoSlide() {
+      this.autoSlideInterval = setInterval(this.nextSlide, 10000);
+    },
     stopAutoSlide() {
       clearInterval(this.autoSlideInterval);
     },
-  }
+  },
+  mounted() {
+    this.updateGames();
+    this.startAutoSlide();
+  },
+  beforeUnmount() {
+    this.stopAutoSlide();
+  },
 };
 </script>
+
 
 <style>
 /* seccion imagenes grandes */
@@ -167,7 +154,7 @@ export default {
         color: #fff;
 
         & .title {
-          
+
           font-size: 4em;
           letter-spacing: 4px;
           font-weight: bold;
@@ -235,27 +222,27 @@ export default {
     filter: brightness(0.5);
     transition: transform 0.3s, filter 0.3s;
 
-        & img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 0 4rem rgb(132, 113, 92), 0 0 3rem #ff6600,
-                inset 0 0 2.3rem rgb(92, 101, 98);
-        }
-
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 0 4rem rgb(132, 113, 92), 0 0 3rem #ff6600,
+        inset 0 0 2.3rem rgb(92, 101, 98);
     }
 
-    & .item.active {
-        transform: scale(1.1);
-        filter: brightness(1.5);
-        box-shadow: 0 0 .3rem #fff,
-            0 0 .1rem #fff,
-            0 0 1rem #e51a4c,
-            0 0 0.9rem #e51a4c,
-            0 0 2rem #ff7214,
-            inset 0 0 0.8rem #ff7214;
-    }
+  }
+
+  & .item.active {
+    transform: scale(1.1);
+    filter: brightness(1.5);
+    box-shadow: 0 0 .3rem #fff,
+      0 0 .1rem #fff,
+      0 0 1rem #e51a4c,
+      0 0 0.9rem #e51a4c,
+      0 0 2rem #ff7214,
+      inset 0 0 0.8rem #ff7214;
+  }
 }
 
 .nextPrevArrows {
@@ -285,16 +272,12 @@ export default {
     transition: all 0.4s ease;
 
     &:hover {
-      background: var(
-        --Gradiente-Radial,
-        radial-gradient(
-          270.17% 139.44% at 99.27% 1%,
-          #483c9e 0%,
-          #68088b 31.27%,
-          #6c2c4a 65.27%,
-          #000 99.77%
-        )
-      );
+      background: var(--Gradiente-Radial,
+          radial-gradient(270.17% 139.44% at 99.27% 1%,
+            #483c9e 0%,
+            #68088b 31.27%,
+            #6c2c4a 65.27%,
+            #000 99.77%));
       color: #fff;
     }
   }
@@ -320,6 +303,7 @@ export default {
   & .list {
     & .item {
       & .content {
+
         & .title,
         & .description,
         & .button {
