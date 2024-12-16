@@ -1,4 +1,4 @@
-<template class="bg-color-thirty">
+<template>
   <!-- <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> -->
   <Navbar />
   <section class="section-principal-game bg-color-thirty py-20">
@@ -98,18 +98,24 @@
       </div>
     </section>
   </section>
+  <GameList />
+  <FooterSection />
 </template>
 
 <script>
 import { useApiStore } from "../stores/apiStore";
 import Navbar from "../components/Navbar.vue";
 import Header from "../components/Header.vue";
+import GameList from "../components/GameList.vue";
+import FooterSection from "../components/FooterSection.vue";
 
 export default {
   name: "Game",
   components: {
     Navbar,
     Header,
+    GameList,
+    FooterSection
   },
   data() {
     return {

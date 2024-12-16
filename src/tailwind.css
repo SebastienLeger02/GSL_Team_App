@@ -81,3 +81,29 @@ h1 ,h2, h3, .button, .title{
     0 0 102px #bc13fe,
     0 0 151px #bc13fe;
 }
+
+.neonText4 {
+  color: #c5170f;
+  text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #c5170f,
+      0 0 62px #c5170f,
+      0 0 70px #c5170f,
+      0 0 80px #c5170f,
+      0 0 120px #c5170f;
+}
+
+.neonText5 {
+  color: #6CDAFB;
+  text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #5271ff,
+      0 0 82px #5271ff,
+      0 0 92px #5271ff,
+      0 0 102px #5271ff,
+      0 0 151px #5271ff;
+}
