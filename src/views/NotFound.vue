@@ -1,5 +1,9 @@
 <template >
-
+  <div class="bg-color-thirty">
+    <div v-if="loading">
+      <Spinner />
+    </div>
+    <div v-else>
     <section class="a bg-gradient  flex flex-col justify-center items-center h-screen w-screen">
       <h3 class="text-color-fifth text-2xl font-semibold ">error</h3>
        <h1 class="text-[12em] font-semibold text-stroke text-transparent leading-[0.7] ">404</h1>
@@ -7,17 +11,30 @@
       <router-link :to="'/'" class="mt-8 text-xl text-color-first font-jaro border-2 border-color-fourth px-4 py-2 rounded hover:bg-color-fifth hover:scale-105 transition-all duration-500 hover:shadow-[0px_2px_45px_5px_rgba(108,218,251,1)]">
         Home</router-link>
   </section>
+  </div>
+</div>
 </template>
 
 <script>
+import Spinner
+ from '../components/Spinner.vue';
+
 export default {
     name: "NotFound",
     data() {
        return{
-            
-        }
+            loading:true,
+        };
 
-    }
+    },
+    components : {
+      Spinner
+    },
+     mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 1500);
+  }
 
 }
 </script>
