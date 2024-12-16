@@ -1,8 +1,7 @@
 <template>
   <div class="slider">
     <div class="list">
-      <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }"
-        v-show="index === currentIndex">
+      <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }" v-show="index === currentIndex">
         <img :src="item.screenshots[0]?.image || item.thumbnail" :alt="item.alt" />
         <div class="content">
           <div class="text-white font-bold drop-shadow-lg"><span>{{ platform || category }}</span></div>
