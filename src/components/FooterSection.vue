@@ -17,8 +17,8 @@
           <h3 class="text-[32px] font-semibold mb-2 md:mb-4 neonText2 tracking-wider">Siguenos</h3>
           <div class="space-y-2 text-md flex gap-8">
             <img src="../assets/github-icon.svg" alt="GitHub Icon" class="w-[48px] h-[52px]" />
-            <img src="../assets/LinkedIn_icon.svg.png" alt="" class="w-[35px] h-[35px]">
-            <img src="/src/image/Instagram.svg.png" alt="" class="w-[35px] h-[35px]">
+            <img src="../assets/linkedin-icon.svg" alt="" class="w-[48px] h-[38px]">
+            <img src="../assets/instagram-logo.svg" alt="" class="w-[35px] h-[37px]">
           </div>
         </div>
 
@@ -36,7 +36,6 @@
     <!-- columna final -->
     <div class="neonText mt-6 md:mt-12 md:mb-3 text-center text-white text-md">
       <p>Project from: GSL developers CODEOP - FEPT07 - 2024</p>
-      <font-awesome-icon icon="phone" class="text-green-500 w-6 h-6" />
     </div>
   </footer>
 </template>

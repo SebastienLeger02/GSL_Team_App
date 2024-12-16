@@ -27,7 +27,7 @@
       <div
         v-for="(game, index) in limitedGames"
         :key="index"
-        class="w-[250px] h-[100%] flex flex-col justify-self-center rounded-2xl"
+        class="w-[250px] h-[100%] flex justify-self-center rounded-2xl"
       >
         <div
           v-show="game"
