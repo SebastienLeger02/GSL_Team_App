@@ -157,7 +157,7 @@ export default {
     </section>
   </section>
   <section class="h-[20em] w-full bg-color-thirty"></section>
-</template>
+</template> 
 
 <script>
 import { useApiStore } from "../stores/apiStore";
@@ -177,6 +177,7 @@ export default {
   },
 };
 </script>
+ -->
 <style>
 @keyframes spinY {
   0% {
@@ -191,4 +192,4 @@ export default {
 .image-a {
   animation: spinY 4s linear infinite;
 }
-</style> -->
+</style>
