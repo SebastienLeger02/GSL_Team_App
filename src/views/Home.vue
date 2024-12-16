@@ -1,19 +1,19 @@
 <template>
   <div class="bg-color-thirty">
-  <div v-if="loading">
+    <div v-if="loading">
       <Spinner />
-     </div>
-     <div v-else>  
-    <Navbar />
-    <Header />
-    <GameAppCard />
-    <GameDatabaseOverview />
-    <CategoryList :isCategory="true" />
-    <FooterSection />
-</div>
+    </div>
+    <div v-else>
+      <Navbar />
+      <Header />
+      <GameAppCard />
+      <GameDatabaseOverview />
+      <CategoryList :isCategory="true" />
+      <FooterSection />
+    </div>
 
   </div>
-  
+
 </template>
 
 <script>
@@ -28,7 +28,7 @@ import FooterSection from "../components/FooterSection.vue";
 
 export default {
   name: "Home",
-    data() {
+  data() {
     return {
       loading: true,
     };
@@ -43,7 +43,7 @@ export default {
     CategoryList,
     FooterSection
   },
-    mounted() {
+  mounted() {
     // Simuler un délai de chargement avec setTimeout ou attendre que les données soient récupérées
     // Par exemple, si tu fais une requête API, tu attendras que celle-ci soit terminée
 
