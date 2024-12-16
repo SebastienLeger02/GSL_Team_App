@@ -1,12 +1,10 @@
 <template>
   <!-- <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> -->
   <Navbar />
-  <section class="section-principal-game bg-color-thirty pt-10">
-  <!-- Conteneur principal -->
+  <section class="section-principal-game text-color-first bg-color-thirty pt-10">
   <section
     class="grid grid-cols-1 md:grid-cols-2 gap-10 mx-auto max-w-5xl px-4 pt-10 md:pt-28"
   >
-    <!-- Image -->
     <div class="flex justify-center">
       <img
         v-if="gameDetail"
@@ -15,8 +13,6 @@
         class="w-full md:w-[90%] rounded-2xl"
       />
     </div>
-
-    <!-- Détails du jeu -->
     <div>
       <section class="grid grid-cols-2 grid-rows-4 gap-6 max-w-md mx-auto">
         <div class="col-span-2">
@@ -62,7 +58,7 @@
   </section>
     
     <section class="mx-[12%]">
-      <section class="section-description-game p-[5%] mt-24 rounded-[25px]">
+      <section class="section-description-game bg-color-secondary p-[5%] mt-24 rounded-[25px]">
         <h3 class="text-xl font-bold">Description:</h3>
         <p class="mt-4">{{ gameDetail.description }}</p>
         
@@ -206,11 +202,5 @@ export default {
 </script>
 
 <style>
-.section-principal-game {
-  color: rgb(224, 224, 224);
-}
 
-.section-description-game {
-  background-color: #3e0b42;
-}
 </style>
