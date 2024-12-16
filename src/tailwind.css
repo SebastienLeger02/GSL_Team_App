@@ -32,6 +32,7 @@ h1 ,h2, h3, .button, .title{
       inset 0 0 1.3rem #bc13fe;
 }
 
+
 .text-shadow {
   text-shadow:
       0 0 7px #ff6600,
@@ -42,4 +43,41 @@ h1 ,h2, h3, .button, .title{
       0 0 92px #5271ff,
       0 0 102px #5271ff,
       0 0 151px #5271ff;
+}
+
+.neonText {
+  color: #fff;
+  text-shadow:
+      0 0 7px #fff,
+      0 0 10px #fff,
+      0 0 21px #fff,
+      0 0 42px #5271ff,
+      0 0 82px #5271ff,
+      0 0 92px #5271ff,
+      0 0 102px #5271ff,
+      0 0 151px #5271ff;
+}
+
+.neonText2 {
+  color: #fff;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 42px #bc13fe,
+    0 0 82px #bc13fe,
+    0 0 92px #bc13fe,
+    0 0 102px #bc13fe,
+    0 0 151px #bc13fe;
+}
+
+.neonText3 {
+  color: #68088b;
+  text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 42px #bc13fe,
+    0 0 82px #bc13fe,
+    0 0 92px #bc13fe,
+    0 0 102px #bc13fe,
+    0 0 151px #bc13fe;
 }
