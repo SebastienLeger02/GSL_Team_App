@@ -1,13 +1,12 @@
 <template>
-  <section class="text-center py-12 bg-color-thirty text-slate-100">
+  <section class="text-center py-16 bg-color-thirty text-slate-100">
     <h1 class="text-2xl font-bold mb-4">
       La base de datos más grande de juegos
     </h1>
-    <p class="text-gray-300 max-w-2xl mx-auto mb-8">
-      Rhoncus morbi et augue nec, in id ullamcorper at sit. Condimentum sit nunc
-      in eros scelerisque sed. Commodo in viverra nunc, ullamcorper ut. Non,
-      amet, aliquet scelerisque nullam sagittis, pulvinar. Fermentum scelerisque
-      sit consectetur hac mi. Mollis leo eleifend ultricies purus iaculis.
+    <p class="text-gray-300 max-w-4xl mx-auto mb-8">
+      Explora una amplia colección de títulos con información detallada sobre descripciones, especificaciones y
+      características clave. Diseñada para ofrecerte una experiencia intuitiva y confiable, nuestra plataforma reúne lo
+      mejor del mundo gamer en un solo lugar.
     </p>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
       <!-- Juegos -->
