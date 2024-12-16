@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapStores } from "pinia";
 import { useApiStore } from "../stores/apiStore";
 
 export default {
@@ -43,50 +44,57 @@ export default {
   },
   data() {
     return {
-      limit: 12,
+      limit: 12, // Límite de resultados
       currentIndex: 0,
       gameDetails: [],
       gamesOrdered: [],
+      autoSlideInterval: null,
     };
   },
+  computed: {
+    ...mapStores(useApiStore),
+  },
   watch: {
-    platform: {
-      immediate: true,
-      handler() {
-        this.updateGames();
-      },
-    },
-    category: {
-      immediate: true,
-      handler() {
-        this.updateGames();
-      },
-    },
+    platform: "fetchAndResetGames",
+    category: "fetchAndResetGames",
   },
   methods: {
-    async updateGames() {
-      const gameStore = useApiStore();
-      await gameStore.fetchGames("games");
+    async fetchAndResetGames() {
+      this.currentIndex = 0; // Reiniciar el índice del carrusel
+      await this.fetchGames(); // Volver a cargar los juegos
+      this.restartAnimations(); // Reiniciar las animaciones
+    },
+    async fetchGames() {
+      const games = this.apiStore.games;
 
-      let filteredGames = gameStore.games;
+      if (!games.length) {
+        await this.apiStore.fetchGames("games");
+      }
+
+      let filteredGames = [...games];
 
       if (this.platform) {
         filteredGames = filteredGames.filter((game) =>
           game.platform.toLowerCase().includes(this.platform.toLowerCase())
         );
-      } else if (this.category) {
+      }
+
+      if (this.category) {
         filteredGames = filteredGames.filter((game) =>
           game.genre.toLowerCase().includes(this.category.toLowerCase())
         );
       }
 
-      this.gamesOrdered = filteredGames.sort(() => Math.random() - 0.5).slice(0, this.limit);
+      this.gamesOrdered = filteredGames
+        .sort(() => Math.random() - 0.5)
+        .slice(0, this.limit);
 
       const idsArray = this.gamesOrdered.map((game) => game.id);
-      Promise.all(idsArray.map((id) => gameStore.fetchCarruselImages(`game?id=${id}`)))
-        .then((details) => {
-          this.gameDetails = details;
-        });
+      this.gameDetails = await Promise.all(
+        idsArray.map((id) =>
+          this.apiStore.fetchCarruselImages(`game?id=${id}`)
+        )
+      );
     },
     navigateToGame(id) {
       this.$router.push(`/game?id=${id}`);
@@ -96,8 +104,14 @@ export default {
       this.gamesOrdered.push(this.gamesOrdered.shift());
     },
     prevSlide() {
-      this.currentIndex = (this.currentIndex - 1 + this.gamesOrdered.length) % this.gamesOrdered.length;
+      this.currentIndex =
+        (this.currentIndex - 1 + this.gamesOrdered.length) %
+        this.gamesOrdered.length;
       this.gamesOrdered.unshift(this.gamesOrdered.pop());
+    },
+    restartAnimations() {
+      this.stopAutoSlide();
+      this.startAutoSlide();
     },
     startAutoSlide() {
       this.autoSlideInterval = setInterval(this.nextSlide, 10000);
@@ -107,11 +121,11 @@ export default {
     },
   },
   mounted() {
-    this.updateGames();
-    this.startAutoSlide();
+    this.fetchGames(); // Cargar los juegos al montar el componente
+    this.startAutoSlide(); // Iniciar las animaciones
   },
   beforeUnmount() {
-    this.stopAutoSlide();
+    this.stopAutoSlide(); // Detener las animaciones al desmontar
   },
 };
 </script>

@@ -2,6 +2,7 @@
   <section class="bg-color-thirty">
     <Navbar />
     <Carrusel :platform="associatedRelation" />
+    <GameList :platform="associatedRelation" />
     <CategoryList :isCategory="false" />
     <FooterSection />
   </section>
@@ -12,6 +13,7 @@ import { useApiStore } from "../stores/apiStore";
 import { mapStores } from "pinia";
 import Navbar from "../components/Navbar.vue";
 import Carrusel from "../components/Carrusel.vue";
+import GameList from "../components/GameList.vue";
 import CategoryList from "../components/CategoryList.vue";
 import FooterSection from "../components/FooterSection.vue";
 
@@ -20,6 +22,7 @@ export default {
   components: {
     Navbar,
     Carrusel,
+    GameList,
     CategoryList,
     FooterSection,
   },

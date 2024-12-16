@@ -3,7 +3,7 @@
     <Navbar />
     {{ console.log("Category:", category) }}
     <Carrusel :category="associatedRelation" />
-    <GameList />
+    <GameList :category="associatedRelation" />
     <CategoryList :isCategory="true" />
     <FooterSection />
   </section>

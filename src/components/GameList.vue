@@ -1,6 +1,10 @@
 <template>
   <div class="container mx-auto px-4 py-10 bg-color-thirty">
-    <h1 class="text-2xl font-bold mb-4 text-white">List Game</h1>
+    <h1 class="text-2xl font-bold mb-4 text-white">
+      <span v-if="category">Más juegos de esta categoría</span>
+      <span v-else-if="platform">Más juegos de esta plataforma</span>
+      <span v-else>Otros juegos</span>
+    </h1>
     <div v-if="randomGames.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div v-for="(game, index) in randomGames" :key="game.id" class="bg-gray-800 shadow-md rounded-lg p-4">
         <!-- Imagen y enlace al juego -->
@@ -29,6 +33,16 @@ import { mapStores } from "pinia";
 
 export default {
   name: "GameList",
+  props: {
+    platform: {
+      type: String,
+      default: null,
+    },
+    category: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
       randomGames: [], // Juegos aleatorios que se mostrarán
@@ -37,27 +51,38 @@ export default {
   computed: {
     ...mapStores(useApiStore),
   },
+  watch: {
+    platform: "fetchAndFilterGames",
+    category: "fetchAndFilterGames",
+  },
   methods: {
     /**
-     * Selecciona juegos aleatorios del store.
+     * Filtra y selecciona juegos basados en platform, category o sin filtros.
      */
-    getRandomGames() {
-      // Comprueba que apiStore.games existe y es un array
-      if (!this.apiStore.games || !Array.isArray(this.apiStore.games) || !this.apiStore.games.length)
-        return;
+    async fetchAndFilterGames() {
+      // Asegurarse de que los juegos están disponibles
+      if (!this.apiStore.games.length) {
+        await this.apiStore.fetchGames("games");
+      }
 
-      // Selecciona 8 juegos aleatorios
-      const shuffled = [...this.apiStore.games].sort(() => 0.5 - Math.random());
-      this.randomGames = shuffled.slice(0, 8);
+      let filteredGames = [...this.apiStore.games];
+
+      if (this.platform) {
+        filteredGames = filteredGames.filter((game) =>
+          game.platform.toLowerCase().includes(this.platform.toLowerCase())
+        );
+      } else if (this.category) {
+        filteredGames = filteredGames.filter((game) =>
+          game.genre.toLowerCase().includes(this.category.toLowerCase())
+        );
+      }
+
+      // Mezclar juegos aleatoriamente y limitar a 8
+      this.randomGames = filteredGames.sort(() => Math.random() - 0.5).slice(0, 8);
     },
   },
-
   async mounted() {
-    if (!this.apiStore || !this.apiStore.fetchGames) {
-      return;
-    }
-    await this.apiStore.fetchGames("games");
-    this.getRandomGames();
+    await this.fetchAndFilterGames();
   },
 };
 </script>
