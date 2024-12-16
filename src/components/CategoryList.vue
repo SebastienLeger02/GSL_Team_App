@@ -1,25 +1,38 @@
 <template>
-  <section class="py-12 bg-color-thirty">
-    <div class="max-w-6xl mx-auto space-y-8">
+  <section class="mt-20 md:mt-40 mb-20 md:mb-40 bg-color-thirty">
+    <div class="max-w-6xl mx-auto space-y-8 px-4 sm:px-6 lg:px-8">
       <!-- Recorre las categorías o plataformas únicas -->
       <div v-for="(group, index) in randomGroups" :key="index">
-        <h2 class="text-lg font-semibold text-color-first mb-4">
+        <h2 class="text-xl md:text-3xl font-semibold text-color-first mb-4">
           {{ isCategory ? "Category" : "Platform" }}: {{ group.name }}
         </h2>
-        <div v-for="game in group.games" :key="game.id" class="bg-white shadow-md rounded-lg flex overflow-hidden mb-4">
+        <div
+          v-for="game in group.games"
+          :key="game.id"
+          class="bg-white shadow-md rounded-lg flex flex-col md:flex-row overflow-hidden mb-4"
+        >
           <!-- Enlace al juego -->
-          <a :href="`/game?id=${game.id}`" class="w-1/4 bg-color-first flex items-center justify-center">
-            <img :src="game.thumbnail" :alt="game.title">
+          <a
+            :href="`/game?id=${game.id}`"
+            class="w-full md:w-2/4 bg-color-secondary flex items-center justify-center p-4"
+          >
+            <img
+              :src="game.thumbnail"
+              :alt="game.title"
+              class="w-full object-cover rounded-md  border-2 custom-shadow"
+            >
           </a>
           <!-- Detalles del juego -->
-          <div class="w-3/4 p-4 bg-color-secondary">
-            <h3 class="text-xl font-bold text-color-first">{{ game.title }}</h3>
-            <ul class="text-color-first text-sm mb-4">
+          <div class="w-full md:w-3/4 p-6 bg-color-secondary">
+            <h3 class="text-xl md:text-2xl mb-4 font-bold text-color-first">
+              {{ game.title }}
+            </h3>
+            <ul class="text-color-first text-sm md:text-base mb-4">
               <li><strong>Creator:</strong> {{ game.developer || "Unknown" }}</li>
               <li><strong>Platform:</strong> {{ game.platform || "N/A" }}</li>
               <li><strong>Start year:</strong> {{ game.release_date || "N/A" }}</li>
             </ul>
-            <p class="text-color-first text-sm">
+            <p class="text-color-first text-sm md:text-base">
               {{ game.short_description || "No description available." }}
             </p>
           </div>

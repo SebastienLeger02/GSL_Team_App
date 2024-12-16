@@ -1,10 +1,16 @@
 <template>
-    <section class="px-4 py-2 bg-color-secondary">
+    <section :class="[
+        'fixed w-full z-50 px-4 py-2 transition-all duration-300',
+        isScrolled ? 'bg-color-secondary/40 backdrop-blur-md' : 'bg-color-secondary border-b-2 custom-shadow',
+    ]">
         <div class="flex items-center justify-between">
+            <!-- Logo -->
             <router-link to="/">
-                <img class="w-28 h-9" src="../assets/logo_gsl.png" alt="GSL Gane App">
+                <img class="w-28 h-9" src="../assets/logo_gsl.png" alt="GSL Gane App" />
             </router-link>
-            <div class="flex space-x-6 items-center text-slate-200">
+
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex space-x-6 items-center text-slate-200">
                 <!-- Dropdown Plataforma -->
                 <div class="relative group">
                     <button class="flex items-center" @mouseover="showPlatform = true"
@@ -25,7 +31,7 @@
                     </div>
                 </div>
 
-
+                <!-- Dropdown Categorías -->
                 <div class="relative group">
                     <button class="flex items-center" @mouseover="showCategory = true"
                         @mouseleave="showCategory = false">
@@ -36,7 +42,7 @@
                         </svg>
                     </button>
                     <div v-show="showCategory"
-                        class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 grid-rows-5 gap-2 cursor-pointer py-4 bg-color-thirty/70"
+                        class="absolute w-[600px] shadow-lg rounded z-50 grid grid-cols-3 gap-2 cursor-pointer py-4 bg-color-thirty/70"
                         @mouseover="showCategory = true" @mouseleave="showCategory = false">
                         <router-link v-for="category in apiStore.categories" :key="category"
                             :to="`/category/${formatToUrl(category)}`" class="whitespace-nowrap hover:bg-gray-500 p-1">
@@ -44,69 +50,117 @@
                         </router-link>
                     </div>
                 </div>
-                <div>
-                    <router-link to="/team-dev">Team Dev</router-link>
-                </div>
+
+                <router-link to="/team-dev">Team Dev</router-link>
             </div>
 
-            <!-- Buscador -->
-            <div class="flex space-x-6 items-center">
+            <!-- Search & GitHub -->
+            <div class="hidden lg:flex space-x-6 items-center">
                 <div class="relative">
-                    <label class="sr-only" for="search">Search</label>
                     <input type="search" autocomplete="off" v-model="searchQuery" @input="onSearch"
                         @keyup.enter="navigateToFirstSuggestion" placeholder="Find a game" id="search"
-                        class="w-58 h-8 p-5 border-2 border-gray-400 text-slate-200 font-gilroyregular text-base rounded-full bg-gray-600/80 placeholder:text-slate-300" />
+                        class="w-58 h-8 p-5 border-2 border-gray-400 text-slate-200 text-base rounded-full bg-gray-600/80 placeholder:text-slate-300" />
                     <div class="absolute top-1 right-1" @click="navigateToFirstSuggestion">
-                        <img class="w-9 h-9 sepia" src="../assets/search-icon.svg" alt="Search Icon" aria-hidden="true">
+                        <img class="w-9 h-9 sepia" src="../assets/search-icon.svg" alt="Search Icon" />
                     </div>
                     <ul v-if="suggestions.length"
-                        class="absolute shadow-lg rounded-mg ml-[6%] w-[89%] p-2 z-10 bg-color-thirty/70">
+                        class="absolute shadow-lg rounded-mg w-full p-2 z-10 bg-color-thirty/70">
                         <li v-for="(name, index) in suggestions" :key="index" @click="navigateToGame(name)"
                             class="hover:bg-gray-500 px-4 py-2 text-gray-200 cursor-pointer">
                             {{ name }}
                         </li>
                     </ul>
                 </div>
-
-                <!-- Github Link -->
                 <a href="https://github.com/FEPT07/GSL_Team_App" target="_blank" rel="noopener noreferrer"
                     class="text-white-700 hover:opacity-90 flex items-center space-x-2">
                     <img src="../assets/github-icon.svg" alt="GitHub Icon" class="text-white-700 w-8 h-8" />
                     <span>GitHub</span>
                 </a>
             </div>
+
+            <!-- Mobile Hamburger Menu -->
+            <div class="order-first lg:hidden flex items-center">
+                <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="text-slate-200">
+                    <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div v-if="isMobileMenuOpen" class="lg:hidden bg-color-secondary py-4 space-y-4 text-slate-200">
+            <router-link to="/" class="block px-4">Home</router-link>
+            <div>
+                <button @click="mobilePlatformOpen = !mobilePlatformOpen" class="flex items-center w-full px-4">
+                    Plataforma
+                    <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div v-if="mobilePlatformOpen" class="pl-6 space-y-2">
+                    <router-link v-for="platform in apiStore.platforms" :key="platform"
+                        :to="`/platform/${formatToUrl(platform)}`"
+                        class="block whitespace-nowrap hover:bg-gray-500 p-1">
+                        {{ platform }}
+                    </router-link>
+                </div>
+            </div>
+            <div>
+                <button @click="mobileCategoryOpen = !mobileCategoryOpen" class="flex items-center w-full px-4">
+                    Categorías
+                    <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div v-if="mobileCategoryOpen" class="pl-6 space-y-2">
+                    <router-link v-for="category in apiStore.categories" :key="category"
+                        :to="`/category/${formatToUrl(category)}`"
+                        class="block whitespace-nowrap hover:bg-gray-500 p-1">
+                        {{ category }}
+                    </router-link>
+                </div>
+            </div>
+            <router-link to="/team-dev" class="block px-4">Team Dev</router-link>
         </div>
     </section>
 </template>
 
 <script>
-
-
 import { useApiStore } from "../stores/apiStore";
 import { mapStores } from "pinia";
 
 export default {
-    name: "Navbar",
     data() {
         return {
-            showPlatform: false, // Estado para controlar la visibilidad del contenido
-            showCategory: false, // Estado para controlar la visibilidad del contenido
-            searchQuery: "", // Almacena el texto del buscador
-            suggestions: [], // Sugerencias para autocompletar
+            showPlatform: false,
+            showCategory: false,
+            searchQuery: "",
+            suggestions: [],
+            isMobileMenuOpen: false,
+            mobilePlatformOpen: false,
+            mobileCategoryOpen: false,
+            isScrolled: false,
         };
     },
     computed: {
         ...mapStores(useApiStore),
     },
     mounted() {
-        if (!this.apiStore.games.length) {
-            console.log("Obj apiStore->", this.apiStore.fetchGames("games"));
-            this.apiStore.fetchGames("games");
-        }
+        window.addEventListener("scroll", this.handleScroll);
+    },
+    beforeUnmount() {
+        window.removeEventListener("scroll", this.handleScroll);
     },
     methods: {
+        handleScroll() {
+            this.isScrolled = window.scrollY > 0;
+        },
         onSearch() {
-            // Si el campo de búsqueda está vacío, vaciar las sugerencias
             if (!this.searchQuery.trim()) {
                 this.suggestions = [];
                 return;
@@ -116,9 +170,7 @@ export default {
                 .filter((name) => name.toLowerCase().includes(this.searchQuery.toLowerCase()));
         },
         navigateToGame(name) {
-            const selectedGame = this.apiStore.games.find(
-                (game) => game.title === name
-            );
+            const selectedGame = this.apiStore.games.find((game) => game.title === name);
             if (selectedGame) {
                 this.$router.push(`/game?id=${selectedGame.id}`);
             }
@@ -127,15 +179,11 @@ export default {
         },
         navigateToFirstSuggestion() {
             if (this.suggestions.length > 0) {
-                const firstSuggestion = this.suggestions[0];
-                this.navigateToGame(firstSuggestion);
+                this.navigateToGame(this.suggestions[0]);
             }
         },
         formatToUrl(text) {
-            return text
-                .toLowerCase() // Convertir todo a minúsculas
-                .replace(/\s+/g, "-") // Reemplazar espacios por guiones
-                .replace(/[^a-z0-9\-]/g, ""); // Eliminar caracteres no alfanuméricos excepto guiones
+            return text.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
         },
     },
 };
@@ -145,19 +193,6 @@ export default {
 section {
     color: #fff;
     font-weight: 600;
-    border-bottom: 2px solid #8cb7eb;
-}
-
-.input-search {
-    color: #151516;
-}
-
-button:hover+ul,
-ul:hover {
-    display: block;
-}
-
-.container-full {
-    background-color: #1B001E;
+    transition: background-color 0.3s, backdrop-filter 0.3s;
 }
 </style>
