@@ -41,7 +41,7 @@
             <!-- Default image -->
             <img
               v-if="!hoveredGameId || hoveredGameId !== game.id || !videoAvailability[game.id]"
-              class="rounded-t-2xl transition-all duration-300"
+              class="rounded-t-2xl transition-all duration-300 w-[100%]"
               :src="game.thumbnail"
               :alt="game.title"
             />
