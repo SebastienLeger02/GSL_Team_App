@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-color-thirty">
+  <div class="bg-color-thirty" role="region" aria-labelledby="home-page-heading">
     <div v-if="loading">
       <Spinner />
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <section class="mt-20 md:mt-40 mb-20 md:mb-40 bg-color-thirty">
+  <section class="mt-20 md:mt-40 mb-20 md:mb-40 bg-color-thirty" role="region" aria-label="Category or Platform List">
     <div class="max-w-6xl mx-auto space-y-8 px-4 sm:px-6 lg:px-8">
       <!-- Recorre las categorías o plataformas únicas -->
       <div v-for="(group, index) in randomGroups" :key="index">
@@ -9,13 +9,11 @@
         <div
           v-for="game in group.games"
           :key="game.id"
-          class="bg-white shadow-md rounded-lg flex flex-col md:flex-row overflow-hidden mb-4"
-        >
+          class="bg-white shadow-md rounded-lg flex flex-col md:flex-row overflow-hidden mb-4" role="article">
           <!-- Enlace al juego -->
           <a
             :href="`/game?id=${game.id}`"
-            class="w-full md:w-2/4 bg-color-secondary flex items-center justify-center p-4"
-          >
+            class="w-full md:w-2/4 bg-color-secondary flex items-center justify-center p-4" aria-label="Link to {{ game.title }}">
             <img
               :src="game.thumbnail"
               :alt="game.title"

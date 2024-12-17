@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-color-thirty">
+  <section class="bg-color-thirty" role="region" aria-labelledby="platform-page-heading">
     <Navbar />
     <Carrusel :platform="associatedRelation" />
     <GameList :platform="associatedRelation" />

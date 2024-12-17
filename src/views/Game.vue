@@ -1,15 +1,14 @@
 <template>
-  <!-- <h2 class="text-2xl font-bold">Game {{ $route.query.id }}</h2> -->
   <Navbar />
-  <section class="section-principal-game bg-color-thirty py-20">
-    <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container ">
+  <section class="section-principal-game bg-color-thirty py-20" role="region" aria-labelledby="game-page-heading">
+    <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container">
       <div>
-        <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="gameDetail.title" class="w-[90%] rounded-2xl" />
+        <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="`Thumbnail of ${gameDetail.title}`" class="w-[90%] rounded-2xl" />
       </div>
       <div>
         <section class="grid grid-cols-2 grid-rows-4 gap-6 max-w-md">
           <div class="col-span-2">
-            <h2 class="text-4xl font-bold">{{ gameDetail?.title }}</h2>
+            <h2 id="game-page-heading" class="text-4xl font-bold">{{ gameDetail?.title }}</h2>
           </div>
           <div class="flex items-center row-start-2">
             <img src="../assets/publisher.png" :alt="gameDetail?.publisher" class="w-7 mr-2.5" />
@@ -36,21 +35,21 @@
       </div>
     </section>
     <section class="mx-[12%]">
-      <section class="section-description-game p-[5%] mt-28 rounded-[25px]">
-        <h3 class="text-xl font-bold">Description:</h3>
+      <section class="section-description-game p-[5%] mt-28 rounded-[25px]" aria-labelledby="description-heading">
+        <h3 id="description-heading" class="text-xl font-bold">Description:</h3>
         <p class="mt-4">{{ gameDetail.description }}</p>
-        <!-- <a href=""></a> -->
       </section>
 
       <div v-if="gameDetail.screenshots?.length" class="mt-28">
-        <h3 class="text-xl font-bold">Screenshots:</h3>
-        <div class="flex flex-wrap mt-2">
+        <h3 class="text-xl font-bold" id="screenshots-heading">Screenshots:</h3>
+        <div class="flex flex-wrap mt-2" role="list" aria-labelledby="screenshots-heading">
           <img v-for="screenshot in gameDetail.screenshots" :key="screenshot.id" :src="screenshot.image"
-            class="w-1/3 p-1" :alt="`Screenshot ${screenshot.id}`" />
+            class="w-1/3 p-1" :alt="`Screenshot of ${gameDetail.title} ${screenshot.id}`" role="listitem" />
         </div>
       </div>
     </section>
-    <section class="mx-[22%] mt-14">
+    <section class="mx-[22%] mt-14" aria-labelledby="system-requirements-heading">
+      <h3 id="system-requirements-heading" class="text-xl font-bold">Minimum System Requirements</h3>
       <div class="grid grid-cols-2 grid-rows-6 border-2 border-white">
         <div class="col-span-2 border-b-2 border-white pl-3 py-1.5 font-bold content-center">
           Minimum System Requirements

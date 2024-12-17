@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen w-screen">
+  <div class="flex justify-center items-center h-screen w-screen" role="region" aria-label="Loading Spinner for GSL Game App">
     <div class="image-container relative flex items-center justify-center w-[300px] h-[300px] animate-grow-shrink">
       <img src="../assets/circle-neon.png" alt="Image Spinner GSL _ Game App"
         class="image-circle absolute w-[60%] h-[60%] z-20" />
