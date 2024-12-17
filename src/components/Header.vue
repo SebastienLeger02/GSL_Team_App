@@ -1,6 +1,6 @@
 <template>
   <section
-    class="bg-gradient relative flex items-center justify-center min-h-screen flex-col pt-14"
+    class="bg-gradient relative flex items-center justify-center flex-col pt-14"
     role="region"
     aria-labelledby="main-logo-heading"
   >
@@ -25,7 +25,7 @@
   
     <!-- Game Section -->
     <section
-      class="text-color-first grid grid-cols-1 md:grid-cols-3 gap-6 relative top-[5em] mx-[5%] md:mx-[20%] mt-15"
+      class="text-color-first grid grid-cols-1 md:grid-cols-3 gap-6 relative top-[150px] mx-[5%] md:mx-[20%] mt-15"
       aria-labelledby="game-section-heading"
     >
       <h2 id="game-section-heading" class="sr-only">Game Section</h2>
