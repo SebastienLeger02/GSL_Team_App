@@ -91,9 +91,13 @@ export default {
     },
     async fetchGames() {
       try {
-        const games = this.apiStore.games.length
-          ? this.apiStore.games
-          : await this.apiStore.fetchGames("games");
+        let games = null;
+        if (this.apiStore.games.length) {
+          games = this.apiStore.games;
+        } else {
+          await this.apiStore.fetchGames("games");
+          games = this.apiStore.games;
+        }
 
         let filteredGames = [...games];
 
