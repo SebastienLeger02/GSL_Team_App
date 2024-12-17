@@ -35,6 +35,99 @@ import { useApiStore } from "../stores/apiStore";
 
 export default {
   props: {
+    platform: { type: String, default: null },
+    category: { type: String, default: null },
+  },
+  data() {
+    return {
+      limit: 12,
+      currentIndex: 0,
+      gameDetails: [],
+      gamesOrdered: [],
+      autoSlideInterval: null,
+    };
+  },
+  computed: {
+    ...mapStores(useApiStore),
+  },
+  watch: {
+    platform: "fetchAndResetGames",
+    category: "fetchAndResetGames",
+  },
+  methods: {
+    async fetchAndResetGames() {
+      this.currentIndex = 0;
+      await this.fetchGames();
+      this.restartAnimations();
+    },
+    async fetchGames() {
+      try {
+        const games = this.apiStore.games.length
+          ? this.apiStore.games
+          : await this.apiStore.fetchGames("games");
+
+        let filteredGames = [...games];
+        if (this.platform) {
+          filteredGames = filteredGames.filter((game) =>
+            game.platform?.toLowerCase().includes(this.platform.toLowerCase())
+          );
+        }
+        if (this.category) {
+          filteredGames = filteredGames.filter((game) =>
+            game.genre?.toLowerCase().includes(this.category.toLowerCase())
+          );
+        }
+
+        this.gamesOrdered = filteredGames
+          .sort(() => Math.random() - 0.5)
+          .slice(0, this.limit);
+
+        const idsArray = this.gamesOrdered.map((game) => game.id);
+        this.gameDetails = await Promise.all(
+          idsArray.map((id) =>
+            this.apiStore.fetchCarruselImages(`game?id=${id}`)
+          )
+        );
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    },
+    navigateToGame(id) {
+      if (id) this.$router.push({ path: "/game", query: { id } });
+    },
+    nextSlide() {
+      this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
+      this.gamesOrdered.push(this.gamesOrdered.shift());
+    },
+    prevSlide() {
+      this.currentIndex =
+        (this.currentIndex - 1 + this.gamesOrdered.length) %
+        this.gamesOrdered.length;
+        this.gamesOrdered.unshift(this.gamesOrdered.pop());
+    },
+    restartAnimations() {
+      this.stopAutoSlide();
+      this.startAutoSlide();
+    },
+    startAutoSlide() {
+      if (this.gamesOrdered.length > 0) {
+        this.autoSlideInterval = setInterval(this.nextSlide, 10000);
+      }
+    },
+    stopAutoSlide() {
+      clearInterval(this.autoSlideInterval);
+    },
+  },
+  async mounted() {
+    await this.fetchGames();
+    this.startAutoSlide();
+  },
+  beforeUnmount() {
+    this.stopAutoSlide();
+  },
+};
+/* export default {
+  props: {
     platform: {
       type: String,
       default: null,
@@ -129,7 +222,7 @@ export default {
   beforeUnmount() {
     this.stopAutoSlide(); // Detener las animaciones al desmontar
   },
-};
+}; */
 </script>
 
 
