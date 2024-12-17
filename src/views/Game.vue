@@ -143,7 +143,6 @@ export default {
     // Obtener los datos del juego desde el store
     gameDetail() {
       const gameStore = useApiStore();
-      console.log("GamesDetail :", gameStore.gameById);
       return gameStore.gameById;
     },
   },
@@ -154,7 +153,6 @@ export default {
     // Llamar a la API para obtener los detalles del juego
 
     if (gameId) {
-      console.log("ID :", gameStore.fetchGames(`game?id=${gameId}`));
       gameStore.fetchGames(`game?id=${gameId}`);
     }
   },
@@ -164,7 +162,6 @@ export default {
       const gameStore = useApiStore();
       if (newId) {
         gameStore.fetchGames(`game?id=${newId}`);
-        console.log("fetchGame: ", gameStore.fetchGames(`game?id=${newId}`));
       }
     },
   },
@@ -175,8 +172,4 @@ export default {
   },
 };
 </script>
-<<<<<<< HEAD
 <style></style>
-=======
-<style></style>
->>>>>>> e5590d23443b93e1cc872a11efe82b0741610584
