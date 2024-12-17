@@ -1,5 +1,5 @@
 <template>
-  <section class="text-center py-10 mt-5 bg-color-thirty text-slate-100" role="region" aria-labelledby="game-database-heading">
+  <section class="text-center pb-4 pt-24 bg-color-thirty text-slate-100" role="region" aria-labelledby="game-database-heading">
     <h1 id="game-database-heading" class="text-2xl font-bold mb-4">
       La base de datos más grande de juegos
     </h1>
