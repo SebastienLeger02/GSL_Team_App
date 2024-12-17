@@ -175,4 +175,8 @@ export default {
   },
 };
 </script>
+<<<<<<< HEAD
 <style></style>
+=======
+<style></style>
+>>>>>>> e5590d23443b93e1cc872a11efe82b0741610584

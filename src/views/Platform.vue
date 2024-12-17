@@ -1,11 +1,16 @@
 <template>
-  <section class="bg-color-thirty" role="region" aria-labelledby="platform-page-heading">
-    <Navbar />
-    <Carrusel :platform="associatedRelation" />
-    <GameList :platform="associatedRelation" />
-    <CategoryList :isCategory="false" />
-    <FooterSection />
-  </section>
+  <div v-if="loading">
+    <Spinner />
+  </div>
+  <div v-else>
+    <section class="bg-color-thirty" role="region" aria-labelledby="platform-page-heading">
+      <Navbar />
+      <Carrusel :platform="associatedRelation" />
+      <GameList :platform="associatedRelation" />
+      <CategoryList :isCategory="false" />
+      <FooterSection />
+    </section>
+  </div>
 </template>
 
 <script>
@@ -16,6 +21,8 @@ import Carrusel from "../components/Carrusel.vue";
 import GameList from "../components/GameList.vue";
 import CategoryList from "../components/CategoryList.vue";
 import FooterSection from "../components/FooterSection.vue";
+import Spinner from "../components/Spinner.vue";
+
 
 export default {
   name: "Platform",
@@ -25,6 +32,12 @@ export default {
     GameList,
     CategoryList,
     FooterSection,
+    Spinner
+  },
+  data() {
+    return {
+      loading: true
+    }
   },
   computed: {
     ...mapStores(useApiStore),
@@ -37,9 +50,11 @@ export default {
     },
     filteredGames() {
       const relatedPlatforms = this.associatedRelation.split(", ");
-      return this.apiStore?.games?.filter((game) =>
-        relatedPlatforms.includes(game.platform)
-      ) || [];
+      return (
+        this.apiStore?.games?.filter((game) =>
+          relatedPlatforms.includes(game.platform)
+        ) || []
+      );
     },
   },
   methods: {
@@ -69,6 +84,9 @@ export default {
   },
   mounted() {
     this.fetchGamesByPlatform();
+    setTimeout(() => { 
+      this.loading = false;
+    }, 500);
   },
   watch: {
     "$route.params.platform": {
@@ -80,6 +98,5 @@ export default {
   },
 };
 </script>
-
 
 <style></style>

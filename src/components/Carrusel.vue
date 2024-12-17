@@ -1,4 +1,185 @@
 <template>
+  <div class="slider-container">
+    <div v-if="loading" class="loading-spinner">
+      <p>Cargando carrusel...</p>
+    </div>
+    <div v-else-if="gameDetails.length && gamesOrdered.length" class="slider">
+      <div class="list">
+        <div
+          v-for="(item, index) in gameDetails"
+          :key="index"
+          class="item"
+          :class="{ active: index === currentIndex }"
+          v-show="index === currentIndex"
+        >
+          <img
+            :src="item.screenshots[0]?.image || item.thumbnail || 'default-thumbnail.jpg'"
+            :alt="item.alt || 'Imagen no disponible'"
+          />
+          <div class="content">
+            <div class="font-bold drop-shadow-lg neonText6 mb-2">
+              <span>{{ platform || category }}</span>
+            </div>
+            <div class="title">{{ item.title || 'Título no disponible' }}</div>
+            <div class="description">{{ item.short_description || 'Descripción no disponible' }}</div>
+            <div class="button">
+              <button @click="navigateToGame(item.id)">More Info</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="thumbnail">
+        <div
+          v-for="(item, index) in gamesOrdered"
+          :key="'thumb-' + index"
+          class="item"
+          :class="{ active: index === 0 }"
+          @click="goToSlide(index)"
+        >
+          <img :src="item.thumbnail || 'default-thumbnail.jpg'" :alt="item.alt || 'Thumbnail'" />
+        </div>
+      </div>
+      <div class="nextPrevArrows">
+        <button class="prev" @click="prevSlide()"></button>
+        <button class="next" @click="nextSlide()"></button>
+      </div>
+    </div>
+    <div v-else>
+      <p>No se encontraron juegos para mostrar.</p>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapStores } from "pinia";
+import { useApiStore } from "../stores/apiStore";
+
+export default {
+  props: {
+    platform: {
+      type: String,
+      default: null,
+    },
+    category: {
+      type: String,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      limit: 12,
+      currentIndex: 0,
+      gameDetails: [],
+      gamesOrdered: [],
+      autoSlideInterval: null,
+      loading: true,
+    };
+  },
+  computed: {
+    ...mapStores(useApiStore),
+  },
+  watch: {
+    platform: "fetchAndResetGames",
+    category: "fetchAndResetGames",
+  },
+  methods: {
+    async fetchAndResetGames() {
+      this.currentIndex = 0;
+      this.loading = true;
+      await this.fetchGames();
+      this.loading = false;
+    },
+    async fetchGames() {
+      try {
+        const games = this.apiStore.games.length
+          ? this.apiStore.games
+          : await this.apiStore.fetchGames("games");
+
+        let filteredGames = [...games];
+
+        if (this.platform) {
+          filteredGames = filteredGames.filter((game) =>
+            game.platform?.toLowerCase().includes(this.platform.toLowerCase())
+          );
+        }
+
+        if (this.category) {
+          filteredGames = filteredGames.filter((game) =>
+            game.genre?.toLowerCase().includes(this.category.toLowerCase())
+          );
+        }
+
+        this.gamesOrdered = filteredGames
+          .sort(() => Math.random() - 0.5)
+          .slice(0, this.limit);
+
+        const idsArray = this.gamesOrdered.map((game) => game.id);
+
+        this.gameDetails = await Promise.all(
+          idsArray.map((id) =>
+            this.apiStore
+              .fetchCarruselImages(`game?id=${id}`)
+              .catch(() => ({
+                screenshots: [],
+                thumbnail: "default-thumbnail.jpg",
+                alt: "Sin descripción",
+                title: "Juego no disponible",
+                short_description: "Descripción no disponible",
+              }))
+          )
+        );
+
+        if (!this.gameDetails.length) {
+          console.warn("No se cargaron detalles del juego");
+        }
+      } catch (error) {
+        console.error("Error al cargar los juegos:", error);
+        this.gamesOrdered = [];
+        this.gameDetails = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+    navigateToGame(id) {
+      this.$router.push(`/game?id=${id}`);
+    },
+    nextSlide() {
+      this.currentIndex = (this.currentIndex + 1) % this.gamesOrdered.length;
+      this.gamesOrdered.push(this.gamesOrdered.shift());
+    },
+    prevSlide() {
+      this.currentIndex =
+        (this.currentIndex - 1 + this.gamesOrdered.length) %
+        this.gamesOrdered.length;
+        this.gamesOrdered.unshift(this.gamesOrdered.pop());
+    },
+    restartAnimations() {
+      this.stopAutoSlide();
+      this.startAutoSlide();
+    },
+    startAutoSlide() {
+      if (this.gamesOrdered.length > 0) {
+        this.autoSlideInterval = setInterval(this.nextSlide, 10000);
+      }
+    },
+    stopAutoSlide() {
+      clearInterval(this.autoSlideInterval);
+    },
+  },
+  async mounted() {
+    await this.fetchGames();
+    if (this.gamesOrdered.length) {
+      this.autoSlideInterval = setInterval(this.nextSlide, 10000);
+      this.startAutoSlide();
+    }
+  },
+  beforeUnmount() {
+    clearInterval(this.autoSlideInterval);
+  },
+};
+</script>
+
+<!-- <template>
   <div class="slider" role="region" aria-label="Game Carousel">
     <div class="list">
       <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }"
@@ -27,9 +208,9 @@
       <button class="next" @click="nextSlide()" aria-label="Next slide"></button>
     </div>
   </div>
-</template>
+</template> -->
 
-<script>
+<!-- <script>
 import { mapStores } from "pinia";
 import { useApiStore } from "../stores/apiStore";
 
@@ -224,8 +405,7 @@ export default {
   },
 }; */
 </script>
-
-
+ -->
 <style>
 /* seccion imagenes grandes */
 .slider {
