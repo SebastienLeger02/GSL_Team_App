@@ -1,6 +1,6 @@
 <template class="bg-color">
   <section
-    class="bg-gradient relative flex items-center justify-center min-h-screen flex-col"
+    class="bg-gradient relative flex items-center justify-center min-h-screen flex-col pt-14"
   >
     <div
       class="image-container relative flex items-center justify-center w-[300px] h-[300px] m-12"
