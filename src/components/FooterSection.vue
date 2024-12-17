@@ -7,7 +7,7 @@
           <h3 id="footer-heading" class="text-[32px] text-[#bc168d] neonText3 font-semibold mb-2 md:mb-4 tracking-wider">GSL <span class="neonText2">developers</span></h3>
           <div class="space-y-1 md:space-y-4 text-md">
             <p>. Gerard Macias</p>
-            <p>. Sebastian Léger</p>
+            <p>. Sebastien Léger</p>
             <p>. Lenin Ruiz</p>
           </div>
         </div>

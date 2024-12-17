@@ -1,6 +1,6 @@
 <template>
   <section
-    class="bg-gradient relative flex items-center justify-center min-h-screen flex-col"
+    class="bg-gradient relative flex items-center justify-center min-h-screen flex-col pt-14"
     role="region"
     aria-labelledby="main-logo-heading"
   >

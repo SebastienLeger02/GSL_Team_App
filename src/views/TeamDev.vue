@@ -10,7 +10,8 @@
         <section class="flex flex-col items-center gap-6 md:gap-8 pt-20 md:pt-24 px-4 sm:px-6 md:px-8">
           <h1 id="team-dev-heading" class="neonText2 tracking-wider text-5xl md:text-6xl font-bold text-center">Team Dev</h1>
           <p class="text-lg md:text-2xl text-center">
-            Esta plataforma es el resultado del trabajo colaborativo de nuestro equipo de desarrollo.
+            Esta plataforma es el resultado del trabajo colaborativo de nuestro
+            equipo de desarrollo.
           </p>
         </section>
 
@@ -23,7 +24,8 @@
               src="../../public/DevPictures/Gerard-Macias.jpg" alt="Foto de Gerard Macias" />
             <h3 id="gerard-profile-heading" class="text-xl md:text-3xl font-bold mb-2">Gerard Macias</h3>
             <p class="text-md md:text-lg">
-              Desarrollador Full Stack con experiencia en diversas tecnologías. Siempre dispuesto a aprender y mejorar.
+              Desarrollador Full Stack con experiencia en diversas tecnologías.
+              Siempre dispuesto a aprender y mejorar.
             </p>
             <div class="flex items-center gap-4 mt-2">
               <a href="#">
@@ -59,7 +61,8 @@
               src="../../public/DevPictures/Lenin-Ruiz.jpg" alt="Foto de Lenin Ruiz" />
             <h3 id="lenin-profile-heading" class="text-xl md:text-3xl font-bold mb-2">Lenin Ruiz</h3>
             <p class="text-md md:text-lg">
-              Desarrollador Full Stack y front-end con ganas de seguir evolucionando dentro del campo de la tecnología.
+              Desarrollador Full Stack y front-end con ganas de seguir
+              evolucionando dentro del campo de la tecnología.
             </p>
             <div class="flex items-center gap-4 mt-2">
               <a href="#">
@@ -72,13 +75,16 @@
           </div>
         </section>
       </section>
+      <FooterSection />
     </div>
   </div>
 </template>
 
 <script>
+
 import Navbar from "../components/Navbar.vue";
 import Spinner from "../components/Spinner.vue";
+import FooterSection from "../components/FooterSection.vue";
 
 export default {
   name: "TeamDev",
@@ -90,11 +96,12 @@ export default {
   components: {
     Spinner,
     Navbar,
+    FooterSection,
   },
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 2000);
+    }, 500);
   },
 };
 </script>
