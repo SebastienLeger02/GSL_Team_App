@@ -1,5 +1,5 @@
 <template>
-    <section class="bg-color-thirty" role="region" aria-labelledby="game-app-heading">
+    <section class="bg-color-thirty mt-32" role="region" aria-labelledby="game-app-heading">
         <div
             class="grid sm:grid-cols-1 md:grid-cols-2 border-solid border-4 rounded-lg custom-shadow my-12 mx-auto max-w-[95%] md:max-w-[800px] lg:max-w-[1000px] p-4 items-center gap-6 text-white">
             <!-- Columna izquierda -->

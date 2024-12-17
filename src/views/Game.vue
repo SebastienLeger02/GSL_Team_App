@@ -1,14 +1,18 @@
 <template>
+  <div v-if="loading">
+    <Spinner />
+  </div>
+  <div v-else>
   <Navbar />
-  <section class="section-principal-game bg-color-thirty py-20" role="region" aria-labelledby="game-page-heading">
-    <section class="grid grid-cols-2 grid-rows-1 gap-36 m-[auto] container">
-      <div>
-        <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="`Thumbnail of ${gameDetail.title}`" class="w-[90%] rounded-2xl" />
+  <section class="text-color-first bg-color-thirty pt-10" role="region" aria-labelledby="game-page-heading">
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-10 mx-auto max-w-5xl px-4 pt-10 md:pt-28">
+      <div class="flex justify-center">
+        <img v-if="gameDetail" :src="gameDetail.thumbnail" :alt="`Thumbnail of ${gameDetail.title}`" class="w-full md:w-[90%] rounded-2xl" />
       </div>
       <div>
         <section class="grid grid-cols-2 grid-rows-4 gap-6 max-w-md">
           <div class="col-span-2">
-            <h2 id="game-page-heading" class="text-4xl font-bold">{{ gameDetail?.title }}</h2>
+            <h2 id="game-page-heading" class="text-2xl md:text-4xl font-bold text-center md:text-left">{{ gameDetail?.title }}</h2>
           </div>
           <div class="flex items-center row-start-2">
             <img src="../assets/publisher.png" :alt="gameDetail?.publisher" class="w-7 mr-2.5" />
@@ -35,7 +39,7 @@
       </div>
     </section>
     <section class="mx-[12%]">
-      <section class="section-description-game p-[5%] mt-28 rounded-[25px]" aria-labelledby="description-heading">
+      <section class="bg-color-secondary p-[5%] mt-24 rounded-[25px]" aria-labelledby="description-heading">
         <h3 id="description-heading" class="text-xl font-bold">Description:</h3>
         <p class="mt-4">{{ gameDetail.description }}</p>
       </section>
@@ -48,11 +52,10 @@
         </div>
       </div>
     </section>
-    <section class="mx-[22%] mt-14" aria-labelledby="system-requirements-heading">
-      <h3 id="system-requirements-heading" class="text-xl font-bold">Minimum System Requirements</h3>
+    <section class="mx-[22%] my-24" aria-labelledby="system-requirements-heading">
       <div class="grid grid-cols-2 grid-rows-6 border-2 border-white">
         <div class="col-span-2 border-b-2 border-white pl-3 py-1.5 font-bold content-center">
-          Minimum System Requirements
+                <h3 id="system-requirements-heading" class="text-2xl">Minimum System Requirements</h3>
         </div>
         <div class="row-start-2 border-b-2 border-r-2 border-white pl-3 py-1.5 content-center">
           Graphics
@@ -95,10 +98,22 @@
           Storage
         </div>
       </div>
+        <a
+          :href="gameDetail.game_url"
+          target="_blank"
+          class="flex justify-center"
+        >
+          <button
+            class="hidden md:block font-jaro border-2 border-[#5271ff] px-4 py-2 rounded hover:bg-[#ff00ff] mt-8"
+          >
+            Download Game
+          </button>
+        </a>
     </section>
   </section>
-  <GameList />
+    <GameList class="mb-24" />
   <FooterSection />
+  </div>
 </template>
 
 <script>
@@ -107,6 +122,7 @@ import Navbar from "../components/Navbar.vue";
 import Header from "../components/Header.vue";
 import GameList from "../components/GameList.vue";
 import FooterSection from "../components/FooterSection.vue";
+import Spinner from "../components/Spinner.vue";
 
 export default {
   name: "Game",
@@ -114,11 +130,13 @@ export default {
     Navbar,
     Header,
     GameList,
-    FooterSection
+    FooterSection,
+    Spinner
   },
   data() {
     return {
       gameId: null,
+      loading: true
     };
   },
   computed: {
@@ -146,19 +164,15 @@ export default {
       const gameStore = useApiStore();
       if (newId) {
         gameStore.fetchGames(`game?id=${newId}`);
-        console.log("fetchGame: ", gameStore.fetchGames(`game?id=${newId}`))
+        console.log("fetchGame: ", gameStore.fetchGames(`game?id=${newId}`));
       }
     },
   },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
+  },
 };
 </script>
-
-<style>
-.section-principal-game {
-  color: rgb(224, 224, 224);
-}
-
-.section-description-game {
-  background-color: #3e0b42;
-}
-</style>
+<style></style>
