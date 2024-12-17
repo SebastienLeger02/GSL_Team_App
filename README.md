@@ -69,4 +69,18 @@ Para arrancar la aplicación, usa el siguiente comando:
 ```bash
 npm run dev
 ```
+---
+## 7. Demostración en Vivo
+Visita la aplicación en el siguiente enlace:  
+👉 [GSL Game App en Vercel](https://gsl-team-app.vercel.app/)
 
+### Características Clave:
+1. **Interfaz Responsive:** Construida con Tailwind CSS.
+2. **Carrusel de Juegos:** Navegación intuitiva.
+3. **Filtros Dinámicos:** Clasificación por categorías y plataformas.
+4. **Detalles del Juego:** Visualización clara y estructurada de la información.
+
+---
+## 8. Conclusión
+GSL Game App es una herramienta intuitiva y eficiente para los amantes de los videojuegos.  
+Gracias a tecnologías como Vue.js, Tailwind CSS y el manejo de estado con Pinia, logramos un producto funcional y escalable.
