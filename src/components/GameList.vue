@@ -1,15 +1,15 @@
 <template>
-  <div class="container mx-auto px-4 py-10 bg-color-thirty">
-    <h1 class="text-2xl font-bold mb-4 text-white">
+  <div class="container mx-auto px-4 py-10 bg-color-thirty" role="region" aria-labelledby="game-list-heading">
+    <h1 id="game-list-heading" class="text-2xl font-bold mb-4 text-white">
       <span v-if="category">Más juegos de esta categoría</span>
       <span v-else-if="platform">Más juegos de esta plataforma</span>
       <span v-else>Otros juegos</span>
     </h1>
     <div v-if="randomGames.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div v-for="(game) in randomGames" :key="game.id" class="bg-gray-800 shadow-md rounded-lg p-4">
+      <div v-for="(game) in randomGames" :key="game.id" class="bg-gray-800 shadow-md rounded-lg p-4" role="article">
         <!-- Imagen y enlace al juego -->
-        <a :href="`/game?id=${game.id}`" class="block h-32 rounded-md mb-4">
-          <img :src="game.thumbnail" alt="Game Thumbnail" class="w-full h-full object-cover rounded-md" />
+        <a :href="`/game?id=${game.id}`" class="block h-32 rounded-md mb-4" aria-label="Link to {{ game.title }}">
+          <img :src="game.thumbnail" :alt="'Thumbnail of ' + game.title" class="w-full h-full object-cover rounded-md" />
         </a>
         <!-- Categoría del juego -->
         <p class="text-sm text-gray-200">{{ game.genre || "Unknown" }}</p>

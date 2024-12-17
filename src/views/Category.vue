@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-color-thirty">
+  <section class="bg-color-thirty" role="region" aria-labelledby="category-page-heading">
     <Navbar />
     {{ console.log("Category:", category) }}
     <Carrusel :category="associatedRelation" />

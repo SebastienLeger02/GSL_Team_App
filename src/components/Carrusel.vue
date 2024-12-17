@@ -1,8 +1,10 @@
 <template>
-  <div class="slider">
+  <div class="slider" role="region" aria-label="Game Carousel">
     <div class="list">
-      <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }" v-show="index === currentIndex">
-        <img :src="item.screenshots[0]?.image || item.thumbnail" :alt="item.alt" />
+      <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }"
+        v-show="index === currentIndex" role="tabpanel" :aria-hidden="index !== currentIndex"
+        :aria-labelledby="'thumb-' + index">
+        <img :src="item.screenshots[0]?.image || item.thumbnail" :alt="item.alt || 'Game image'" />
         <div class="content">
           <div class="text-white font-bold drop-shadow-lg"><span>{{ platform || category }}</span></div>
           <div class="title">{{ item.title }}</div>
@@ -13,15 +15,16 @@
         </div>
       </div>
     </div>
-    <div class="thumbnail">
+    <div class="thumbnail" role="tablist">
       <div v-for="(item, index) in gamesOrdered" :key="'thumb-' + index" class="item" :class="{ active: index === 0 }"
-        @click="goToSlide(index)">
-        <img :src="item.thumbnail" :alt="item.alt" />
+        @click="goToSlide(index)" role="tab" :aria-selected="index === currentIndex"
+        :aria-controls="'tabpanel-' + index" tabindex="0">
+        <img :src="item.thumbnail" :alt="item.alt || 'Thumbnail of ' + item.title" />
       </div>
     </div>
     <div class="nextPrevArrows">
-      <button class="prev" @click="prevSlide()"></button>
-      <button class="next" @click="nextSlide()"></button>
+      <button class="prev" @click="prevSlide()" aria-label="Previous slide"></button>
+      <button class="next" @click="nextSlide()" aria-label="Next slide"></button>
     </div>
   </div>
 </template>
