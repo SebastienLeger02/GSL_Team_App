@@ -4,7 +4,7 @@
       <div v-for="(item, index) in gameDetails" :key="index" class="item" :class="{ active: index === currentIndex }" v-show="index === currentIndex">
         <img :src="item.screenshots[0]?.image || item.thumbnail" :alt="item.alt" />
         <div class="content">
-          <div class="text-white font-bold drop-shadow-lg"><span>{{ platform || category }}</span></div>
+          <div class="font-bold drop-shadow-lg neonText6 mb-2 tracking-wider"><span>{{ platform || category }}</span></div>
           <div class="title">{{ item.title }}</div>
           <div class="description">{{ item.short_description }}</div>
           <div class="button">
@@ -260,8 +260,8 @@ export default {
 
 .nextPrevArrows {
   position: absolute;
-  top: 72%;
-  right: 50%;
+  top: 74%;
+  right: 54%;
   z-index: 100;
   width: 300px;
   max-width: 30%;
