@@ -1,3 +1,5 @@
+<img src="src/assets/logo.png" alt="Logo" width="400" style="display: block; margin: auto;">
+
 # GSL Game App
 
 ## 1. Introducción
