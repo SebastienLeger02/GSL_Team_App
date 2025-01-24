@@ -10,17 +10,21 @@ export default {
   name: "App",
   data() {
     return {
+      
+    
 
     };
   },
   methods:{
 
+
   },
   computed:{
-    ...mapStores(useApiStore) 
+    ...mapStores(useApiStore) ,
+    
   },
   mounted(){
-
+    
   }
 };
 </script>
